@@ -1,122 +1,253 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LUDIK AI</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg: #050505; --neon: #bc13fe; --gold: linear-gradient(180deg, #ffe57e 0%, #d4af37 40%, #b8860b 100%); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; touch-action: manipulation; }
-        
-        html, body { 
-            height: 100%; width: 100%; 
-            background-color: var(--bg); 
-            overflow: hidden; position: fixed;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LUDIK AI</title>
 
-        body { 
-            color: white; font-family: 'Inter', sans-serif; 
-            display: flex; flex-direction: column; align-items: center; 
-            padding: 15px;
-        }
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-        .app-title { font-family: 'Orbitron', sans-serif; font-size: 18px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 15px 0; text-transform: uppercase; z-index: 10; }
-        
-        /* Основная карточка с повышенным приоритетом клика */
-        .main-card { 
-            width: 100%; max-width: 400px; 
-            background: rgba(15,15,15,0.98); 
-            border: 2px solid var(--neon); 
-            border-radius: 30px; padding: 20px; 
-            position: relative; z-index: 100; /* Очень высокий слой */
-        }
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
-        .balance-box { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-        .balance-amount { font-size: 36px; font-weight: 900; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+<style>
+:root {
+    --bg: #050505;
+    --neon: #bc13fe;
+    --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
+}
 
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        
-        /* Кнопки теперь имеют z-index и pointer-events: auto */
-        .menu-item { 
-            background: #111; 
-            border: 1px solid rgba(212, 175, 55, 0.2); 
-            border-radius: 20px; padding: 15px; 
-            text-align: center; cursor: pointer; 
-            position: relative; z-index: 110;
-            pointer-events: auto !important; 
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        .menu-item:active { background: #222; transform: scale(0.95); }
-        .gold-icon { font-size: 24px; display: block; margin-bottom: 5px; pointer-events: none; }
-        .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 800; pointer-events: none; }
+html, body {
+    height: 100%;
+    width: 100%;
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color: white;
+}
 
-        /* Попапы */
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; }
-        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 25px; z-index: 210; text-align: center; }
-        .row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        .gold-t { color: #d4af37; font-weight: bold; }
-        .close-btn { background: none; border: 1px solid #444; color: #888; padding: 12px; width: 100%; border-radius: 12px; margin-top: 10px; cursor: pointer; }
-    </style>
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.app-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    background: var(--gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 15px 0 20px;
+    text-transform: uppercase;
+}
+
+.main-card {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(15,15,15,0.98);
+    border: 2px solid var(--neon);
+    border-radius: 30px;
+    padding: 20px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.menu-item {
+    background: #111;
+    border: 2px solid rgba(212,175,55,0.3);
+    border-radius: 20px;
+    padding: 25px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.menu-item:active {
+    background: #222;
+    border-color: var(--neon);
+    transform: scale(0.97);
+}
+
+.gold-icon {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.item-label {
+    font-size: 12px;
+    color: #f3cf7a;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+/* POPUPS */
+
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 1000;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    max-width: 380px;
+    background: #0a0a0a;
+    border: 2px solid #d4af37;
+    border-radius: 25px;
+    padding: 25px;
+    z-index: 1001;
+    text-align: center;
+}
+
+.close-btn {
+    background: #222;
+    color: white;
+    padding: 15px;
+    width: 100%;
+    border-radius: 15px;
+    margin-top: 15px;
+    border: 1px solid #444;
+    cursor: pointer;
+}
+</style>
 </head>
-<body onclick="tg.expand()">
 
-    <div class="app-title">LUDIK AI PREDICTOR</div>
+<body>
 
-    <div class="main-card">
-        <div class="balance-box">
-            <div id="userBalance" class="balance-amount">100.00</div>
-            <p style="color: var(--neon); font-size: 10px; font-weight: 900;">LUDIK COINS</p>
+<div class="app-title">LUDIK AI</div>
+
+<div class="main-card">
+    <div class="menu-grid">
+        <div class="menu-item" data-code="PL">
+            <span class="gold-icon">🏴</span>
+            <span class="item-label">АПЛ</span>
         </div>
-
-        <div class="menu-grid">
-            <div class="menu-item" onclick="apiFetch('PL')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div><div class="menu-item" onclick="apiFetch('PD')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
-            <div class="menu-item" onclick="apiFetch('BL1')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундес</span></div>
-            <div class="menu-item" onclick="apiFetch('SA')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
-            <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
-            <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+        <div class="menu-item" data-code="PD">
+            <span class="gold-icon">🇪🇸</span>
+            <span class="item-label">Ла Лига</span>
+        </div>
+        <div class="menu-item" data-code="BL1">
+            <span class="gold-icon">🇩🇪</span>
+            <span class="item-label">Бундес</span>
+        </div>
+        <div class="menu-item" data-code="SA">
+            <span class="gold-icon">🇮🇹</span>
+            <span class="item-label">Серия А</span>
+        </div>
+        <div class="menu-item" id="profileBtn">
+            <span class="gold-icon">👤</span>
+            <span class="item-label">ПРОФИЛЬ</span>
+        </div>
+        <div class="menu-item" id="bonusBtn">
+            <span class="gold-icon">🎁</span>
+            <span class="item-label">БОНУСЫ</span>
         </div>
     </div>
+</div>
 
-    <div class="overlay" id="overlay" onclick="closeAll()"></div>
-    <div id="predictP" class="popup"><h2 id="pTitle">АНАЛИЗ...</h2><div id="pStats"></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
-    <div id="profileP" class="popup"><h2>ПРОФИЛЬ</h2><div class="row"><span>Баланс:</span><span class="gold-t">100.00 LC</span></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
-    <div id="bonusP" class="popup"><h2>БОНУСЫ</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
+<div class="overlay" id="overlay"></div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        
-        // Цикл на расширение
-        setInterval(() => { if (!tg.isExpanded) tg.expand(); }, 500);
+<div id="predictP" class="popup">
+    <h2 id="pTitle">АНАЛИЗ...</h2>
+    <div id="pStats"></div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
 
-        function openP(id) { 
-            document.getElementById('overlay').style.display = 'block'; 
-            document.getElementById(id).style.display = 'block'; 
+<div id="profileP" class="popup">
+    <h2>ПРОФИЛЬ</h2>
+    <p>Баланс: 100 LC</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="bonusP" class="popup">
+    <h2>БОНУСЫ</h2>
+    <p>Подпишись на канал!</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<script>
+const tg = window.Telegram.WebApp;
+
+tg.ready();tg.expand();
+
+const overlay = document.getElementById('overlay');
+const popups = document.querySelectorAll('.popup');
+
+function openPopup(id){
+    overlay.style.display = 'block';
+    document.getElementById(id).style.display = 'block';
+}
+
+function closeAll(){
+    overlay.style.display = 'none';
+    popups.forEach(p => p.style.display = 'none');
+}
+
+document.querySelectorAll('.close-btn').forEach(btn=>{
+    btn.addEventListener('click', closeAll);
+});
+
+overlay.addEventListener('click', closeAll);
+
+document.getElementById('profileBtn').addEventListener('click', ()=>{
+    openPopup('profileP');
+});
+
+document.getElementById('bonusBtn').addEventListener('click', ()=>{
+    openPopup('bonusP');
+});
+
+document.querySelectorAll('[data-code]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        apiFetch(btn.dataset.code);
+    });
+});
+
+async function apiFetch(code){
+    openPopup('predictP');
+    document.getElementById('pTitle').innerText = "АНАЛИЗ...";
+    document.getElementById('pStats').innerText = "";
+
+    try{
+        const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
+            headers:{ 'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019' }
+        });
+
+        const data = await res.json();
+
+        if(data.matches && data.matches.length > 0){
+            const m = data.matches[0];
+            document.getElementById('pTitle').innerText =
+                m.homeTeam.name + " - " + m.awayTeam.name;
+            document.getElementById('pStats').innerText = "АНАЛИЗ ГОТОВ";
+        } else {
+            document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
         }
-        function closeAll() { 
-            document.getElementById('overlay').style.display = 'none'; 
-            document.querySelectorAll('.popup').forEach(p => p.style.display = 'none'); 
-        }
 
-        async function apiFetch(code) {
-            openP('predictP');
-            document.getElementById('pTitle').innerText = "АНАЛИЗ...";
-            try {
-                const response = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
-                    headers: { 'X-Auth-Token': '7a5d573e9f134d42b4edaa35c408e019' }
-                });
-                const data = await response.json();
-                if (data.matches && data.matches.length > 0) {
-                    const m = data.matches[0];
-                    document.getElementById('pTitle').innerText = m.homeTeam.name + " - " + m.awayTeam.name;
-                    document.getElementById('pStats').innerHTML = <div class="row"><span>ПРОГНОЗ:</span><span class="gold-t">Победа ${m.homeTeam.name}</span></div>;
-                } else {
-                    document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
-                }
-            } catch (e) { document.getElementById('pTitle').innerText = "ОШИБКА API"; }
-        }
-    </script>
+    } catch(e){
+        document.getElementById('pTitle').innerText = "ОШИБКА";
+    }
+}
+</script>
+
 </body>
 </html>
