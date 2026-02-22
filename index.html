@@ -1,81 +1,47 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUDIK AI 2.0</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body { background: #080808; color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 15px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .user-tag { background: #1a1a1a; padding: 5px 12px; border-radius: 20px; font-size: 12px; border: 1px solid #333; color: #00ff88; }
-        
-        .balance-card { 
-            background: linear-gradient(135deg, #111, #222);
-            border-radius: 20px; padding: 25px; 
-            text-align: center; border: 1px solid #00ff8844;
-            box-shadow: 0 10px 30px rgba(0,255,136,0.1);
-            margin-bottom: 20px;
-        }
-        .balance-card span { color: #888; font-size: 14px; text-transform: uppercase; }
-        .balance-card h2 { font-size: 42px; margin: 10px 0; color: #00ff88; }
-
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
-        .menu-item { 
-            background: #151515; padding: 20px; border-radius: 15px; 
-            text-align: center; border: 1px solid #222;
-        }
-        .menu-item i { font-size: 24px; display: block; margin-bottom: 10px; }
-        
-        .status-bar { background: #151515; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; }
-        .status-fill { background: #00ff88; height: 100%; width: 70%; }
-
-        .btn-main { 
-            background: #00ff88; color: black; border: none; padding: 18px; 
-            border-radius: 15px; width: 100%; font-weight: bold; font-size: 16px;
-            box-shadow: 0 5px 15px rgba(0,255,136,0.3);
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <div class="user-tag" id="user-id">ID: 000000</div>
-        <div id="user-name" style="font-weight: bold;">LUDIK AI</div>
+<div class="balance-label">Ваш текущий баланс</div>
+        <div class="balance-val" id="userBalance">100.00</div>
+        <div style="color: var(--neon-purple); font-size: 10px; margin-top: 5px;">LUDIK COINS</div>
     </div>
 
-    <div class="balance-card">
-        <span>Твой кошелек</span>
-        <h2 id="balance">0 LC</h2>
-        <div class="status-bar"><div class="status-fill"></div></div>
-    </div>
-
-    <div class="menu-grid">
-        <div class="menu-item">
-            <span style="font-size: 20px;">⚽️</span>
-            <div style="font-size: 12px; margin-top:5px;">Матчей<br><b>24</b></div>
+    <div class="grid">
+        <div class="item" onclick="tg.showAlert('Раздел Статистика в разработке')">
+            <span class="icon">📈</span>
+            <span class="item-label">Статистика</span>
         </div>
-        <div class="menu-item">
-            <span style="font-size: 20px;">💎</span>
-            <div style="font-size: 12px; margin-top:5px;">Статус<br><b>PRO</b></div>
+        <div class="item" onclick="tg.showAlert('Доступно только VIP пользователям')">
+            <span class="icon">💎</span>
+            <span class="item-label">VIP Чат</span>
+        </div>
+        <div class="item" onclick="tg.showAlert('Новые бонусы завтра!')">
+            <span class="icon">🎁</span>
+            <span class="item-label">Бонусы</span>
+        </div>
+        <div class="item" onclick="tg.showAlert('Настройки профиля')">
+            <span class="icon">⚙️</span>
+            <span class="item-label">Профиль</span>
         </div>
     </div>
 
-    <button class="btn-main" onclick="tg.close()">ЗАКРЫТЬ МОДУЛЬ</button>
+    <button class="main-btn" onclick="startAnalysis()">Запустить AI Анализ</button>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        tg.headerColor = '#080808';
+        tg.headerColor = "#050505";
+        tg.backgroundColor = "#050505";
 
-        // Получаем данные из URL, которые передал бот
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('id');
-        const coins = urlParams.get('coins');
-
-        if (userId) document.getElementById('user-id').innerText = 'ID: ' + userId;
-        if (coins) document.getElementById('balance').innerText = coins + ' LC';
         if (tg.initDataUnsafe.user) {
-            document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
+            document.getElementById('userName').innerText = ${tg.initDataUnsafe.user.first_name} | LUDIK AI;
+        }
+
+        function startAnalysis() {
+            tg.HapticFeedback.impactOccurred('heavy');
+            tg.showConfirm("Использовать 10 LC для анализа матча?", (ok) => {
+                if(ok) {
+                    tg.sendData("analyze_now");
+                    tg.close();
+                }
+            });
         }
     </script>
 </body>
