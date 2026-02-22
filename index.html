@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LUDIK AI PREDICTOR</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #050505;
@@ -13,98 +13,34 @@
             --gold: linear-gradient(180deg, #ffe57e 0%, #d4af37 40%, #b8860b 100%);
             --glass: rgba(15, 15, 15, 0.98);
         }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            background-color: var(--bg);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0; padding: 15px;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-
-        .app-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            background: var(--gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
-        }
-
-        .main-card {
-            width: 100%; max-width: 400px;
-            background: var(--glass);
-            border: 2px solid var(--neon);
-            border-radius: 30px;
-            padding: 20px;
-            box-shadow: 0 0 30px rgba(188, 19, 254, 0.2);
-            z-index: 10;
-        }
-
-        .balance-display {
-            text-align: center; margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 15px;
-        }
-
-        .balance-amount {
-            font-size: 38px; font-weight: 900;
-            background: var(--gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .menu-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-        }
-
-        .menu-item {
-            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 20px; padding: 15px;
-            text-align: center; transition: 0.2s;
-        }
-
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body { background-color: var(--bg); color: white; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; min-height: 100vh; overflow-x: hidden; }
+        
+        .app-title { font-family: 'Orbitron', sans-serif; font-size: 18px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 10px 0; text-align: center; letter-spacing: 1px; }
+        
+        .main-card { width: 100%; max-width: 400px; background: var(--glass); border: 2px solid var(--neon); border-radius: 30px; padding: 15px; box-shadow: 0 0 30px rgba(188, 19, 254, 0.2); z-index: 10; }
+        
+        .balance-box { text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .balance-amount { font-size: 34px; font-weight: 900; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .menu-item { background: linear-gradient(145deg, #1a1a1a, #0d0d0d); border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 18px; padding: 12px; text-align: center; position: relative; }
         .menu-item:active { transform: scale(0.95); border-color: var(--neon); }
-        .gold-icon { font-size: 26px; display: block; margin-bottom: 5px; }
+        .gold-icon { font-size: 22px; display: block; margin-bottom: 4px; }
         .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 800; }
+        
+        /* POPUP */
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); z-index: 99; }
+        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 360px; background: #0f0f0f; border: 2px solid #d4af37; border-radius: 25px; padding: 20px; z-index: 100; max-height: 85vh; overflow-y: auto; }
+        
+        .predict-header { border-bottom: 1px solid #333; margin-bottom: 12px; padding-bottom: 8px; }
+        .predict-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; border-bottom: 1px dashed #222; padding-bottom: 4px; }
+        .row-label { color: #888; }
+        .row-value { color: #fff; font-weight: bold; }
+        .gold-val { color: #d4af37; }
 
-        /* POPUP СИСТЕМА */
-        .overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); z-index: 99;
-        }
-
-        .popup {
-            display: none; position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); width: 90%; max-width: 350px;
-            background: #0f0f0f; border: 2px solid #d4af37;
-            border-radius: 30px; padding: 25px; z-index: 100; text-align: center;
-        }
-
-        .btn-link {
-            display: block; width: 100%; background: var(--gold);
-            color: black; text-decoration: none; padding: 14px;
-            border-radius: 15px; font-weight: 900; margin-bottom: 10px;
-            text-transform: uppercase; font-size: 12px;
-        }
-
-        .close-btn {
-            background: none; border: 1px solid #444; color: #888;
-            padding: 10px; width: 100%; border-radius: 15px; margin-top: 10px;
-        }
-
-        .predict-box {
-            background: rgba(255,255,255,0.03); border: 1px solid #333;
-            border-radius: 15px; padding: 15px; margin-top: 10px;
-        }
+        .btn-link { display: block; width: 100%; background: var(--gold); color: black; text-decoration: none; padding: 12px; border-radius: 12px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; font-size: 11px; text-align: center; }
+        .close-btn { background: none; border: 1px solid #444; color: #888; padding: 10px; width: 100%; border-radius: 12px; margin-top: 10px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -112,49 +48,59 @@
     <div class="app-title">LUDIK AI PREDICTOR</div>
 
     <div class="main-card">
-        <div class="balance-display"><div style="font-size: 10px; color: #888;">MY BALANCE</div>
+        <div class="balance-box">
+            <p style="font-size: 9px; color: #888; letter-spacing: 1px;">MY BALANCE</p>
             <div id="userBalance" class="balance-amount">100.00</div>
-            <div style="color: var(--neon); font-size: 10px; font-weight: 900;">LUDIK COINS</div>
+            <p style="color: var(--neon); font-size: 9px; font-weight: 900;">LUDIK COINS</p>
         </div>
 
-        <div class="menu-grid">
-            <div class="menu-item" onclick="getAI('PL')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
+        <div class="menu-grid"><div class="menu-item" onclick="getAI('PL')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
             <div class="menu-item" onclick="getAI('PD')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
             <div class="menu-item" onclick="getAI('BL1')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
             <div class="menu-item" onclick="getAI('SA')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
+            <div class="menu-item" onclick="getAI('FL1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
+            <div class="menu-item" onclick="getAI('DED')"><span class="gold-icon">🇳🇱</span><span class="item-label">Эредивизи</span></div>
+            <div class="menu-item" onclick="getAI('PPL')"><span class="gold-icon">🇵🇹</span><span class="item-label">Примейра</span></div>
             <div class="menu-item" onclick="getAI('JB')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
-            <div class="menu-item" onclick="openPop('vipPop')"><span class="gold-icon">💎</span><span class="item-label" style="color:#fff">VIP ПРОГНОЗ</span></div>
+            <div class="menu-item" onclick="openPop('vipPop')"><span class="gold-icon">👑</span><span class="item-label" style="color:#fff">VIP ПРОГНОЗ</span></div>
             <div class="menu-item" onclick="openPop('bonusPop')"><span class="gold-icon">🎁</span><span class="item-label">Бонусы</span></div>
-            <div class="menu-item" onclick="openPop('chatPop')"><span class="gold-icon">💬</span><span class="item-label">Чат</span></div>
+            <div class="menu-item" onclick="openPop('chatPop')"><span class="gold-icon">💬</span><span class="item-label">Наш Чат</span></div>
+            <div class="menu-item" onclick="openPop('profilePop')"><span class="gold-icon">👤</span><span class="item-label">Профиль</span></div>
         </div>
     </div>
 
     <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
     <div id="predictPop" class="popup">
-        <h2 id="popLeague" style="color:#d4af37; font-family:'Orbitron'; font-size:16px;">АНАЛИЗ AI</h2>
-        <div id="popContent" class="predict-box">Расчет нейросетью...</div>
-        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+        <div class="predict-header">
+            <h2 id="popTeamName" style="color:#fff; font-size:16px;">Матч</h2>
+            <p id="popLeagueName" style="color:#d4af37; font-size:11px; text-transform:uppercase;">Лига</p>
+        </div>
+        <div id="popStats">
+            </div>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ АНАЛИЗ</button>
     </div>
 
     <div id="bonusPop" class="popup">
-        <h2 style="color:#d4af37; font-family:'Orbitron';">БОНУСЫ</h2>
-        <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="btn-link">ПОДПИСАТЬСЯ (+100 LC)</a>
-        <a href="https://1wqaxr.com/?p=h14y" class="btn-link">БОНУС 500% (1WIN)</a>
-        <button class="close-btn" onclick="closeAll()">НАЗАД</button>
-    </div>
-
-    <div id="vipPop" class="popup">
-        <h2 style="color:#bc13fe; font-family:'Orbitron';">VIP ДОСТУП</h2>
-        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Точность 95% + доступ в закрытый канал</p>
-        <a href="https://t.me/CryptoBot?start=pay" class="btn-link" style="background:var(--neon); color:white;">КУПИТЬ VIP (15$)</a>
+        <h2 style="color:#d4af37; margin-bottom:15px; font-family:'Orbitron'; font-size:16px;">БОНУСЫ</h2>
+        <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="btn-link">📢 ПОДПИСАТЬСЯ (+100 LC)</a>
+        <a href="https://1wqaxr.com/?p=h14y" class="btn-link">🎰 1WIN БОНУС 500%</a>
+        <a href="https://stake.com/?c=LUDIK" class="btn-link">🔥 STAKE (VIP РЕЙКБЕК)</a>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
 
     <div id="chatPop" class="popup">
-        <h2 style="color:#d4af37; font-family:'Orbitron';">ЧАТ ИГРОКОВ</h2>
-        <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="btn-link">ВОЙТИ В ЧАТ</a>
+        <h2 style="color:#d4af37; margin-bottom:15px; font-family:'Orbitron';">ЧАТ ИГРОКОВ</h2>
+        <p style="font-size:12px; color:#888; margin-bottom:15px;">Обсуждай ставки с 5000+ участников</p>
+        <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="btn-link">💬 ВОЙТИ В ЧАТ</a>
         <button class="close-btn" onclick="closeAll()">НАЗАД</button>
+    </div>
+
+    <div id="vipPop" class="popup">
+        <h2 style="color:#bc13fe; margin-bottom:10px; font-family:'Orbitron';">VIP КАНАЛ</h2>
+        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Доступ к приватным экспрессам с кф 5.0+</p>
+        <a href="https://t.me/CryptoBot?start=pay" class="btn-link" style="background:var(--neon); color:white;">ОПЛАТИТЬ VIP ($15)</a>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
 
     <script>
@@ -164,24 +110,29 @@
         const urlParams = new URLSearchParams(window.location.search);
         document.getElementById('userBalance').innerText = urlParams.get('balance') || "100.00";
 
-        const matches = {
-            'PL': { name: 'Ливерпуль — Арсенал', res: 'Победа 1', k: '1.95' },
-            'PD': { name: 'Реал Мадрид — Барселона', res: 'Тотал 2.5 Б', k: '1.75' },
-            'BL1': { name: 'Бавария — Боруссия Д', res: 'Победа 1', k: '1.60' },
-            'SA': { name: 'Интер — Ювентус', res: 'Ничья (X)', k: '3.20' },
-            'JB': { name: 'Ман Сити — Челси', res: 'Победа 1 + ТБ 1.5', k: '1.85' }
+        const db = {
+            'PL': { l:'Premier League', t:'Арсенал — Ман Сити', r:'П1', k:'2.15', g:'2.5 Б', c:'9.5 Б', y:'3.5 Б' },
+            'PD': { l:'La Liga', t:'Реал Мадрид — Барселона', r:'X2', k:'1.85', g:'3.5 Б', c:'8.5 Б', y:'5.5 Б' },'BL1': { l:'Bundesliga', t:'Бавария — Боруссия Д', r:'П1', k:'1.65', g:'4.5 Б', c:'10.5 Б', y:'2.5 Б' },
+            'SA': { l:'Serie A', t:'Ювентус — Интер', r:'ТМ 2.5', k:'1.90', g:'1.5 М', c:'9.5 М', y:'4.5 Б' },
+            'FL1': { l:'Ligue 1', t:'ПСЖ — Монако', r:'П1 + ТБ 2.5', k:'2.05', g:'3.5 Б', c:'9.5 Б', y:'3.5 Б' },
+            'DED': { l:'Eredivisie', t:'Аякс — ПСВ', r:'П2', k:'2.40', g:'2.5 Б', c:'11.5 Б', y:'2.5 Б' },
+            'PPL': { l:'Primeira Liga', t:'Порту — Бенфика', r:'П1', k:'2.20', g:'1.5 Б', c:'8.5 Б', y:'6.5 Б' },
+            'JB': { l:'ЖЕЗОБЕТОН', t:'Ман Юнайтед — Ливерпуль', r:'П2', k:'1.75', g:'2.5 Б', c:'10.5 Б', y:'4.5 Б' }
         };
 
         function getAI(code) {
-            tg.HapticFeedback.impactOccurred('medium');
-            openPop('predictPop');
-            const data = matches[code];
-            document.getElementById('popLeague').innerText = "AI АНАЛИЗ ЗАВЕРШЕН";
-            document.getElementById('popContent').innerHTML = `
-                <div style="font-weight:900; color:#fff; margin-bottom:10px;">${data.name}</div>
-                <div style="color:#d4af37">ИСХОД: <span style="color:#00ff00">${data.res}</span></div>
-                <div style="color:#d4af37">КОЭФФИЦИЕНТ: ${data.k}</div>
+            tg.HapticFeedback.impactOccurred('heavy');
+            const data = db[code];
+            document.getElementById('popTeamName').innerText = data.t;
+            document.getElementById('popLeagueName').innerText = data.l;
+            document.getElementById('popStats').innerHTML = `
+                <div class="predict-row"><span class="row-label">Основная ставка</span><span class="row-value gold-val">${data.r} (кф ${data.k})</span></div>
+                <div class="predict-row"><span class="row-label">Тотал голов</span><span class="row-value">${data.g}</span></div>
+                <div class="predict-row"><span class="row-label">Угловые</span><span class="row-value">${data.c}</span></div>
+                <div class="predict-row"><span class="row-label">Желтые карточки</span><span class="row-value">${data.y}</span></div>
+                <div class="predict-row"><span class="row-label">Вероятность AI</span><span class="row-value" style="color:#00ff00">88%</span></div>
             `;
+            openPop('predictPop');
         }
 
         function openPop(id) {
