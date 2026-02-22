@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LUDIK AI PREDICTOR</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #121212;
+            --bg: #0a0a0a;
             --neon-purple: #bc13fe;
             --gold: linear-gradient(180deg, #ffcf48 0%, #b8860b 100%);
             --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(188, 19, 254, 0.3);
+            --border: rgba(188, 19, 254, 0.4);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -27,195 +27,164 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            overflow: hidden;
+            overflow: hidden; /* Чтобы мячи не создавали скролл */
+            position: relative;
         }
 
-        /* Заголовок сверху */
+        /* --- АНИМИРОВАННЫЕ ОБЪЕКТЫ --- */
+        .floating-obj {
+            position: absolute;
+            z-index: 0;
+            filter: drop-shadow(0 0 15px rgba(255, 207, 72, 0.4));
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* --- КОНТЕНТ --- */
         .app-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 18px;
             color: var(--neon-purple);
             text-shadow: 0 0 15px rgba(188, 19, 254, 0.6);
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            animation: fadeInDown 0.8s ease;
+            margin-bottom: 25px;
+            z-index: 2;
         }
 
-        /* Основной контейнер-рамка */
         .main-container {
             width: 100%;
             max-width: 380px;
             border: 2px solid var(--neon-purple);
-            border-radius: 30px;
+            border-radius: 35px;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow: 0 0 30px rgba(188, 19, 254, 0.15);
-            animation: zoomIn 0.6s ease;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(188, 19, 254, 0.2);
+            z-index: 1;
+            position: relative;
         }
 
-        /* Карточка баланса */
         .balance-section {
             background: var(--glass);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .balance-label {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .balance-value {
-            font-family: 'Inter', sans-serif;
-            font-size: 48px;
+            font-size: 44px;
             font-weight: 800;
             background: var(--gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 5px 0;
         }
 
-        .balance-currency {
-            color: var(--neon-purple);
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* Сетка кнопок */
+        /* --- СЕТКА МЕНЮ (ОБНОВЛЕННАЯ) --- */
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 20px;
         }
 
         .grid-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
             padding: 15px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             transition: 0.3s;
         }
 
         .grid-item:active {
-            background: rgba(188, 19, 254, 0.1);
             border-color: var(--neon-purple);
-            transform: scale(0.96);
+            background: rgba(188, 19, 254, 0.1);
+            transform: scale(0.95);
         }
 
         .icon-gold {
-            width: 24px;
-            height: 24px;
-            filter: drop-shadow(0 0 2px #ffcf48);
+            width: 32px;
+            height: 32px;
         }
 
         .item-text {
-            font-size: 13px;
-            font-weight: 500;
-            color: #efefef;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ddd;
+            text-transform: uppercase;
         }
 
-        /* Большая кнопка */
         .action-btn {
             width: 100%;
             background: var(--gold);
             border: none;
             border-radius: 50px;
             padding: 18px;
-            margin-top: 30px;
+            margin-top: 25px;
             font-weight: 800;
             font-size: 14px;
-            text-transform: uppercase;
             color: #000;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-            cursor: pointer;
-        }.action-btn:active {
-            transform: translateY(2px);
-            filter: brightness(0.9);
-        }
-
-        /* Анимации */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);}
     </style>
 </head>
 <body>
+
+    <img src="https://img.icons8.com/papercut/100/football.png" class="floating-obj" style="top: 10%; left: -10px; width: 80px;">
+    <img src="https://img.icons8.com/papercut/100/trophy.png" class="floating-obj" style="bottom: 15%; right: -10px; width: 90px; animation-delay: 1s;">
 
     <div class="app-title">LUDIK AI PREDICTOR</div>
 
     <div class="main-container">
         
         <div class="balance-section">
-            <div class="balance-label">Твой баланс</div>
+            <div style="font-size: 10px; color: #888; letter-spacing: 1px;">MY BALANCE</div>
             <div class="balance-value" id="userBalance">100.00</div>
-            <div class="balance-currency">LUDIK COINS</div>
-            <div style="position: absolute; top: 15px; right: 15px; color: #555;">ⓘ</div>
+            <div style="color: var(--neon-purple); font-size: 11px; font-weight: bold;">LUDIK COINS</div>
         </div>
-
-        <div style="text-align: center; color: #888; font-size: 14px; margin-bottom: 15px;">MENU</div>
 
         <div class="grid">
-            <div class="grid-item" onclick="tgAlert('Статистика')">
-                <img src="https://img.icons8.com/ios-filled/50/ffcf48/line-chart.png" class="icon-gold">
+            <div class="grid-item" onclick="sendToBot('get_predictions')">
+                <img src="https://img.icons8.com/fluency/48/football-ball.png" class="icon-gold">
+                <span class="item-text">Прогнозы</span>
+            </div>
+            <div class="grid-item" onclick="sendToBot('get_jb')">
+                <img src="https://img.icons8.com/fluency/48/fire-element.png" class="icon-gold">
+                <span class="item-text">ЖБ ДНЯ</span>
+            </div>
+            <div class="grid-item" onclick="sendToBot('get_vip')">
+                <img src="https://img.icons8.com/fluency/48/crown.png" class="icon-gold">
+                <span class="item-text" style="color: #ffcf48;">VIP Прогноз</span>
+            </div>
+            <div class="grid-item" onclick="sendToBot('get_stats')">
+                <img src="https://img.icons8.com/fluency/48/bar-chart.png" class="icon-gold">
                 <span class="item-text">Статистика</span>
-            </div>
-            <div class="grid-item" onclick="tgAlert('VIP Чат')">
-                <img src="https://img.icons8.com/ios-filled/50/ffcf48/diamond--v1.png" class="icon-gold">
-                <span class="item-text">VIP Чат</span>
-            </div>
-            <div class="grid-item" onclick="tgAlert('Бонусы')">
-                <img src="https://img.icons8.com/ios-filled/50/ffcf48/gift.png" class="icon-gold">
-                <span class="item-text">Бонусы</span>
-            </div>
-            <div class="grid-item" onclick="tgAlert('Настройки')">
-                <img src="https://img.icons8.com/ios-filled/50/ffcf48/settings.png" class="icon-gold">
-                <span class="item-text">Настройки</span>
             </div>
         </div>
 
-        <button class="action-btn" onclick="startAnalysis()">Запустить AI Анализ</button>
+        <button class="action-btn" onclick="sendToBot('analyze_now')">ЗАПУСТИТЬ AI АНАЛИЗ</button>
 
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        tg.headerColor = "#121212";
 
-        // Читаем баланс из параметров URL
         const params = new URLSearchParams(window.location.search);
         const bal = params.get('balance');
         if (bal) document.getElementById('userBalance').innerText = bal;
 
-        function startAnalysis() {
-            tg.HapticFeedback.impactOccurred('heavy');
-            tg.showConfirm("Вы уверены, что хотите запустить анализ?", (ok) => {
-                if(ok) {
-                    tg.sendData("analyze_now");
-                    tg.close();
-                }
-            });
-        }
-
-        function tgAlert(text) {
-            tg.HapticFeedback.selectionChanged();
-            tg.showAlert("Раздел '" + text + "' скоро будет доступен!");
+        function sendToBot(action) {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.sendData(action);
+            tg.close();
         }
     </script>
 </body>
