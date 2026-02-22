@@ -42,14 +42,14 @@
             <div id="userBalance" class="balance-amount">100.00</div><p style="color: var(--neon); font-size: 10px; font-weight: 900;">LUDIK COINS</p>
         </div>
         <div class="menu-grid">
-            <div class="menu-item" onclick="loadRealMatches(39, '🏴󠁧󠁢󠁥󠁮󠁧󠁿 АПЛ')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
-            <div class="menu-item" onclick="loadRealMatches(140, '🇪🇸 Ла Лига')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
-            <div class="menu-item" onclick="loadRealMatches(78, '🇩🇪 Бундеслига')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
-            <div class="menu-item" onclick="loadRealMatches(135, '🇮🇹 Серия А')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
-            <div class="menu-item" onclick="loadRealMatches(61, '🇫🇷 Лига 1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
-            <div class="menu-item" onclick="loadRealMatches(88, '🇳🇱 Эредивизи')"><span class="gold-icon">🇳🇱</span><span class="item-label">Эредивизи</span></div>
-            <div class="menu-item" onclick="loadRealMatches(94, '🇵🇹 Примейра')"><span class="gold-icon">🇵🇹</span><span class="item-label">Примейра</span></div>
-            <div class="menu-item" onclick="loadRealMatches(39, '🔥 ЖБ ДНЯ')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
+            <div class="menu-item" onclick="apiFetch('PL', 'АПЛ')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
+            <div class="menu-item" onclick="apiFetch('PD', 'Ла Лига')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
+            <div class="menu-item" onclick="apiFetch('BL1', 'Бундеслига')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
+            <div class="menu-item" onclick="apiFetch('SA', 'Серия А')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
+            <div class="menu-item" onclick="apiFetch('FL1', 'Лига 1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
+            <div class="menu-item" onclick="apiFetch('DED', 'Эредивизи')"><span class="gold-icon">🇳🇱</span><span class="item-label">Эредивизи</span></div>
+            <div class="menu-item" onclick="apiFetch('PPL', 'Примейра')"><span class="gold-icon">🇵🇹</span><span class="item-label">Примейра</span></div>
+            <div class="menu-item" onclick="apiFetch('CL', 'ЛЧ')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
             <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">👑</span><span class="item-label" style="color:#fff">VIP ПРОГНОЗ</span></div>
             <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">Бонусы</span></div>
             <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">Наш Чат</span></div>
@@ -58,10 +58,9 @@
     </div>
 
     <div class="overlay" id="overlay" onclick="closeAll()"></div>
-
     <div id="predictP" class="popup">
-        <h2 id="pTitle" style="color:#fff; margin-bottom:5px; font-size:16px;">ПОИСК МАТЧЕЙ...</h2>
-        <p id="pLeague" style="color:#d4af37; font-size:12px; margin-bottom:20px; text-transform:uppercase;"></p>
+        <h2 id="pTitle" style="color:#fff; font-size:16px;">АНАЛИЗ...</h2>
+        <p id="pLeague" style="color:#d4af37; font-size:12px; margin-bottom:20px;"></p>
         <div id="pStats"></div>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
@@ -73,79 +72,79 @@
         <a href="https://stake.com/?c=LUDIK" target="_blank" class="btn-link" style="background:#2f4553; color:white;">🔥 STAKE (РЕЙКБЕК)</a>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
-
     <div id="vipP" class="popup">
         <h2 style="color:#bc13fe; margin-bottom:10px;">VIP ДОСТУП</h2>
         <a href="https://t.me/CryptoBot?start=pay" target="_blank" class="btn-link" style="background:#bc13fe; color:white;">ОПЛАТИТЬ</a>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
-
     <div id="chatP" class="popup">
         <h2 style="color:#d4af37; margin-bottom:15px;">ЧАТ ИГРОКОВ</h2>
         <a href="https://t.me/+BrVJbCy5i5hjMjYy" target="_blank" class="btn-link">💬 ВОЙТИ</a>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
-
     <div id="profileP" class="popup">
         <h2 style="color:#d4af37; margin-bottom:20px;">ПРОФИЛЬ</h2>
-        <div class="row"><span>Ранг:</span><span class="gold-t">МАСТЕР</span></div>
-        <div class="row"><span>Точность:</span><span style="color:#0f0">94.2%</span></div>
-        <button class="btn-link" onclick="dailyBonus()" id="dailyBtn" style="margin-top:10px;">🎁 БОНУС 50 LC</button><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+        <div class="row"><span>Баланс:</span><span class="gold-t" id="profBal">100.00</span></div>
+        <button class="btn-link" onclick="dailyBonus()" id="dailyBtn">🎁 БОНУС 50 LC</button>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.ready(); tg.expand();
         let balance = 100.00;
-
-        async function loadRealMatches(leagueId, leagueName) {
+        const API_KEY = '7a5d573e9f134d42b4edaa35c408e019';async function apiFetch(code, name) {
             openP('predictP');
-            document.getElementById('pLeague').innerText = leagueName;
-            document.getElementById('pTitle').innerText = "LIVE ЗАПРОС...";
-            document.getElementById('pStats').innerHTML = '<div class="loading-dots" style="color:#d4af37; font-weight:900; padding:20px;">ПОДКЛЮЧЕНИЕ К СЕРВЕРУ МАТЧЕЙ</div>';
+            document.getElementById('pLeague').innerText = name;
+            document.getElementById('pTitle').innerText = "ПОИСК МАТЧЕЙ...";
+            document.getElementById('pStats').innerHTML = '<div class="loading-dots" style="color:#d4af37; padding:20px;">ПОДКЛЮЧЕНИЕ К API...</div>';
 
             try {
-                // Используем прокси для получения данных о реальных матчах на сегодня
-                const today = new Date().toISOString().split('T')[0];
-                const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://fixturedownload.com/feed/json/epl-2025')}`);
-                const raw = await response.json();
-                const matches = JSON.parse(raw.contents);
+                // Запрос на матчи конкретной лиги
+                const response = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
+                    headers: { 'X-Auth-Token': API_KEY }
+                });
+                const data = await response.json();
+                
+                if (!data.matches || data.matches.length === 0) {
+                    document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
+                    document.getElementById('pStats').innerText = "На ближайшие 24 часа игр не найдено.";
+                    return;
+                }
 
-                // Ищем первый матч, который еще не начался (будущий)
-                const realMatch = matches.find(m => new Date(m.Date) >= new Date()) || matches[matches.length - 1];
+                // Берем самый первый (ближайший) матч
+                const match = data.matches[0];
+                const t1 = match.homeTeam.name;
+                const t2 = match.awayTeam.name;
 
                 setTimeout(() => {
-                    const t1 = realMatch.HomeTeam;
-                    const t2 = realMatch.AwayTeam;
                     const winner = Math.random() > 0.5 ? t1 : t2;
-                    
-                    document.getElementById('pTitle').innerText = ${t1} — ${t2};
+                    document.getElementById('pTitle').innerText = ${t1} VS ${t2};
                     document.getElementById('pStats').innerHTML = `
-                        <div class="row"><span>ПРОГНОЗ:</span><span class="gold-t">Победа ${winner}</span></div>
-                        <div class="row"><span>КОЭФФИЦИЕНТ:</span><span class="gold-t">${(Math.random() * (2.3 - 1.5) + 1.5).toFixed(2)}</span></div>
-                        <div class="row"><span>ТОТАЛ ГОЛОВ:</span><span>2.5 Б</span></div>
-                        <div class="row"><span>УГЛОВЫЕ:</span><span>9.5 Б</span></div>
-                        <div class="row"><span>КАРТОЧКИ:</span><span>4.5 Б</span></div>
-                        <p style="font-size:10px; color:#555; margin-top:10px;">Дата матча: ${new Date(realMatch.Date).toLocaleDateString()}</p>
+                        <div class="row"><span>КТО ПОБЕДИТ:</span><span class="gold-t">Победа ${winner}</span></div>
+                        <div class="row"><span>КОЭФФИЦИЕНТ:</span><span class="gold-t">${(Math.random() * (2.1 - 1.4) + 1.4).toFixed(2)}</span></div>
+                        <div class="row"><span>УГЛОВЫЕ:</span><span>${(Math.random() * (11-8)+8).toFixed(1)} Б</span></div>
+                        <div class="row"><span>КАРТОЧКИ:</span><span>${(Math.random() * (5-3)+3).toFixed(1)} Б</span></div>
+                        <p style="font-size:10px; color:#555; margin-top:10px;">Старт: ${new Date(match.utcDate).toLocaleString()}</p>
                     `;
-                }, 1500);
+                }, 1000);
+
             } catch (e) {
-                document.getElementById('pTitle').innerText = "ОШИБКА";
-                document.getElementById('pStats').innerText = "Сервер временно недоступен. Попробуйте через минуту.";
+                document.getElementById('pTitle').innerText = "API ERROR";
+                document.getElementById('pStats').innerText = "Лимит запросов или ошибка ключа.";
             }
         }
 
         function dailyBonus() {
             balance += 50;
             document.getElementById('userBalance').innerText = balance.toFixed(2);
-            document.getElementById('dailyBtn').innerText = "ПОЛУЧЕНО";
+            document.getElementById('profBal').innerText = balance.toFixed(2);
+            document.getElementById('dailyBtn').innerText = "ГОТОВО";
             document.getElementById('dailyBtn').disabled = true;
-            tg.showAlert("Бонус зачислен!");
         }
         function openP(id) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById(id).style.display = 'block';
-            tg.HapticFeedback.impactOccurred('medium');
         }
         function closeAll() {
             document.getElementById('overlay').style.display = 'none';
