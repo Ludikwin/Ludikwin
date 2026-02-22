@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LUDIK AI</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -86,6 +86,9 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
+        // В этой версии мы не используем tg.expand() принудительно, 
+        // если оно раньше ломало тебе верстку.
+
         let balance = 100.00;
         const API_KEY = '7a5d573e9f134d42b4edaa35c408e019';
 
@@ -93,7 +96,7 @@
             openP('predictP');
             document.getElementById('pLeague').innerText = name;
             document.getElementById('pTitle').innerText = "АНАЛИЗ...";
-            document.getElementById('pStats').innerHTML = '<div style="color:#d4af37; padding:20px;">ЗАГРУЗКА ДАННЫХ API...</div>';
+            document.getElementById('pStats').innerHTML = '<div style="color:#d4af37; padding:20px;">ПОЛУЧЕНИЕ ДАННЫХ...</div>';
 
             try {
                 const response = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
@@ -103,23 +106,22 @@
                 
                 if (!data.matches || data.matches.length === 0) {
                     document.getElementById('pTitle').innerText = "НЕТ МАТЧЕЙ";
-                    document.getElementById('pStats').innerText = "На ближайшие 24 часа игр не найдено.";
+                    document.getElementById('pStats').innerText = "На сегодня игр больше нет.";
                     return;
-                }const m = data.matches[0];
-                const t1 = m.homeTeam.name;
-                const t2 = m.awayTeam.name;
-                const winner = Math.random() > 0.5 ? t1 : t2;
+                }
 
-                document.getElementById('pTitle').innerText = ${t1} — ${t2};
+                const m = data.matches[0];
+                const winner = Math.random() > 0.5 ? m.homeTeam.name : m.awayTeam.name;
+
+                document.getElementById('pTitle').innerText = ${m.homeTeam.name} — ${m.awayTeam.name};
                 document.getElementById('pStats').innerHTML = `
                     <div class="row"><span>ПРОГНОЗ:</span><span class="gold-t">Победа ${winner}</span></div>
-                    <div class="row"><span>КФ:</span><span class="gold-t">${(Math.random()*(2.1-1.4)+1.4).toFixed(2)}</span></div>
+                    <div class="row"><span>КФ:</span><span class="gold-t">${(Math.random()*(1.9-1.4)+1.4).toFixed(2)}</span></div>
                     <div class="row"><span>ТОТАЛ:</span><span>2.5 Б</span></div>
-                    <p style="font-size:10px; color:#555; margin-top:10px;">${new Date(m.utcDate).toLocaleString()}</p>
+                    <p style="font-size:10px; color:#555; margin-top:10px;">Старт: ${new Date(m.utcDate).toLocaleString()}</p>
                 `;
             } catch (e) {
                 document.getElementById('pTitle').innerText = "ОШИБКА API";
-                document.getElementById('pStats').innerText = "Проверьте ключ или лимиты запросов.";
             }
         }
 
