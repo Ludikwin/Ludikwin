@@ -42,27 +42,30 @@
             <div id="userBalance" class="balance-amount">100.00</div><p style="color: var(--neon); font-size: 10px; font-weight: 900;">LUDIK COINS</p>
         </div>
         <div class="menu-grid">
-            <div class="menu-item" onclick="getRealTimeMatch('PL', '🏴󠁧󠁢󠁥󠁮󠁧󠁿 АПЛ')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
-            <div class="menu-item" onclick="getRealTimeMatch('PD', '🇪🇸 Ла Лига')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
-            <div class="menu-item" onclick="getRealTimeMatch('BL1', '🇩🇪 Бундеслига')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
-            <div class="menu-item" onclick="getRealTimeMatch('SA', '🇮🇹 Серия А')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
-            <div class="menu-item" onclick="getRealTimeMatch('FL1', '🇫🇷 Лига 1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
-            <div class="menu-item" onclick="getRealTimeMatch('DED', '🇳🇱 Эредивизи')"><span class="gold-icon">🇳🇱</span><span class="item-label">Эредивизи</span></div>
-            <div class="menu-item" onclick="getRealTimeMatch('PPL', '🇵🇹 Примейра')"><span class="gold-icon">🇵🇹</span><span class="item-label">Примейра</span></div>
-            <div class="menu-item" onclick="getRealTimeMatch('JB', '🔥 ЖБ ДНЯ')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
+            <div class="menu-item" onclick="loadRealMatches(39, '🏴󠁧󠁢󠁥󠁮󠁧󠁿 АПЛ')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
+            <div class="menu-item" onclick="loadRealMatches(140, '🇪🇸 Ла Лига')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
+            <div class="menu-item" onclick="loadRealMatches(78, '🇩🇪 Бундеслига')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
+            <div class="menu-item" onclick="loadRealMatches(135, '🇮🇹 Серия А')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
+            <div class="menu-item" onclick="loadRealMatches(61, '🇫🇷 Лига 1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
+            <div class="menu-item" onclick="loadRealMatches(88, '🇳🇱 Эредивизи')"><span class="gold-icon">🇳🇱</span><span class="item-label">Эредивизи</span></div>
+            <div class="menu-item" onclick="loadRealMatches(94, '🇵🇹 Примейра')"><span class="gold-icon">🇵🇹</span><span class="item-label">Примейра</span></div>
+            <div class="menu-item" onclick="loadRealMatches(39, '🔥 ЖБ ДНЯ')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
             <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">👑</span><span class="item-label" style="color:#fff">VIP ПРОГНОЗ</span></div>
             <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">Бонусы</span></div>
             <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">Наш Чат</span></div>
             <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">Профиль</span></div>
         </div>
     </div>
+
     <div class="overlay" id="overlay" onclick="closeAll()"></div>
+
     <div id="predictP" class="popup">
-        <h2 id="pTitle" style="color:#fff; margin-bottom:5px; font-size:16px;">ПОИСК...</h2>
+        <h2 id="pTitle" style="color:#fff; margin-bottom:5px; font-size:16px;">ПОИСК МАТЧЕЙ...</h2>
         <p id="pLeague" style="color:#d4af37; font-size:12px; margin-bottom:20px; text-transform:uppercase;"></p>
         <div id="pStats"></div>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
+
     <div id="bonusP" class="popup">
         <h2 style="color:#d4af37; margin-bottom:15px;">БОНУСЫ</h2>
         <a href="https://t.me/+oEnEz7IOZ90wN2Ri" target="_blank" class="btn-link">📢 КАНАЛ (+100 LC)</a>
@@ -70,86 +73,79 @@
         <a href="https://stake.com/?c=LUDIK" target="_blank" class="btn-link" style="background:#2f4553; color:white;">🔥 STAKE (РЕЙКБЕК)</a>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
+
     <div id="vipP" class="popup">
         <h2 style="color:#bc13fe; margin-bottom:10px;">VIP ДОСТУП</h2>
         <a href="https://t.me/CryptoBot?start=pay" target="_blank" class="btn-link" style="background:#bc13fe; color:white;">ОПЛАТИТЬ</a>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
+
     <div id="chatP" class="popup">
         <h2 style="color:#d4af37; margin-bottom:15px;">ЧАТ ИГРОКОВ</h2>
         <a href="https://t.me/+BrVJbCy5i5hjMjYy" target="_blank" class="btn-link">💬 ВОЙТИ</a>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
+
     <div id="profileP" class="popup">
         <h2 style="color:#d4af37; margin-bottom:20px;">ПРОФИЛЬ</h2>
-        <div style="text-align:left; background:#111; padding:15px; border-radius:15px; margin-bottom:15px;">
-            <div class="row"><span>Ранг:</span><span class="gold-t">МАСТЕР</span></div>
-            <div class="row"><span>Точность:</span><span style="color:#0f0">94.2%</span></div>
-        </div><button class="btn-link" onclick="dailyBonus()" id="dailyBtn">🎁 БОНУС 50 LC</button>
-        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+        <div class="row"><span>Ранг:</span><span class="gold-t">МАСТЕР</span></div>
+        <div class="row"><span>Точность:</span><span style="color:#0f0">94.2%</span></div>
+        <button class="btn-link" onclick="dailyBonus()" id="dailyBtn" style="margin-top:10px;">🎁 БОНУС 50 LC</button><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.ready(); tg.expand();
         let balance = 100.00;
-        document.getElementById('userBalance').innerText = balance.toFixed(2);
 
-        // Список реальных ТОП-матчей на ближайшие 48 часов (22.02 - 23.02)
-        // В реальном API это подгружается автоматически, здесь я прописал фильтр
-        const schedule = {
-            'PL': ['Ман Сити — Ливерпуль', 'Тоттенхэм — Фулхэм'],
-            'PD': ['Атлетик — Вильярреал', 'Реал Мадрид — Жирона'],
-            'BL1': ['Вольфсбург — Айнтрахт', 'Бавария — Штутгарт'],
-            'SA': ['Лечче — Фиорентина', 'Ювентус — Лацио'],
-            'FL1': ['Лион — Нант', 'ПСЖ — Ренн'],
-            'DED': ['Утрехт — Хераклес', 'Аякс — Фейеноорд'],
-            'PPL': ['Витория Г. — Каза Пия', 'Бенфика — Брага'],
-            'JB': ['Ман Сити — Ливерпуль', 'Тоттенхэм — Фулхэм']
-        };
-
-        function getRealTimeMatch(code, name) {
+        async function loadRealMatches(leagueId, leagueName) {
             openP('predictP');
-            document.getElementById('pLeague').innerText = name;
-            document.getElementById('pTitle').innerText = "АНАЛИЗ...";
-            document.getElementById('pStats').innerHTML = '<div class="loading-dots" style="color:#d4af37; font-weight:900; padding:20px;">ИИ ПРОВЕРЯЕТ СЕТКУ ВЕЩАНИЯ</div>';
+            document.getElementById('pLeague').innerText = leagueName;
+            document.getElementById('pTitle').innerText = "LIVE ЗАПРОС...";
+            document.getElementById('pStats').innerHTML = '<div class="loading-dots" style="color:#d4af37; font-weight:900; padding:20px;">ПОДКЛЮЧЕНИЕ К СЕРВЕРУ МАТЧЕЙ</div>';
 
-            setTimeout(() => {
-                const pairs = schedule[code];
-                // Выбираем первый матч из списка (самый ближайший)
-                const currentPair = pairs[0];
-                const t1 = currentPair.split(' — ')[0];
-                const t2 = currentPair.split(' — ')[1];
+            try {
+                // Используем прокси для получения данных о реальных матчах на сегодня
+                const today = new Date().toISOString().split('T')[0];
+                const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://fixturedownload.com/feed/json/epl-2025')}`);
+                const raw = await response.json();
+                const matches = JSON.parse(raw.contents);
 
-                const winner = Math.random() > 0.5 ? t1 : t2;
-                const kf = (Math.random() * (2.1 - 1.5) + 1.5).toFixed(2);
-                const goals = (Math.random() * (3.5 - 1.5) + 1.5).toFixed(1) + " Б";
-                const corners = (Math.random() * (10.5 - 8.5) + 8.5).toFixed(1) + " Б";
-                const cards = (Math.random() * (5.5 - 3.5) + 3.5).toFixed(1) + " Б";
+                // Ищем первый матч, который еще не начался (будущий)
+                const realMatch = matches.find(m => new Date(m.Date) >= new Date()) || matches[matches.length - 1];
 
-                document.getElementById('pTitle').innerText = currentPair;
-                document.getElementById('pStats').innerHTML = `
-                    <div class="row"><span>КТО ПОБЕДИТ:</span><span class="gold-t" style="font-size:14px;">Победа ${winner}</span></div>
-                    <div class="row"><span>КОЭФФИЦИЕНТ:</span><span class="gold-t">${kf}</span></div>
-                    <div class="row"><span>ТОТАЛ ГОЛОВ:</span><span>${goals}</span></div>
-                    <div class="row"><span>УГЛОВЫЕ:</span><span>${corners}</span></div>
-                    <div class="row"><span>КАРТОЧКИ:</span><span>${cards}</span></div>
-                    <p style="font-size:10px; color:#555; margin-top:10px; text-align:center;">Ближайший матч: ${new Date().toLocaleDateString()}</p>
-                `;
-                tg.HapticFeedback.notificationOccurred('success');
-            }, 1500);
+                setTimeout(() => {
+                    const t1 = realMatch.HomeTeam;
+                    const t2 = realMatch.AwayTeam;
+                    const winner = Math.random() > 0.5 ? t1 : t2;
+                    
+                    document.getElementById('pTitle').innerText = ${t1} — ${t2};
+                    document.getElementById('pStats').innerHTML = `
+                        <div class="row"><span>ПРОГНОЗ:</span><span class="gold-t">Победа ${winner}</span></div>
+                        <div class="row"><span>КОЭФФИЦИЕНТ:</span><span class="gold-t">${(Math.random() * (2.3 - 1.5) + 1.5).toFixed(2)}</span></div>
+                        <div class="row"><span>ТОТАЛ ГОЛОВ:</span><span>2.5 Б</span></div>
+                        <div class="row"><span>УГЛОВЫЕ:</span><span>9.5 Б</span></div>
+                        <div class="row"><span>КАРТОЧКИ:</span><span>4.5 Б</span></div>
+                        <p style="font-size:10px; color:#555; margin-top:10px;">Дата матча: ${new Date(realMatch.Date).toLocaleDateString()}</p>
+                    `;
+                }, 1500);
+            } catch (e) {
+                document.getElementById('pTitle').innerText = "ОШИБКА";
+                document.getElementById('pStats').innerText = "Сервер временно недоступен. Попробуйте через минуту.";
+            }
         }
 
         function dailyBonus() {
             balance += 50;
             document.getElementById('userBalance').innerText = balance.toFixed(2);
-            document.getElementById('dailyBtn').innerText = "ПОЛУЧЕНО ✅";
+            document.getElementById('dailyBtn').innerText = "ПОЛУЧЕНО";
             document.getElementById('dailyBtn').disabled = true;
-            tg.showAlert("Бонус +50 LC зачислен!");
+            tg.showAlert("Бонус зачислен!");
         }
         function openP(id) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById(id).style.display = 'block';
+            tg.HapticFeedback.impactOccurred('medium');
         }
         function closeAll() {
             document.getElementById('overlay').style.display = 'none';
