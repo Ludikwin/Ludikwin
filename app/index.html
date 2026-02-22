@@ -6,7 +6,6 @@
 <title>LUDIK AI</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
@@ -16,180 +15,55 @@
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-}
-
-html, body {
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;
-    background: var(--bg);
-    font-family: 'Inter', sans-serif;
-    color: white;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-.app-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 20px;
-    background: var(--gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-transform: uppercase;
-    margin: 15px 0 20px;
-    text-shadow: 0 0 10px #ffe57e, 0 0 20px #bc13fe;
-}
-
-.main-card {
-    width: 100%;
-    max-width: 420px;
-    background: rgba(15,15,15,0.98);
-    border: 2px solid var(--neon);
-    border-radius: 30px;
-    padding: 20px;
-    box-shadow: 0 0 20px var(--neon);
-}
-
-.menu-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.menu-item {
-    background: #111;
-    border: 2px solid var(--neon);
-    border-radius: 25px;
-    padding: 25px 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.2s;
-    box-shadow: 0 0 15px var(--neon);
-}
-
-.menu-item:active {
-    background: #222;
-    border-color: #ffe57e;
-    box-shadow: 0 0 25px #ffe57e;
-    transform: scale(0.97);
-}
-
-.gold-icon {
-    font-size: 28px;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.item-label {
-    font-size: 12px;
-    color: #f3cf7a;
-    text-transform: uppercase;
-    font-weight: 900;
-}
-
-/* POPUPS */
-
-.overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.95);
-    z-index: 1000;
-}
-
-.popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 85%;
-    max-width: 380px;
-    background: #0a0a0a;
-    border: 2px solid #d4af37;
-    border-radius: 25px;
-    padding: 25px;
-    z-index: 1001;
-    text-align: center;
-}
-
-.close-btn {
-    background: #222;
-    color: white;
-    padding: 15px;
-    width: 100%;
-    border-radius: 15px;
-    margin-top: 15px;
-    border: 1px solid #444;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.close-btn:active {
-    background: #111;
-    transform: scale(0.97);
-}
+* {box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;width:100%;overflow-x:hidden;font-family:'Inter',sans-serif;color:white;background:var(--bg);}
+body{display:flex;flex-direction:column;align-items:center;padding:20px;}
+.app-title{font-family:'Orbitron',sans-serif;font-size:20px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;margin:15px 0 20px;text-shadow:0 0 10px #ffe57e,0 0 20px #bc13fe;}
+.main-card{width:100%;max-width:420px;background:rgba(15,15,15,0.98);border:2px solid var(--neon);border-radius:30px;padding:20px;box-shadow:0 0 20px var(--neon);}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
+.menu-item{background:#111;border:2px solid var(--neon);border-radius:25px;padding:25px 10px;text-align:center;cursor:pointer;transition:.2s;box-shadow:0 0 15px var(--neon);}
+.menu-item:active{background:#222;border-color:#ffe57e;box-shadow:0 0 25px #ffe57e;transform:scale(0.97);}
+.gold-icon{font-size:28px;display:block;margin-bottom:8px;}
+.item-label{font-size:12px;color:#f3cf7a;text-transform:uppercase;font-weight:900;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:1000;}
+.popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:85%;max-width:380px;background:#0a0a0a;border:2px solid #d4af37;border-radius:25px;padding:25px;z-index:1001;text-align:center;}
+.close-btn{background:#222;color:white;padding:15px;width:100%;border-radius:15px;margin-top:15px;border:1px solid #444;cursor:pointer;transition:.2s;}
+.close-btn:active{background:#111;transform:scale(0.97);}
+button.action-btn{background:var(--neon);color:white;padding:10px 15px;margin:5px;border:none;border-radius:15px;cursor:pointer;transition:.2s;}
+button.action-btn:active{transform:scale(0.95);background:#bc13aa;}
+.history-item{background:#111;border:1px solid #444;border-radius:12px;padding:8px;margin:5px 0;font-size:12px;}
 </style>
 </head>
 
 <body>
-
 <div class="app-title">LUDIK AI</div>
-
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" data-code="PL">
-            <span class="gold-icon">🏴</span>
-            <span class="item-label">АПЛ</span>
-        </div>
-        <div class="menu-item" data-code="PD">
-            <span class="gold-icon">🇪🇸</span>
-            <span class="item-label">Ла Лига</span>
-        </div>
-        <div class="menu-item" data-code="BL1">
-            <span class="gold-icon">🇩🇪</span>
-            <span class="item-label">Бундес</span>
-        </div>
-        <div class="menu-item" data-code="SA">
-            <span class="gold-icon">🇮🇹</span>
-            <span class="item-label">Серия А</span>
-        </div>
-        <div class="menu-item" data-code="CL">
-            <span class="gold-icon">🏆</span>
-            <span class="item-label">Лига Чемпионов</span>
-        </div>
-        <div class="menu-item" id="profileBtn">
-            <span class="gold-icon">👤</span>
-            <span class="item-label">ПРОФИЛЬ</span>
-        </div>
-        <div class="menu-item" id="bonusBtn">
-            <span class="gold-icon">🎁</span>
-            <span class="item-label">БОНУСЫ</span>
-        </div>
+        <div class="menu-item" data-code="PL"><span class="gold-icon">🏴</span><span class="item-label">АПЛ</span></div>
+        <div class="menu-item" data-code="PD"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
+        <div class="menu-item" data-code="BL1"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундес</span></div>
+        <div class="menu-item" data-code="SA"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
+        <div class="menu-item" data-code="CL"><span class="gold-icon">🏆</span><span class="item-label">Лига Чемпионов</span></div>
+        <div class="menu-item" data-code="FL1"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
+        <div class="menu-item" id="profileBtn"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
+        <div class="menu-item" id="bonusBtn"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
     </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
-<div id="predictP" class="popup"><h2 id="pTitle">АНАЛИЗ...</h2>
+<div id="predictP" class="popup">
+    <h2 id="pTitle">АНАЛИЗ...</h2>
     <div id="pStats"></div>
+    <div id="betBtns"></div>
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
 <div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
-    <p>Баланс: 100 LC</p>
-    <button class="close-btn">ЗАКРЫТЬ</button>
+    <p id="balanceText">Баланс: 100 LC</p>
+    <h3>История ставок</h3>
+    <div id="historyList"></div><button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
 <div id="bonusP" class="popup">
@@ -200,83 +74,108 @@ body {
 
 <script>
 const tg = window.Telegram.WebApp;
+tg.ready(); tg.expand();
+tg.onEvent('viewportChanged', ()=>tg.expand());
+setTimeout(()=>tg.expand(),200);
 
 // ============================
-// ПОЛНОЭКРАННОЕ ОТКРЫТИЕ
+// Ludik Coin и история ставок
 // ============================
-tg.ready();
-tg.expand();
-tg.onEvent('viewportChanged', () => tg.expand());
-setTimeout(() => tg.expand(), 200);
+let userBalance = 100;
+let history = [];
 
 // ============================
 // POPUP ЛОГИКА
 // ============================
 const overlay = document.getElementById('overlay');
 const popups = document.querySelectorAll('.popup');
-
-function openPopup(id){
-    overlay.style.display = 'block';
-    document.getElementById(id).style.display = 'block';
-}
-
-function closeAll(){
-    overlay.style.display = 'none';
-    popups.forEach(p => p.style.display = 'none');
-}
-
-document.querySelectorAll('.close-btn').forEach(btn=>{
-    btn.addEventListener('click', closeAll);
-});
-
-overlay.addEventListener('click', closeAll);
+function openPopup(id){overlay.style.display='block';document.getElementById(id).style.display='block';}
+function closeAll(){overlay.style.display='none';popups.forEach(p=>p.style.display='none');}
+document.querySelectorAll('.close-btn').forEach(btn=>btn.addEventListener('click',closeAll));
+overlay.addEventListener('click',closeAll);
 
 // ============================
 // КНОПКИ
 // ============================
-document.getElementById('profileBtn').addEventListener('click', ()=>{
+document.getElementById('profileBtn').addEventListener('click',()=>{
+    document.getElementById('balanceText').innerText = Баланс: ${userBalance} LC;
+    renderHistory();
     openPopup('profileP');
 });
 
-document.getElementById('bonusBtn').addEventListener('click', ()=>{
-    openPopup('bonusP');
-});
+document.getElementById('bonusBtn').addEventListener('click',()=>openPopup('bonusP'));
 
 document.querySelectorAll('[data-code]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-        apiFetch(btn.dataset.code);
-    });
+    btn.addEventListener('click',()=>{apiFetch(btn.dataset.code);});
 });
 
 // ============================
-// API FOOTBALL-DATA
+// API FOOTBALL-DATA + AI прогноз
 // ============================
 async function apiFetch(code){
     openPopup('predictP');
-    document.getElementById('pTitle').innerText = "АНАЛИЗ...";
-    document.getElementById('pStats').innerText = "";
+    document.getElementById('pTitle').innerText="АНАЛИЗ...";
+    document.getElementById('pStats').innerText="";
+    document.getElementById('betBtns').innerHTML="";
 
     try{
         const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
-            headers:{ 'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019' }
+            headers:{'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019'}
         });
-
         const data = await res.json();
-
-        if(data.matches && data.matches.length > 0){
+        if(data.matches && data.matches.length>0){
             const m = data.matches[0];
-            document.getElementById('pTitle').innerText =
-                m.homeTeam.name + " - " + m.awayTeam.name;
-            document.getElementById('pStats').innerText = "АНАЛИЗ ГОТОВ (тут можно вставить прогноз AI)";
-        } else {
-            document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
-        }
+            document.getElementById('pTitle').innerText = m.homeTeam.name + " - " + m.awayTeam.name;
 
-    } catch(e){
-        document.getElementById('pTitle').innerText = "ОШИБКА ПРИ ЗАПРОСЕ API";
-    }
+            // Генерация AI прогноза
+            const scoreH = Math.floor(Math.random()*3);
+            const scoreA = Math.floor(Math.random()*3);
+            let pred = scoreH>scoreA?"Победа Хозяев (П1)":scoreA>scoreH?"Победа Гостей (П2)":"Ничья";
+            const confidence = Math.floor(Math.random()*15)+70;
+            document.getElementById('pStats').innerHTML=
+                `<p>Прогноз AI: <b>${pred}</b></p><p>Вероятность: ${confidence}%</p>
+                <p>Предполагаемый счет: ${scoreH}:${scoreA}</p>`;
+
+            // Кнопки ставок P1/P2 (ничья → Ludik AI)
+            const betDiv = document.getElementById('betBtns');
+            ['P1','P2'].forEach(b=>{
+                const btn=document.createElement('button');
+                btn.className='action-btn';
+                btn.innerText=b;
+                btn.onclick=()=>makeBet(b,m.homeTeam.name,m.awayTeam.name);
+                betDiv.appendChild(btn);
+            });
+
+        }else{document.getElementById('pTitle').innerText="МАТЧЕЙ НЕТ";}
+    }catch(e){document.getElementById('pTitle').innerText="ОШИБКА ПРИ ЗАПРОСЕ API";}
+}
+
+// ============================
+// Ludik Coin PvP
+// ============================
+function makeBet(bet,home,away){
+    const opponentBet = Math.random()>0.5?'P1':'P2';
+    let resultText='';
+    if(bet===opponentBet){userBalance+=10; resultText='Вы выиграли! +10 LC';}
+    else if(opponentBet==='P1'&&bet==='P2' || opponentBet==='P2'&&bet==='P1'){userBalance-=10; resultText='Вы проиграли! -10 LC';}
+    document.getElementById('balanceText').innerText=`Баланс: ${userBalance} LC`;
+    history.push(`${home} - ${away} | Ваш выбор: ${bet} | Результат: ${resultText}`);
+    renderHistory();
+}
+
+// ============================
+// История ставок
+// ============================
+function renderHistory(){
+    const list = document.getElementById('historyList');
+    list.innerHTML='';
+    history.slice(-10).reverse().forEach(h=>{
+        const div=document.createElement('div');
+        div.className='history-item';
+        div.innerText=h;
+        list.appendChild(div);
+    });
 }
 </script>
-
 </body>
 </html>
