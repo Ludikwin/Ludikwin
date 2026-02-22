@@ -11,8 +11,10 @@
             --bg: #050505;
             --neon: #bc13fe;
             --gold: linear-gradient(180deg, #ffe57e 0%, #d4af37 40%, #b8860b 100%);
-            --glass: rgba(20, 20, 20, 0.9);
+            --glass: rgba(15, 15, 15, 0.98);
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--bg);
@@ -21,10 +23,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 0;
-            padding: 20px;
+            margin: 0; padding: 15px;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         .app-title {
@@ -33,75 +34,76 @@
             background: var(--gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
         }
 
         .main-card {
-            width: 100%;
-            max-width: 400px;
+            width: 100%; max-width: 400px;
             background: var(--glass);
             border: 2px solid var(--neon);
             border-radius: 30px;
-            padding: 15px;
+            padding: 20px;
             box-shadow: 0 0 30px rgba(188, 19, 254, 0.2);
-            backdrop-filter: blur(10px);
+            z-index: 10;
         }
 
-        /* Сетка лиг */
+        .balance-display {
+            text-align: center; margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 15px;
+        }
+
+        .balance-amount {
+            font-size: 38px; font-weight: 900;
+            background: var(--gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .menu-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
         }
 
         .menu-item {
-            background: rgba(255,255,255,0.05);
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 15px;
-            padding: 12px;
-            text-align: center;
-            transition: 0.2s;
+            border-radius: 20px; padding: 15px;
+            text-align: center; transition: 0.2s;
         }
 
         .menu-item:active { transform: scale(0.95); border-color: var(--neon); }
+        .gold-icon { font-size: 26px; display: block; margin-bottom: 5px; }
+        .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 800; }
 
-        .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: bold; display: block; margin-top: 5px; }
-        
-        .gold-icon { font-size: 24px; filter: sepia(1) saturate(3); }
+        /* POPUP СИСТЕМА */
+        .overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); z-index: 99;
+        }
 
-        /* Окно прогноза (Popup) */
-        #predictionPopup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 85%;
-            background: #111;
-            border: 2px solid #d4af37;
-            border-radius: 25px;
-            padding: 20px;
-            z-index: 100;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+        .popup {
+            display: none; position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); width: 90%; max-width: 350px;
+            background: #0f0f0f; border: 2px solid #d4af37;
+            border-radius: 30px; padding: 25px; z-index: 100; text-align: center;
+        }
+
+        .btn-link {
+            display: block; width: 100%; background: var(--gold);
+            color: black; text-decoration: none; padding: 14px;
+            border-radius: 15px; font-weight: 900; margin-bottom: 10px;
+            text-transform: uppercase; font-size: 12px;
         }
 
         .close-btn {
-            margin-top: 15px;
-            background: var(--gold);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            width: 100%;
+            background: none; border: 1px solid #444; color: #888;
+            padding: 10px; width: 100%; border-radius: 15px; margin-top: 10px;
         }
 
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 99;
+        .predict-box {
+            background: rgba(255,255,255,0.03); border: 1px solid #333;
+            border-radius: 15px; padding: 15px; margin-top: 10px;
         }
     </style>
 </head>
@@ -110,45 +112,49 @@
     <div class="app-title">LUDIK AI PREDICTOR</div>
 
     <div class="main-card">
-        <div style="text-align:center; margin-bottom:15px;">
-            <div style="font-size:10px; color:#888;">ВАШ БАЛАНС</div>
-            <div id="userBalance" style="font-size:32px; font-weight:900; background:var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">100.00</div>
+        <div class="balance-display"><div style="font-size: 10px; color: #888;">MY BALANCE</div>
+            <div id="userBalance" class="balance-amount">100.00</div>
+            <div style="color: var(--neon); font-size: 10px; font-weight: 900;">LUDIK COINS</div>
         </div>
 
         <div class="menu-grid">
-            <div class="menu-item" onclick="showPredict('Англия 🏴󠁧󠁢󠁥󠁮󠁧󠁿')">
-                <span class="gold-icon">⚽</span><span class="item-label">АПЛ</span>
-            </div>
-            <div class="menu-item" onclick="showPredict('Испания 🇪🇸')">
-                <span class="gold-icon">🏆</span><span class="item-label">Ла Лига</span>
-            </div><div class="menu-item" onclick="showPredict('Германия 🇩🇪')">
-                <span class="gold-icon">🛡️</span><span class="item-label">Бундеслига</span>
-            </div>
-            <div class="menu-item" onclick="showPredict('Италия 🇮🇹')">
-                <span class="gold-icon">🔱</span><span class="item-label">Серия А</span>
-            </div>
-            <div class="menu-item" onclick="showPredict('Франция 🇫🇷')">
-                <span class="gold-icon">💎</span><span class="item-label">Лига 1</span>
-            </div>
-            <div class="menu-item" onclick="showPredict('ЖБ ДНЯ 🔥')">
-                <span class="gold-icon">✨</span><span class="item-label">ЖБ ДНЯ</span>
-            </div>
-            <div class="menu-item" onclick="tg.sendData('get_bonuses')">
-                <span class="gold-icon">🎁</span><span class="item-label">Бонусы</span>
-            </div>
-            <div class="menu-item" onclick="tg.sendData('get_chat')">
-                <span class="gold-icon">💬</span><span class="item-label">Чат</span>
-            </div>
+            <div class="menu-item" onclick="getAI('PL')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
+            <div class="menu-item" onclick="getAI('PD')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
+            <div class="menu-item" onclick="getAI('BL1')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
+            <div class="menu-item" onclick="getAI('SA')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
+            <div class="menu-item" onclick="getAI('JB')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
+            <div class="menu-item" onclick="openPop('vipPop')"><span class="gold-icon">💎</span><span class="item-label" style="color:#fff">VIP ПРОГНОЗ</span></div>
+            <div class="menu-item" onclick="openPop('bonusPop')"><span class="gold-icon">🎁</span><span class="item-label">Бонусы</span></div>
+            <div class="menu-item" onclick="openPop('chatPop')"><span class="gold-icon">💬</span><span class="item-label">Чат</span></div>
         </div>
     </div>
 
-    <div class="overlay" id="overlay"></div>
-    <div id="predictionPopup">
-        <h2 style="color:#d4af37; margin-bottom:10px;" id="popTitle">АНАЛИЗ...</h2>
-        <div id="popBody" style="font-size:14px; line-height:1.5;">
-            Идет расчет нейросетью...
-        </div>
-        <button class="close-btn" onclick="closePopup()">ЗАКРЫТЬ</button>
+    <div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+    <div id="predictPop" class="popup">
+        <h2 id="popLeague" style="color:#d4af37; font-family:'Orbitron'; font-size:16px;">АНАЛИЗ AI</h2>
+        <div id="popContent" class="predict-box">Расчет нейросетью...</div>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
+
+    <div id="bonusPop" class="popup">
+        <h2 style="color:#d4af37; font-family:'Orbitron';">БОНУСЫ</h2>
+        <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="btn-link">ПОДПИСАТЬСЯ (+100 LC)</a>
+        <a href="https://1wqaxr.com/?p=h14y" class="btn-link">БОНУС 500% (1WIN)</a>
+        <button class="close-btn" onclick="closeAll()">НАЗАД</button>
+    </div>
+
+    <div id="vipPop" class="popup">
+        <h2 style="color:#bc13fe; font-family:'Orbitron';">VIP ДОСТУП</h2>
+        <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Точность 95% + доступ в закрытый канал</p>
+        <a href="https://t.me/CryptoBot?start=pay" class="btn-link" style="background:var(--neon); color:white;">КУПИТЬ VIP (15$)</a>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
+
+    <div id="chatPop" class="popup">
+        <h2 style="color:#d4af37; font-family:'Orbitron';">ЧАТ ИГРОКОВ</h2>
+        <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="btn-link">ВОЙТИ В ЧАТ</a>
+        <button class="close-btn" onclick="closeAll()">НАЗАД</button>
     </div>
 
     <script>
@@ -158,28 +164,36 @@
         const urlParams = new URLSearchParams(window.location.search);
         document.getElementById('userBalance').innerText = urlParams.get('balance') || "100.00";
 
-        function showPredict(league) {
+        const matches = {
+            'PL': { name: 'Ливерпуль — Арсенал', res: 'Победа 1', k: '1.95' },
+            'PD': { name: 'Реал Мадрид — Барселона', res: 'Тотал 2.5 Б', k: '1.75' },
+            'BL1': { name: 'Бавария — Боруссия Д', res: 'Победа 1', k: '1.60' },
+            'SA': { name: 'Интер — Ювентус', res: 'Ничья (X)', k: '3.20' },
+            'JB': { name: 'Ман Сити — Челси', res: 'Победа 1 + ТБ 1.5', k: '1.85' }
+        };
+
+        function getAI(code) {
             tg.HapticFeedback.impactOccurred('medium');
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('predictionPopup').style.display = 'block';
-            document.getElementById('popTitle').innerText = league;
-            
-            // Имитация работы AI
-            setTimeout(() => {
-                document.getElementById('popBody').innerHTML = `
-                    <div style="border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:10px;">
-                        <b>Матч найден!</b><br>Прогноз: <span style="color:#00ff00">Победа 1</span>
-                    </div>
-                    <div>Коэффициент: <b>1.95</b></div>
-                    <div>Проходимость: <b>87%</b></div>
-                `;
-            }, 1500);
+            openPop('predictPop');
+            const data = matches[code];
+            document.getElementById('popLeague').innerText = "AI АНАЛИЗ ЗАВЕРШЕН";
+            document.getElementById('popContent').innerHTML = `
+                <div style="font-weight:900; color:#fff; margin-bottom:10px;">${data.name}</div>
+                <div style="color:#d4af37">ИСХОД: <span style="color:#00ff00">${data.res}</span></div>
+                <div style="color:#d4af37">КОЭФФИЦИЕНТ: ${data.k}</div>
+            `;
         }
 
-        function closePopup() {
+        function openPop(id) {
+            tg.HapticFeedback.selectionChanged();
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function closeAll() {
             document.getElementById('overlay').style.display = 'none';
-            document.getElementById('predictionPopup').style.display = 'none';
-            document.getElementById('popBody').innerText = "Идет расчет нейросетью...";
+            const pops = document.querySelectorAll('.popup');
+            pops.forEach(p => p.style.display = 'none');
         }
     </script>
 </body>
