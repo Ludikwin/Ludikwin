@@ -1,1 +1,53 @@
-Ludik ai test
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LUDIK AI APP</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background-color: #0d0d0d; color: #ffffff; font-family: sans-serif; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .header { width: 100%; text-align: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .header h1 { color: #00ff88; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        .card { background: #1a1a1a; border-radius: 12px; padding: 15px; width: 95%; margin-bottom: 15px; border: 1px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .balance-label { color: #888; font-size: 12px; }
+        .balance-amount { font-size: 28px; font-weight: bold; color: #00ff88; display: block; }
+        .match-info { font-weight: bold; font-size: 16px; margin-bottom: 5px; }
+        .match-pred { color: #00ff88; font-size: 14px; background: rgba(0,255,136,0.1); padding: 5px 10px; border-radius: 5px; display: inline-block; }
+        .btn { background: #00ff88; color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .btn:active { transform: scale(0.98); background: #00cc6e; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 id="user_name">LUDIK AI ANALYTICS</h1>
+    </div>
+
+    <div class="card">
+        <span class="balance-label">ТВОЙ БАЛАНС:</span>
+        <span class="balance-amount">100 LC</span>
+    </div>
+
+    <div class="card">
+        <div class="match-info">⚽️ Liverpool vs Real Madrid</div>
+        <div class="match-pred">Предикт: Победа П1 (91%)</div>
+    </div>
+
+    <div class="card">
+        <div class="match-info">⚽️ Milan vs Inter</div>
+        <div class="match-pred">Предикт: ТБ 2.5 (84%)</div>
+    </div>
+
+    <button class="btn" onclick="tg.close()">ВЕРНУТЬСЯ В БОТ</button>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); 
+        
+        // Магия: берем имя юзера прямо из Телеграм
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('user_name').innerText = tg.initDataUnsafe.user.first_name.toUpperCase();
+        }
+    </script>
+</body>
+</html>
