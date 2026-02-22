@@ -8,44 +8,61 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #050505; --neon: #bc13fe; --gold: linear-gradient(180deg, #ffe57e 0%, #d4af37 40%, #b8860b 100%); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; touch-action: manipulation; }
         
-        /* Фикс: Заставляем body быть чуть больше экрана, чтобы спровоцировать "растяжку" */
         html, body { 
-            height: 100%; 
-            background-color: var(--bg);
-            overflow: hidden;
+            height: 100%; width: 100%; 
+            background-color: var(--bg); 
+            overflow: hidden; position: fixed;
         }
 
         body { 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
+            color: white; font-family: 'Inter', sans-serif; 
+            display: flex; flex-direction: column; align-items: center; 
             padding: 15px;
-            min-height: 100.1vh; /* Ключевой хак: высота чуть больше 100% */
         }
 
-        .app-title { font-family: 'Orbitron', sans-serif; font-size: 18px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 15px 0; text-transform: uppercase; }
-        .main-card { width: 100%; max-width: 400px; background: rgba(15,15,15,0.98); border: 2px solid var(--neon); border-radius: 30px; padding: 20px; box-shadow: 0 0 20px rgba(188, 19, 254, 0.2); }
+        .app-title { font-family: 'Orbitron', sans-serif; font-size: 18px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 15px 0; text-transform: uppercase; z-index: 10; }
+        
+        /* Основная карточка с повышенным приоритетом клика */
+        .main-card { 
+            width: 100%; max-width: 400px; 
+            background: rgba(15,15,15,0.98); 
+            border: 2px solid var(--neon); 
+            border-radius: 30px; padding: 20px; 
+            position: relative; z-index: 100; /* Очень высокий слой */
+        }
+
         .balance-box { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
         .balance-amount { font-size: 36px; font-weight: 900; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
+
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .menu-item { background: #111; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 15px; text-align: center; cursor: pointer; }
-        .gold-icon { font-size: 24px; display: block; margin-bottom: 5px; }
-        .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 800; }
         
-        /* Окна */
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99; }
-        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 25px; z-index: 100; text-align: center; }
+        /* Кнопки теперь имеют z-index и pointer-events: auto */
+        .menu-item { 
+            background: #111; 
+            border: 1px solid rgba(212, 175, 55, 0.2); 
+            border-radius: 20px; padding: 15px; 
+            text-align: center; cursor: pointer; 
+            position: relative; z-index: 110;
+            pointer-events: auto !important; 
+        }
+
+        .menu-item:active { background: #222; transform: scale(0.95); }
+        .gold-icon { font-size: 24px; display: block; margin-bottom: 5px; pointer-events: none; }
+        .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 800; pointer-events: none; }
+
+        /* Попапы */
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; }
+        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 25px; z-index: 210; text-align: center; }
         .row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; border-bottom: 1px solid #222; padding-bottom: 5px; }
         .gold-t { color: #d4af37; font-weight: bold; }
         .close-btn { background: none; border: 1px solid #444; color: #888; padding: 12px; width: 100%; border-radius: 12px; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
-<body onmouseover="tg.expand()" ontouchmove="tg.expand()"> <div class="app-title">LUDIK AI PREDICTOR</div>
+<body onclick="tg.expand()">
+
+    <div class="app-title">LUDIK AI PREDICTOR</div>
 
     <div class="main-card">
         <div class="balance-box">
@@ -54,11 +71,9 @@
         </div>
 
         <div class="menu-grid">
-            <div class="menu-item" onclick="apiFetch('PL')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
-            <div class="menu-item" onclick="apiFetch('PD')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
-            <div class="menu-item" onclick="apiFetch('BL1')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
-            <div class="menu-item" onclick="apiFetch('SA')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div><div class="menu-item" onclick="apiFetch('FL1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
-            <div class="menu-item" onclick="apiFetch('CL')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
+            <div class="menu-item" onclick="apiFetch('PL')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div><div class="menu-item" onclick="apiFetch('PD')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
+            <div class="menu-item" onclick="apiFetch('BL1')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундес</span></div>
+            <div class="menu-item" onclick="apiFetch('SA')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
             <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
             <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
         </div>
@@ -71,32 +86,20 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-
-        // ТО САМОЕ РЕШЕНИЕ:
-        // 1. Сообщаем Telegram, что мы готовы
         tg.ready();
         
-        // 2. Функция форсированного расширения
-        function forceExpand() {
-            if (!tg.isExpanded) {
-                tg.expand();
-            }
+        // Цикл на расширение
+        setInterval(() => { if (!tg.isExpanded) tg.expand(); }, 500);
+
+        function openP(id) { 
+            document.getElementById('overlay').style.display = 'block'; 
+            document.getElementById(id).style.display = 'block'; 
+        }
+        function closeAll() { 
+            document.getElementById('overlay').style.display = 'none'; 
+            document.querySelectorAll('.popup').forEach(p => p.style.display = 'none'); 
         }
 
-        // 3. Запускаем цикл (проверяем каждые 300мс)
-        const expandInterval = setInterval(() => {
-            forceExpand();
-            // Если расширилось — можно остановить цикл, но лучше оставить для надежности
-            if (tg.isExpanded) {
-                // clearInterval(expandInterval); // Раскомментируй, если хочешь остановить после успеха
-            }
-        }, 300);
-
-        // 4. Дополнительный хак: растяжка при клике
-        window.addEventListener('touchstart', forceExpand);
-        window.addEventListener('click', forceExpand);
-
-        // API и логика
         async function apiFetch(code) {
             openP('predictP');
             document.getElementById('pTitle').innerText = "АНАЛИЗ...";
@@ -110,13 +113,10 @@
                     document.getElementById('pTitle').innerText = m.homeTeam.name + " - " + m.awayTeam.name;
                     document.getElementById('pStats').innerHTML = <div class="row"><span>ПРОГНОЗ:</span><span class="gold-t">Победа ${m.homeTeam.name}</span></div>;
                 } else {
-                    document.getElementById('pTitle').innerText = "ИГР НЕТ";
+                    document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
                 }
             } catch (e) { document.getElementById('pTitle').innerText = "ОШИБКА API"; }
         }
-
-        function openP(id) { document.getElementById('overlay').style.display = 'block'; document.getElementById(id).style.display = 'block'; }
-        function closeAll() { document.getElementById('overlay').style.display = 'none'; document.querySelectorAll('.popup').forEach(p => p.style.display = 'none'); }
     </script>
 </body>
 </html>
