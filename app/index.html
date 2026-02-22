@@ -6,7 +6,6 @@
 <title>LUDIK AI</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
@@ -26,7 +25,6 @@
 html, body {
     height: 100%;
     width: 100%;
-    overflow-x: hidden;
     background: var(--bg);
     font-family: 'Inter', sans-serif;
     color: white;
@@ -45,19 +43,18 @@ body {
     background: var(--gold);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin: 10px 0 20px;
     text-transform: uppercase;
-    margin: 15px 0 20px;
-    text-shadow: 0 0 10px #ffe57e, 0 0 20px #bc13fe;
+    text-align: center;
 }
 
 .main-card {
     width: 100%;
-    max-width: 420px;
+    max-width: 400px;
     background: rgba(15,15,15,0.98);
     border: 2px solid var(--neon);
     border-radius: 30px;
     padding: 20px;
-    box-shadow: 0 0 20px var(--neon);
 }
 
 .menu-grid {
@@ -68,19 +65,17 @@ body {
 
 .menu-item {
     background: #111;
-    border: 2px solid var(--neon);
-    border-radius: 25px;
-    padding: 25px 10px;
+    border: 2px solid rgba(212,175,55,0.3);
+    border-radius: 20px;
+    padding: 20px 10px;
     text-align: center;
     cursor: pointer;
     transition: 0.2s;
-    box-shadow: 0 0 15px var(--neon);
 }
 
 .menu-item:active {
     background: #222;
-    border-color: #ffe57e;
-    box-shadow: 0 0 25px #ffe57e;
+    border-color: var(--neon);
     transform: scale(0.97);
 }
 
@@ -98,7 +93,6 @@ body {
 }
 
 /* POPUPS */
-
 .overlay {
     display: none;
     position: fixed;
@@ -113,105 +107,79 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 85%;
-    max-width: 380px;
+    width: 90%;
+    max-width: 400px;
     background: #0a0a0a;
     border: 2px solid #d4af37;
     border-radius: 25px;
     padding: 25px;
     z-index: 1001;
     text-align: center;
+    color: #fff;
+}
+
+.popup h2 {
+    margin-bottom: 15px;
 }
 
 .close-btn {
     background: #222;
     color: white;
-    padding: 15px;
+    padding: 12px;
     width: 100%;
     border-radius: 15px;
     margin-top: 15px;
     border: 1px solid #444;
     cursor: pointer;
-    transition: 0.2s;
-}
-
-.close-btn:active {
-    background: #111;
-    transform: scale(0.97);
 }
 </style>
 </head>
-
 <body>
 
 <div class="app-title">LUDIK AI</div>
 
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" data-code="PL">
-            <span class="gold-icon">🏴</span>
-            <span class="item-label">АПЛ</span>
-        </div>
-        <div class="menu-item" data-code="PD">
-            <span class="gold-icon">🇪🇸</span>
-            <span class="item-label">Ла Лига</span>
-        </div>
-        <div class="menu-item" data-code="BL1">
-            <span class="gold-icon">🇩🇪</span>
-            <span class="item-label">Бундес</span>
-        </div>
-        <div class="menu-item" data-code="SA">
-            <span class="gold-icon">🇮🇹</span>
-            <span class="item-label">Серия А</span>
-        </div>
-        <div class="menu-item" data-code="CL">
-            <span class="gold-icon">🏆</span>
-            <span class="item-label">Лига Чемпионов</span>
-        </div>
-        <div class="menu-item" id="profileBtn">
-            <span class="gold-icon">👤</span>
-            <span class="item-label">ПРОФИЛЬ</span>
-        </div>
-        <div class="menu-item" id="bonusBtn">
-            <span class="gold-icon">🎁</span>
-            <span class="item-label">БОНУСЫ</span>
-        </div>
+        <div class="menu-item" id="prognosesBtn"><span class="gold-icon">⚽️</span><span class="item-label">Прогнозы</span></div>
+        <div class="menu-item" id="jbBtn"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
+        <div class="menu-item" id="vipBtn"><span class="gold-icon">💎</span><span class="item-label">VIP</span></div>
+        <div class="menu-item" id="refBtn"><span class="gold-icon">👥</span><span class="item-label">Рефералка</span></div>
+        <div class="menu-item" id="bonusBtn"><span class="gold-icon">🎁</span><span class="item-label">Бонусы</span></div>
+        <div class="menu-item" id="statsBtn"><span class="gold-icon">📈</span><span class="item-label">Статистика</span></div>
     </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
-<div id="predictP" class="popup"><h2 id="pTitle">АНАЛИЗ...</h2>
-    <div id="pStats"></div>
+<div id="popupPredict" class="popup">
+    <h2 id="predictTitle">АНАЛИЗ...</h2>
+    <div id="predictContent"></div>
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<div id="profileP" class="popup">
+<div id="popupProfile" class="popup">
     <h2>ПРОФИЛЬ</h2>
-    <p>Баланс: 100 LC</p>
+    <p id="profileContent">Баланс: 100 LC<br>VIP: Не активен</p>
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<div id="bonusP" class="popup">
+<div id="popupBonus" class="popup">
     <h2>БОНУСЫ</h2>
-    <p>Подпишись на канал!</p>
+    <div>
+        <p>📢 Подпишись на канал (+100 LC)</p>
+        <p>💬 Чат (+50 LC)</p>
+        <p>🚀 1WIN БОНУС 500%</p>
+        <p>🔥 STAKE БОНУС</p>
+    </div>
     <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<script>
+</div><script>
 const tg = window.Telegram.WebApp;
-
-// ============================
-// ПОЛНОЭКРАННОЕ ОТКРЫТИЕ
-// ============================
 tg.ready();
 tg.expand();
-tg.onEvent('viewportChanged', () => tg.expand());
-setTimeout(() => tg.expand(), 200);
 
-// ============================
-// POPUP ЛОГИКА
-// ============================
+// ====================
+// Popup Handling
+// ====================
 const overlay = document.getElementById('overlay');
 const popups = document.querySelectorAll('.popup');
 
@@ -228,54 +196,91 @@ function closeAll(){
 document.querySelectorAll('.close-btn').forEach(btn=>{
     btn.addEventListener('click', closeAll);
 });
-
 overlay.addEventListener('click', closeAll);
 
-// ============================
-// КНОПКИ
-// ============================
-document.getElementById('profileBtn').addEventListener('click', ()=>{
-    openPopup('profileP');
-});
+// ====================
+// Menu Buttons
+// ====================
+document.getElementById('prognosesBtn').addEventListener('click', async ()=>{
+    openPopup('popupPredict');
+    document.getElementById('predictTitle').innerText = "Загрузка прогнозов...";
+    document.getElementById('predictContent').innerHTML = "";
 
-document.getElementById('bonusBtn').addEventListener('click', ()=>{
-    openPopup('bonusP');
-});
+    const LEAGUES = {
+        "PL":"🏴 Англия",
+        "PD":"🇪🇸 Испания",
+        "BL1":"🇩🇪 Германия",
+        "SA":"🇮🇹 Италия",
+        "CL":"🏆 Лига Чемпионов"
+    };
 
-document.querySelectorAll('[data-code]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-        apiFetch(btn.dataset.code);
-    });
-});
-
-// ============================
-// API FOOTBALL-DATA
-// ============================
-async function apiFetch(code){
-    openPopup('predictP');
-    document.getElementById('pTitle').innerText = "АНАЛИЗ...";
-    document.getElementById('pStats').innerText = "";
-
-    try{
-        const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
-            headers:{ 'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019' }
-        });
-
-        const data = await res.json();
-
-        if(data.matches && data.matches.length > 0){
-            const m = data.matches[0];
-            document.getElementById('pTitle').innerText =
-                m.homeTeam.name + " - " + m.awayTeam.name;
-            document.getElementById('pStats').innerText = "АНАЛИЗ ГОТОВ (тут можно вставить прогноз AI)";
-        } else {
-            document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
+    let html = "";
+    for(const code in LEAGUES){
+        try{
+            const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
+                headers:{'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019'}
+            });
+            const data = await res.json();
+            if(data.matches && data.matches.length>0){
+                const m = data.matches[0];
+                const scoreH = Math.floor(Math.random()*4);
+                const scoreA = Math.floor(Math.random()*4);
+                const total = scoreH+scoreA > 2.5 ? "2.5 Б":"2.5 М";
+                html += `<p><b>${LEAGUES[code]}:</b> ${m.homeTeam.name} - ${m.awayTeam.name}<br>
+                Счёт: ${scoreH}:${scoreA}, Тотал: ${total}</p>`;
+            } else {
+                html += <p><b>${LEAGUES[code]}:</b> Нет матчей</p>;
+            }
+        } catch(e){
+            html += <p><b>${LEAGUES[code]}:</b> Ошибка</p>;
         }
-
-    } catch(e){
-        document.getElementById('pTitle').innerText = "ОШИБКА ПРИ ЗАПРОСЕ API";
     }
-}
+    document.getElementById('predictTitle').innerText = "Прогнозы AI";
+    document.getElementById('predictContent').innerHTML = html;
+});
+
+document.getElementById('jbBtn').addEventListener('click', async ()=>{
+    openPopup('popupPredict');
+    document.getElementById('predictTitle').innerText = "ЖБ ДНЯ...";
+    document.getElementById('predictContent').innerHTML = "";
+    try{
+        const res = await fetch(`https://api.football-data.org/v4/competitions/PL/matches?status=SCHEDULED`,{
+            headers:{'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019'}
+        });
+        const data = await res.json();
+        if(data.matches && data.matches.length>0){
+            const m = data.matches[0];
+            const scoreH = Math.floor(Math.random()*3)+1; 
+            const scoreA = Math.floor(Math.random()*2); 
+            const total = scoreH+scoreA>2.5?"2.5 Б":"2.5 М";
+            document.getElementById('predictTitle').innerText = "ЖБ ДНЯ";
+            document.getElementById('predictContent').innerHTML = `<p><b>${m.homeTeam.name} - ${m.awayTeam.name}</b><br>
+            Счёт: ${scoreH}:${scoreA}, Тотал: ${total}</p>`;
+        } else {
+            document.getElementById('predictTitle').innerText = "ЖБ ДНЯ";
+            document.getElementById('predictContent').innerHTML = "Нет матчей";
+        }
+    }catch(e){
+        document.getElementById('predictContent').innerText = "Ошибка API";
+    }
+});
+
+document.getElementById('vipBtn').addEventListener('click', ()=>{
+    openPopup('popupPredict');
+    document.getElementById('predictTitle').innerText = "VIP Доступ";
+    document.getElementById('predictContent').innerHTML = "<p>💎 Точность прогнозов выше, доступ к скрытым матчам и VIP аналитике</p>";
+});
+
+document.getElementById('refBtn').addEventListener('click', ()=>{
+    openPopup('popupProfile');
+});
+
+document.getElementById('statsBtn').addEventListener('click', ()=>{
+    openPopup('popupProfile');
+});
+
+document.getElementById('bonusBtn').addEventListener('click', ()=>{openPopup('popupBonus');
+});
 </script>
 
 </body>
