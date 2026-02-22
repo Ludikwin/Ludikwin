@@ -8,17 +8,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #050505; --neon: #bc13fe; --gold: linear-gradient(180deg, #ffe57e 0%, #d4af37 40%, #b8860b 100%); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        html, body { height: 100vh; width: 100vw; overflow: hidden; background-color: var(--bg); position: fixed; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; touch-action: manipulation; }
+        html, body { 
+            height: 100vh; 
+            width: 100vw; 
+            overflow: hidden; 
+            background-color: var(--bg); 
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
         body { color: white; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; }
         .app-title { font-family: 'Orbitron', sans-serif; font-size: 18px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 15px 0; text-transform: uppercase; }
-        .main-card { width: 100%; max-width: 400px; background: rgba(15,15,15,0.98); border: 2px solid var(--neon); border-radius: 30px; padding: 20px; box-shadow: 0 0 20px rgba(188, 19, 254, 0.2); }
+        .main-card { width: 100%; max-width: 400px; background: rgba(15,15,15,0.98); border: 2px solid var(--neon); border-radius: 30px; padding: 20px; box-shadow: 0 0 20px rgba(188, 19, 254, 0.2); z-index: 10; }
         .balance-box { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
         .balance-amount { font-size: 36px; font-weight: 900; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .menu-item { background: #111; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 15px; text-align: center; cursor: pointer; }
-        .gold-icon { font-size: 24px; display: block; margin-bottom: 5px; }
-        .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 800; }
+        .menu-item { background: #111; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 15px; text-align: center; cursor: pointer; position: relative; z-index: 20; }
+        .gold-icon { font-size: 24px; display: block; margin-bottom: 5px; pointer-events: none; }
+        .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 800; pointer-events: none; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99; }
         .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 25px; z-index: 100; text-align: center; }
         .row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; border-bottom: 1px solid #222; padding-bottom: 5px; text-align: left; }
@@ -37,8 +45,8 @@
         <div class="menu-grid">
             <div class="menu-item" onclick="apiFetch('PL')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
             <div class="menu-item" onclick="apiFetch('PD')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
-            <div class="menu-item" onclick="apiFetch('BL1')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
-            <div class="menu-item" onclick="apiFetch('SA')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div><div class="menu-item" onclick="apiFetch('FL1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
+            <div class="menu-item" onclick="apiFetch('BL1')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div><div class="menu-item" onclick="apiFetch('SA')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
+            <div class="menu-item" onclick="apiFetch('FL1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
             <div class="menu-item" onclick="apiFetch('CL')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
             <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">👑</span><span class="item-label">VIP</span></div>
             <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУС</span></div>
@@ -46,7 +54,6 @@
             <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
         </div>
     </div>
-
     <div class="overlay" id="overlay" onclick="closeAll()"></div>
     <div id="predictP" class="popup"><h2 id="pTitle">АНАЛИЗ...</h2><div id="pStats"></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
     <div id="bonusP" class="popup"><h2>БОНУСЫ</h2><a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="btn-link">КАНАЛ</a><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
@@ -55,10 +62,15 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
-
-        // ФОРСИРОВАННОЕ РАСШИРЕНИЕ
-        setInterval(() => { if (!tg.isExpanded) tg.expand(); }, 500);
+        
+        function expandApp() {
+            tg.expand();
+        }
+        
+        // Пытаемся развернуть сразу и через секунду
+        expandApp();
+        setTimeout(expandApp, 500);
+        setTimeout(expandApp, 1500);
 
         let balance = 100.00;
         const API_KEY = '7a5d573e9f134d42b4edaa35c408e019';
@@ -78,6 +90,7 @@
                     document.getElementById('pStats').innerHTML = <div class="row"><span>ПРОГНОЗ:</span><span class="gold-t">Победа ${m.homeTeam.name}</span></div>;
                 } else {
                     document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
+                    document.getElementById('pStats').innerHTML = "На сегодня игр не найдено.";
                 }
             } catch (e) { document.getElementById('pTitle').innerText = "ОШИБКА API"; }
         }
