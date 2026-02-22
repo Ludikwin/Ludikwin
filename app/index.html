@@ -26,6 +26,7 @@
 html, body {
     height: 100%;
     width: 100%;
+    overflow-x: hidden;
     background: var(--bg);
     font-family: 'Inter', sans-serif;
     color: white;
@@ -40,21 +41,23 @@ body {
 
 .app-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 18px;
+    font-size: 20px;
     background: var(--gold);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 15px 0 20px;
     text-transform: uppercase;
+    margin: 15px 0 20px;
+    text-shadow: 0 0 10px #ffe57e, 0 0 20px #bc13fe;
 }
 
 .main-card {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     background: rgba(15,15,15,0.98);
     border: 2px solid var(--neon);
     border-radius: 30px;
     padding: 20px;
+    box-shadow: 0 0 20px var(--neon);
 }
 
 .menu-grid {
@@ -65,17 +68,19 @@ body {
 
 .menu-item {
     background: #111;
-    border: 2px solid rgba(212,175,55,0.3);
-    border-radius: 20px;
+    border: 2px solid var(--neon);
+    border-radius: 25px;
     padding: 25px 10px;
     text-align: center;
     cursor: pointer;
     transition: 0.2s;
+    box-shadow: 0 0 15px var(--neon);
 }
 
 .menu-item:active {
     background: #222;
-    border-color: var(--neon);
+    border-color: #ffe57e;
+    box-shadow: 0 0 25px #ffe57e;
     transform: scale(0.97);
 }
 
@@ -127,6 +132,12 @@ body {
     margin-top: 15px;
     border: 1px solid #444;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.close-btn:active {
+    background: #111;
+    transform: scale(0.97);
 }
 </style>
 </head>
@@ -153,6 +164,10 @@ body {
             <span class="gold-icon">🇮🇹</span>
             <span class="item-label">Серия А</span>
         </div>
+        <div class="menu-item" data-code="CL">
+            <span class="gold-icon">🏆</span>
+            <span class="item-label">Лига Чемпионов</span>
+        </div>
         <div class="menu-item" id="profileBtn">
             <span class="gold-icon">👤</span>
             <span class="item-label">ПРОФИЛЬ</span>
@@ -166,8 +181,7 @@ body {
 
 <div class="overlay" id="overlay"></div>
 
-<div id="predictP" class="popup">
-    <h2 id="pTitle">АНАЛИЗ...</h2>
+<div id="predictP" class="popup"><h2 id="pTitle">АНАЛИЗ...</h2>
     <div id="pStats"></div>
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
@@ -187,8 +201,17 @@ body {
 <script>
 const tg = window.Telegram.WebApp;
 
-tg.ready();tg.expand();
+// ============================
+// ПОЛНОЭКРАННОЕ ОТКРЫТИЕ
+// ============================
+tg.ready();
+tg.expand();
+tg.onEvent('viewportChanged', () => tg.expand());
+setTimeout(() => tg.expand(), 200);
 
+// ============================
+// POPUP ЛОГИКА
+// ============================
 const overlay = document.getElementById('overlay');
 const popups = document.querySelectorAll('.popup');
 
@@ -208,6 +231,9 @@ document.querySelectorAll('.close-btn').forEach(btn=>{
 
 overlay.addEventListener('click', closeAll);
 
+// ============================
+// КНОПКИ
+// ============================
 document.getElementById('profileBtn').addEventListener('click', ()=>{
     openPopup('profileP');
 });
@@ -222,6 +248,9 @@ document.querySelectorAll('[data-code]').forEach(btn=>{
     });
 });
 
+// ============================
+// API FOOTBALL-DATA
+// ============================
 async function apiFetch(code){
     openPopup('predictP');
     document.getElementById('pTitle').innerText = "АНАЛИЗ...";
@@ -238,13 +267,13 @@ async function apiFetch(code){
             const m = data.matches[0];
             document.getElementById('pTitle').innerText =
                 m.homeTeam.name + " - " + m.awayTeam.name;
-            document.getElementById('pStats').innerText = "АНАЛИЗ ГОТОВ";
+            document.getElementById('pStats').innerText = "АНАЛИЗ ГОТОВ (тут можно вставить прогноз AI)";
         } else {
             document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
         }
 
     } catch(e){
-        document.getElementById('pTitle').innerText = "ОШИБКА";
+        document.getElementById('pTitle').innerText = "ОШИБКА ПРИ ЗАПРОСЕ API";
     }
 }
 </script>
