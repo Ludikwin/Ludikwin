@@ -8,38 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #050505; --neon: #bc13fe; --gold: linear-gradient(180deg, #ffe57e 0%, #d4af37 40%, #b8860b 100%); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        /* Убираем все отступы и фиксируем высоту под экран ТГ */
-        html, body { 
-            height: 100vh; 
-            width: 100vw; 
-            margin: 0; 
-            padding: 0; 
-            overflow-x: hidden; 
-            background-color: var(--bg);
-        }
-
-        body { 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 15px;
-        }
-
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body { background-color: var(--bg); color: white; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; min-height: 100vh; overflow-x: hidden; }
         .app-title { font-family: 'Orbitron', sans-serif; font-size: 18px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 15px 0; text-transform: uppercase; }
         .main-card { width: 100%; max-width: 400px; background: rgba(15,15,15,0.98); border: 2px solid var(--neon); border-radius: 30px; padding: 20px; box-shadow: 0 0 20px rgba(188, 19, 254, 0.2); }
         .balance-box { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
         .balance-amount { font-size: 36px; font-weight: 900; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .menu-item { background: #111; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 15px; text-align: center; cursor: pointer; }
         .gold-icon { font-size: 24px; display: block; margin-bottom: 5px; }
         .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 800; }
-        
-        /* Окна и оверлеи */
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99; }
         .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 25px; z-index: 100; text-align: center; }
         .row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; border-bottom: 1px solid #222; padding-bottom: 5px; text-align: left; }
@@ -57,9 +35,9 @@
         </div>
         <div class="menu-grid">
             <div class="menu-item" onclick="apiFetch('PL', 'АПЛ')"><span class="gold-icon">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="item-label">АПЛ</span></div>
-            <div class="menu-item" onclick="apiFetch('PD', 'Ла Лига')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div><div class="menu-item" onclick="apiFetch('BL1', 'Бундеслига')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
-            <div class="menu-item" onclick="apiFetch('SA', 'Серия А')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
-            <div class="menu-item" onclick="apiFetch('FL1', 'Лига 1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
+            <div class="menu-item" onclick="apiFetch('PD', 'Ла Лига')"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
+            <div class="menu-item" onclick="apiFetch('BL1', 'Бундеслига')"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундеслига</span></div>
+            <div class="menu-item" onclick="apiFetch('SA', 'Серия А')"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div><div class="menu-item" onclick="apiFetch('FL1', 'Лига 1')"><span class="gold-icon">🇫🇷</span><span class="item-label">Лига 1</span></div>
             <div class="menu-item" onclick="apiFetch('DED', 'Эредивизи')"><span class="gold-icon">🇳🇱</span><span class="item-label">Эредивизи</span></div>
             <div class="menu-item" onclick="apiFetch('PPL', 'Примейра')"><span class="gold-icon">🇵🇹</span><span class="item-label">Примейра</span></div>
             <div class="menu-item" onclick="apiFetch('CL', 'ЛЧ')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
@@ -83,7 +61,7 @@
         <a href="https://1wqaxr.com/?p=h14y" target="_blank" class="btn-link">🎰 1WIN БОНУС 500%</a>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
-
+    
     <div id="profileP" class="popup">
         <h2 style="color:#d4af37; margin-bottom:20px;">ПРОФИЛЬ</h2>
         <div class="row"><span>Баланс:</span><span class="gold-t" id="profBal">100.00</span></div>
@@ -93,22 +71,8 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-
-        // ФУНКЦИЯ ПРИНУДИТЕЛЬНОГО РАЗВЕРТЫВАНИЯ
-        function forceExpand() {
-            tg.ready();
-            tg.expand();
-            if (!tg.isExpanded) {
-                setTimeout(forceExpand, 500); // Пробуем каждые полсекунды, пока не развернется
-            }
-        }
-
-        // Запуск агрессивного расширения
-        forceExpand();
-
-        // Настройка цветов интерфейса ТГ
-        tg.setHeaderColor('#050505');
-        tg.setBackgroundColor('#050505');
+        tg.ready();
+        tg.expand();
 
         let balance = 100.00;
         const API_KEY = '7a5d573e9f134d42b4edaa35c408e019';
@@ -116,17 +80,17 @@
         async function apiFetch(code, name) {
             openP('predictP');
             document.getElementById('pTitle').innerText = "АНАЛИЗ...";
-            document.getElementById('pStats').innerHTML = '<div style="color:#d4af37; padding:20px;">ПОЛУЧАЕМ МАТЧИ...</div>';
+            document.getElementById('pStats').innerHTML = '<div style="color:#d4af37; padding:20px;">ГРУЗИМ API...</div>';
 
             try {
-                const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
+                const response = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
                     headers: { 'X-Auth-Token': API_KEY }
                 });
-                const data = await res.json();
+                const data = await response.json();
                 
                 if (!data.matches || data.matches.length === 0) {
                     document.getElementById('pTitle').innerText = "НЕТ МАТЧЕЙ";
-                    document.getElementById('pStats').innerText = "На ближайшее время игр не найдено.";
+                    document.getElementById('pStats').innerText = "Игр нет.";
                     return;
                 }
 
@@ -136,13 +100,12 @@
                 document.getElementById('pTitle').innerText = ${m.homeTeam.name} — ${m.awayTeam.name};
                 document.getElementById('pStats').innerHTML = `
                     <div class="row"><span>ПРОГНОЗ:</span><span class="gold-t">Победа ${winner}</span></div>
-                    <div class="row"><span>КФ:</span><span class="gold-t">${(Math.random()*(1.9-1.2)+1.2).toFixed(2)}</span></div>
+                    <div class="row"><span>КФ:</span><span class="gold-t">${(Math.random()*(1.8-1.4)+1.4).toFixed(2)}</span></div>
                     <p style="font-size:10px; color:#555; margin-top:10px;">Старт: ${new Date(m.utcDate).toLocaleString()}</p>
                 `;
             } catch (e) {
-                document.getElementById('pTitle').innerText = "ОШИБКА API";
-            }
-        }
+                document.getElementById('pTitle').innerText = "API ERROR";
+            }}
 
         function dailyBonus() {
             balance += 50;
@@ -151,12 +114,10 @@
             document.getElementById('dailyBtn').innerText = "ПОЛУЧЕНО";
             document.getElementById('dailyBtn').disabled = true;
         }
-
         function openP(id) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById(id).style.display = 'block';
         }
-
         function closeAll() {
             document.getElementById('overlay').style.display = 'none';
             document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
