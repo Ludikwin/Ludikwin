@@ -6,6 +6,7 @@
 <title>LUDIK AI</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
@@ -15,27 +16,130 @@
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
 
-* { box-sizing: border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
-html, body { height:100%; width:100%; overflow-x:hidden; background:var(--bg); font-family:'Inter', sans-serif; color:white;}
-body { display:flex; flex-direction:column; align-items:center; padding:20px;}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
 
-.app-title { font-family:'Orbitron', sans-serif; font-size:20px; background:var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:15px 0 20px; text-shadow:0 0 10px #ffe57e, 0 0 20px #bc13fe;}
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color: white;
+}
 
-.main-card { width:100%; max-width:420px; background: rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 20px var(--neon);}
-.menu-grid { display:grid; grid-template-columns: 1fr 1fr; gap:15px;}
-.menu-item { background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; transition:0.2s; box-shadow:0 0 15px var(--neon);}
-.menu-item:active { background:#222; border-color:#ffe57e; box-shadow:0 0 25px #ffe57e; transform: scale(0.97);}
-.gold-icon { font-size:28px; display:block; margin-bottom:8px;}
-.item-label { font-size:12px; color:#f3cf7a; text-transform:uppercase; font-weight:900;}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.app-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    background: var(--gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    margin: 15px 0 20px;
+    text-shadow: 0 0 10px #ffe57e, 0 0 20px #bc13fe;
+}
+
+.main-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(15,15,15,0.98);
+    border: 2px solid var(--neon);
+    border-radius: 30px;
+    padding: 20px;
+    box-shadow: 0 0 20px var(--neon);
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.menu-item {
+    background: #111;
+    border: 2px solid var(--neon);
+    border-radius: 25px;
+    padding: 25px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 0 15px var(--neon);
+}
+
+.menu-item:active {
+    background: #222;
+    border-color: #ffe57e;
+    box-shadow: 0 0 25px #ffe57e;
+    transform: scale(0.97);
+}
+
+.gold-icon {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.item-label {
+    font-size: 12px;
+    color: #f3cf7a;
+    text-transform: uppercase;
+    font-weight: 900;
+}
 
 /* POPUPS */
-.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000;}
-.popup { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:85%; max-width:380px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:25px; z-index:1001; text-align:center;}
-.close-btn { background:#222; color:white; padding:15px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; cursor:pointer; transition:0.2s;}
-.close-btn:active { background:#111; transform: scale(0.97);}
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 1000;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    max-width: 380px;
+    background: #0a0a0a;
+    border: 2px solid #d4af37;
+    border-radius: 25px;
+    padding: 25px;
+    z-index: 1001;
+    text-align: center;
+}
+
+.close-btn {
+    background: #222;
+    color: white;
+    padding: 15px;
+    width: 100%;
+    border-radius: 15px;
+    margin-top: 15px;
+    border: 1px solid #444;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.close-btn:active {
+    background: #111;
+    transform: scale(0.97);
+}
 </style>
 </head>
-
 <body>
 
 <div class="app-title">LUDIK AI</div>
@@ -47,33 +151,28 @@ body { display:flex; flex-direction:column; align-items:center; padding:20px;}
         <div class="menu-item" data-code="BL1"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундес</span></div>
         <div class="menu-item" data-code="SA"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
         <div class="menu-item" data-code="CL"><span class="gold-icon">🏆</span><span class="item-label">Лига Чемпионов</span></div>
+        <div class="menu-item" id="vipBtn"><span class="gold-icon">💎</span><span class="item-label">VIP</span></div>
         <div class="menu-item" id="profileBtn"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
         <div class="menu-item" id="bonusBtn"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
-        <div class="menu-item" id="vipBtn"><span class="gold-icon">💎</span><span class="item-label">VIP</span></div>
     </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
-<!-- Прогноз -->
 <div id="predictP" class="popup">
     <h2 id="pTitle">АНАЛИЗ...</h2>
     <div id="pStats"></div>
     <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- Профиль -->
-<div id="profileP" class="popup">
+</div><div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
     <p>Баланс: 100 LC</p>
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- Бонусы -->
 <div id="bonusP" class="popup">
     <h2>БОНУСЫ</h2>
     <p>
-        <a href="https://1wqaxr.com/?p=h14y" target="_blank">1Win</a><br>
+        <a href="https://1wqaxr.com/?p=h14y" target="_blank">1win</a><br>
         <a href="https://stake.com/ru?c=oeVgnFIa" target="_blank">Stake</a><br>
         <a href="https://t.me/+oEnEz7IOZ90wN2Ri" target="_blank">Группа</a><br>
         <a href="https://t.me/+BrVJbCy5i5hjMjYy" target="_blank">Чат</a>
@@ -81,82 +180,75 @@ body { display:flex; flex-direction:column; align-items:center; padding:20px;}
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- VIP -->
-<div id="vipP" class="popup">
-    <h2 id="vipTitle">VIP</h2>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
 <script>
 const tg = window.Telegram.WebApp;
-tg.ready(); tg.expand();
+tg.ready(); tg.expand(); tg.onEvent('viewportChanged', () => tg.expand());
 
-// Попапы
+// ============================
+// POPUP ЛОГИКА
+// ============================
 const overlay = document.getElementById('overlay');
 const popups = document.querySelectorAll('.popup');
-function openPopup(id){ overlay.style.display='block'; document.getElementById(id).style.display='block'; }
-function closeAll(){ overlay.style.display='none'; popups.forEach(p=>p.style.display='none'); }
-document.querySelectorAll('.close-btn').forEach(btn=>btn.addEventListener('click', closeAll));
+
+function openPopup(id){
+    overlay.style.display = 'block';
+    document.getElementById(id).style.display = 'block';
+}
+
+function closeAll(){
+    overlay.style.display = 'none';
+    popups.forEach(p => p.style.display = 'none');
+}
+
+document.querySelectorAll('.close-btn').forEach(btn => btn.addEventListener('click', closeAll));
 overlay.addEventListener('click', closeAll);
 
-// Профиль и бонусы
-document.getElementById('profileBtn').addEventListener('click', ()=>openPopup('profileP'));
-document.getElementById('bonusBtn').addEventListener('click', ()=>openPopup('bonusP'));
+// ============================
+// КНОПКИ
+// ============================
+document.getElementById('profileBtn').addEventListener('click', ()=>{ openPopup('profileP'); });
+document.getElementById('bonusBtn').addEventListener('click', ()=>{ openPopup('bonusP'); });
 
-// Прогнозы
+// Прогноз
 document.querySelectorAll('[data-code]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-        apiFetch(btn.dataset.code);
+    btn.addEventListener('click', async ()=>{
+        openPopup('predictP');
+        document.getElementById('pTitle').innerText = "АНАЛИЗ...";
+        document.getElementById('pStats').innerText = "";
+
+        try {
+            const res = await fetch(`/predict?league=${btn.dataset.code}`);
+            const data = await res.json();
+            if(data.error){
+                document.getElementById('pTitle').innerText = "ОШИБКА";
+                document.getElementById('pStats').innerText = data.error;
+            } else {
+                document.getElementById('pTitle').innerText = ${data.home_team} - ${data.away_team};
+                document.getElementById('pStats').innerText =
+                    Прогноз: ${data.prediction}\nСчёт: ${data.score}\nТотал: ${data.total}\nУгловые: ${data.corners}\nЖК: ${data.yellow_cards}\nФолы: ${data.fouls}\nДоверие: ${data.confidence}%;
+            }
+        } catch(e){
+            document.getElementById('pTitle').innerText = "ОШИБКА";
+            document.getElementById('pStats').innerText = e;
+        }
     });
 });
 
-// API для прогноза (рандом пока)
-async function apiFetch(code){
-    openPopup('predictP');
-    document.getElementById('pTitle').innerText="АНАЛИЗ...";
-    document.getElementById('pStats').innerText="";
-
+// ============================
+// VIP кнопка
+document.getElementById('vipBtn').addEventListener('click', async ()=>{
     try{
-        const res = await fetch(`http://localhost:8000/predict?league=${code}`);
+        const res = await fetch('/create_vip_invoice');
         const data = await res.json();
-
-        document.getElementById('pTitle').innerText = ${data.home_team} - ${data.away_team};
-        document.getElementById('pStats').innerHTML = `
-            Прогноз: ${data.prediction}<br>
-            Счет: ${data.score}<br>
-            Тотал: ${data.total}<br>
-            Угловые: ${data.corners}<br>
-            Желтые: ${data.yellow_cards}<br>
-            Фолы: ${data.fouls}<br>
-            Доверие: ${data.confidence}%
-        `;
-    }catch(e){
-        document.getElementById('pTitle').innerText="ОШИБКА ПРИ ЗАПРОСЕ API";
-    }
-}
-
-// ======================
-// VIP кнопка с CryptoBot
-// ======================
-document.getElementById('vipBtn').addEventListener('click', async () => {
-    openPopup('vipP');
-    document.getElementById('vipTitle').innerText = "Создание инвойса...";
-
-    try {
-        const res = await fetch("http://localhost:8000/create_vip_invoice");
-        const data = await res.json();
-
         if(data.invoice_url){
-            window.open(data.invoice_url, "_blank");
-            document.getElementById('vipTitle').innerText = "💎 VIP: оплата открыта!";
+            window.open(data.invoice_url, '_blank');
         } else {
-            document.getElementById('vipTitle').innerText = "❌ Ошибка: " + (data.error || "Не удалось создать инвойс");
+            alert("Ошибка при создании оплаты: " + (data.error || "Неизвестная ошибка"));
         }
     } catch(e){
-        document.getElementById('vipTitle').innerText = "❌ Ошибка сервера";
+        alert("Ошибка при создании оплаты: " + e);
     }
 });
 </script>
-
 </body>
 </html>
