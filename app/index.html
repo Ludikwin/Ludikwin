@@ -94,7 +94,12 @@ th {background:#1a1a1a;}
 <div id="refP" class="popup">
     <h2>РЕФЕРАЛЫ</h2>
     <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
-    <div id="refLinks" style="margin-top:10px; font-size:11px;"></div>
+    <div id="refLinks" style="margin-top:10px; font-size:11px;">
+        <b>Ваши ссылки для рефералов:</b><br>
+        <a href="https://t.me/LudikWin_bot?start=ref1" target="_blank">https://t.me/LudikWin_bot?start=ref1</a><br>
+        <a href="https://t.me/LudikWin_bot?start=ref2" target="_blank">https://t.me/LudikWin_bot?start=ref2</a><br>
+        <a href="https://t.me/LudikWin_bot?start=ref3" target="_blank">https://t.me/LudikWin_bot?start=ref3</a>
+    </div>
     <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ</button>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
@@ -117,19 +122,21 @@ th {background:#1a1a1a;}
 <!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
     <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
-    <p id="jbContent" style="font-size:12px; margin:15px 0;">Сегодня: Лудик сделал невероятный прогноз!</p>
+    <p id="jbContent" style="font-size:12px; margin:15px 0;">
+        Сегодня: <span>Реал Мадрид 🆚 Барселона — П1 (вероятность 85%)</span>
+    </p>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <!-- ИСТОРИЯ ПРОГНОЗОВ -->
-<div id="historyP" class="popup">
-    <h2 style="color:#bc13fe">История прогнозов</h2>
+<div id="historyP" class="popup"><h2 style="color:#bc13fe">История прогнозов</h2>
     <table>
         <tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
         <tr><td>23.02</td><td>Бенфика - Реал</td><td>ТБ 2.5</td><td>✔️</td></tr>
         <tr><td>22.02</td><td>МЮ - Ливерпуль</td><td>П2</td><td>❌</td></tr>
         <tr><td>21.02</td><td>Барса - Атлетико</td><td>Ничья</td><td>✔️</td></tr>
-    </table><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </table>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <!-- ЧАТ -->
@@ -149,22 +156,6 @@ const user = tg.initDataUnsafe?.user;
 if(user){
     document.getElementById('uID').innerText = user.id;
     document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start='+user.id;
-}
-
-// ЖБ — самый уверенный прогноз дня
-const topPrediction = "Реал Мадрид 🆚 Барселона — П1 (вероятность 85%)";
-const jbContent = document.getElementById('jbContent');
-if(jbContent) jbContent.innerHTML = Сегодня: <span>${topPrediction}</span>;
-
-// Реферал — ссылки для рефералов
-const refBox = document.getElementById('refLinks');
-if(refBox){
-    const refArr = [
-        'https://t.me/LudikWin_bot?start=ref1',
-        'https://t.me/LudikWin_bot?start=ref2',
-        'https://t.me/LudikWin_bot?start=ref3'
-    ];
-    refBox.innerHTML = '<b>Ваши ссылки для рефералов:</b><br>' + refArr.map(r=>`<a href="${r}" target="_blank">${r}</a>`).join('<br>');
 }
 
 function openP(id){
