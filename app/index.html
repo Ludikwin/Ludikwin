@@ -8,36 +8,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-    --bg-gradient: linear-gradient(135deg, #1a1a1a 0%, #111 50%, #1a1a1a 100%);
+    --bg-gradient: linear-gradient(135deg, #111 0%, #1a1a1a 50%, #111 100%);
     --gold-gradient: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
-    --neon: #bc13fe;
+    --gold-glow: rgba(255,215,0,0.6);
+    --accent-neon: #bc13fe;
 }
 * { box-sizing: border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
 html, body {height:100%; width:100%; overflow:hidden; background: var(--bg-gradient); font-family: 'Inter', sans-serif; color:white; position: relative;}
-body {display:flex; flex-direction:column; align-items:center; padding:20px; animation:bgGlow 10s ease-in-out infinite alternate;}
+body {display:flex; flex-direction:column; align-items:center; padding:20px; animation:bgGlow 12s ease-in-out infinite alternate;}
 @keyframes bgGlow {
     0% {background-position:0% 50%;}
     100% {background-position:100% 50%;}
 }
 .app-title {
     font-family:'Orbitron', sans-serif;
-    font-size:24px;
+    font-size:26px;
     background: var(--gold-gradient);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
     text-transform:uppercase;
     margin:10px 0 25px;
-    text-shadow:0 0 20px rgba(255, 215, 0, 0.7);
-    transition: text-shadow 0.3s;
+    text-shadow:0 0 20px var(--gold-glow);
+    animation:glowTitle 2s infinite alternate;
 }
-.app-title:hover {text-shadow:0 0 30px rgba(255, 215, 0, 1);}
+@keyframes glowTitle{
+    0% {text-shadow:0 0 20px var(--gold-glow);}
+    50% {text-shadow:0 0 30px var(--gold-glow);}
+    100% {text-shadow:0 0 20px var(--gold-glow);}
+}
 .main-card {
     width:100%; max-width:440px;
     background:rgba(20,20,20,0.95);
-    border:2px solid var(--neon);
+    border:2px solid var(--accent-neon);
     border-radius:35px;
     padding:25px;
-    box-shadow:0 0 30px var(--neon);
+    box-shadow:0 0 30px var(--accent-neon);
     z-index:10; position:relative; touch-action:auto;
     transition: transform 0.2s;
 }
@@ -45,7 +50,7 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px; ani
 .menu-grid {display:grid; grid-template-columns:1fr 1fr; gap:14px;}
 .menu-item {
     background:#111;
-    border:2px solid var(--neon);
+    border:2px solid var(--accent-neon);
     border-radius:28px;
     padding:25px 12px;
     text-align:center;
@@ -58,6 +63,10 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px; ani
     justify-content:center;
     touch-action: manipulation;
     transition: all 0.2s;
+}
+.menu-item:hover {
+    border-image: linear-gradient(180deg,#ffe57e,#d4af37,#b8860b) 1;
+    box-shadow:0 0 15px var(--gold-glow);
 }
 .menu-item:active {
     background:#222;
@@ -111,8 +120,6 @@ th {background:#1a1a1a;}
 </div>
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
-
-<!-- Тут идут все попапы как раньше (не трогаем структуру, добавлены ЖБ и Реф ссылки) -->
 
 <!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
