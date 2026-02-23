@@ -18,7 +18,7 @@
             height: 100%; width: 100%; 
             overflow: hidden; background: var(--bg); 
             font-family: 'Inter', sans-serif; color: white; 
-            position: fixed; touch-action: none; /* Запрещаем скролл всей страницы */
+            position: relative; /* было fixed, теперь relative */
         }
         
         body { display: flex; flex-direction: column; align-items: center; padding: 20px; }
@@ -36,13 +36,13 @@
         
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         
-        /* ГЛАВНОЕ: Увеличиваем область нажатия и ставим z-index */
         .menu-item { 
             background: #111; border: 2px solid var(--neon); 
             border-radius: 25px; padding: 25px 10px; 
             text-align: center; cursor: pointer; 
             position: relative; z-index: 20;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            touch-action: manipulation; /* чтобы кнопки реагировали на клики */
         }
         
         .menu-item:active { background: #222; transform: scale(0.95); border-color: #ffe57e; }
@@ -69,12 +69,12 @@
 
     <div class="app-title">LUDIK AI</div><div class="main-card">
         <div class="menu-grid">
-            <div class="menu-item" onclick="openPredict()" ontouchend="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
-            <div class="menu-item" onclick="openP('vipP')" ontouchend="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
-            <div class="menu-item" onclick="openP('profileP')" ontouchend="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
-            <div class="menu-item" onclick="openP('bonusP')" ontouchend="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
-            <div class="menu-item" onclick="openP('refP')" ontouchend="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
-            <div class="menu-item" onclick="openP('statsP')" ontouchend="openP('statsP')"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
+            <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
+            <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
+            <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
+            <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+            <div class="menu-item" onclick="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
+            <div class="menu-item" onclick="openP('statsP')"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
         </div>
     </div>
 
@@ -128,7 +128,6 @@
         tg.ready();
         tg.expand();
 
-        // Данные юзера
         const user = tg.initDataUnsafe?.user;
         if(user) {
             document.getElementById('uID').innerText = user.id;
@@ -139,19 +138,18 @@
             closeAll();
             document.getElementById('overlay').style.display = 'block';
             document.getElementById(id).style.display = 'block';
-            tg.expand(); // На всякий случай расширяем при клике
+            tg.expand();
         }
 
         function closeAll() {
             document.getElementById('overlay').style.display = 'none';
-            const popups = document.querySelectorAll('.popup');
-            popups.forEach(p => p.style.display = 'none');}
+            document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
+        }
 
         function openPredict() {
             openP('predictP');
             const box = document.getElementById('leagueBox');
-            box.innerHTML = "";
-            const leagues = {"PL":"АПЛ", "PD":"Ла Лига", "BL1":"Бундес", "SA":"Серия А", "CL":"ЛЧ", "RPL":"РПЛ", "MLS":"MLS", "EL":"ЛЕ"};
+            box.innerHTML = "";const leagues = {"PL":"АПЛ", "PD":"Ла Лига", "BL1":"Бундес", "SA":"Серия А", "CL":"ЛЧ", "RPL":"РПЛ", "MLS":"MLS", "EL":"ЛЕ"};
             Object.keys(leagues).forEach(code => {
                 const btn = document.createElement('button');
                 btn.className = "league-btn";
