@@ -15,11 +15,7 @@
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
     height: 100%;
@@ -79,7 +75,7 @@ body {
 }
 
 .gold-icon {
-    font-size: 28px;
+    font-size: 26px;
     display: block;
     margin-bottom: 8px;
 }
@@ -90,6 +86,15 @@ body {
     text-transform: uppercase;
     font-weight: 900;
 }
+
+.hidden { display: none; }
+
+.back-btn {
+    margin-bottom: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #f3cf7a;
+}
 </style>
 </head>
 
@@ -98,61 +103,63 @@ body {
 <div class="app-title">LUDIK AI</div>
 
 <div class="main-card">
-    <div class="menu-grid">
 
-        <!-- Топ лиги -->
-        <div class="menu-item" onclick="openLeague('PL')">
-            <span class="gold-icon">🏴</span>
-            <span class="item-label">АПЛ</span>
+    <!-- Главное меню -->
+    <div id="mainMenu" class="menu-grid">
+
+        <div class="menu-item" onclick="openPredictions()">
+            <span class="gold-icon">🔮</span>
+            <span class="item-label">Прогнозы</span>
         </div>
 
-        <div class="menu-item" onclick="openLeague('PD')">
-            <span class="gold-icon">🇪🇸</span>
-            <span class="item-label">Ла Лига</span>
+        <div class="menu-item" onclick="vip()">
+            <span class="gold-icon">💎</span>
+            <span class="item-label">VIP</span>
         </div>
 
-        <div class="menu-item" onclick="openLeague('BL1')">
-            <span class="gold-icon">🇩🇪</span>
-            <span class="item-label">Бундеслига</span>
+        <div class="menu-item" onclick="referral()">
+            <span class="gold-icon">🤝</span>
+            <span class="item-label">Реферал</span>
         </div>
 
-        <div class="menu-item" onclick="openLeague('SA')">
-            <span class="gold-icon">🇮🇹</span>
-            <span class="item-label">Серия А</span>
+        <div class="menu-item" onclick="jbDay()">
+            <span class="gold-icon">🔥</span>
+            <span class="item-label">ЖБ дня</span>
         </div>
 
-        <div class="menu-item" onclick="openLeague('CL')">
-            <span class="gold-icon">🏆</span>
-            <span class="item-label">Лига Чемпионов</span>
+        <div class="menu-item" onclick="stats()">
+            <span class="gold-icon">📊</span>
+            <span class="item-label">Статистика</span>
         </div>
 
-        <div class="menu-item" onclick="openLeague('FL1')">
-            <span class="gold-icon">🇫🇷</span>
-            <span class="item-label">Лига 1</span>
-        </div>
-
-        <div class="menu-item" onclick="openLeague('DED')">
-            <span class="gold-icon">🇳🇱</span>
-            <span class="item-label">Эредивизи</span>
-        </div>
-
-        <div class="menu-item" onclick="openLeague('PPL')">
-            <span class="gold-icon">🇵🇹</span>
-            <span class="item-label">Примейра</span>
-        </div>
-
-        <!-- Меню -->
-        <div class="menu-item" onclick="openProfile()">
+        <div class="menu-item" onclick="profile()">
             <span class="gold-icon">👤</span>
             <span class="item-label">Профиль</span>
         </div>
 
-        <div class="menu-item" onclick="openBonus()">
+        <div class="menu-item" onclick="bonus()">
             <span class="gold-icon">🎁</span>
             <span class="item-label">Бонусы</span>
         </div>
 
     </div>
+
+    <!-- Меню лиг -->
+    <div id="leagueMenu" class="menu-grid hidden">
+
+        <div class="back-btn" onclick="back()">← Назад</div>
+
+        <div class="menu-item" onclick="openLeague('PL')">🇬🇧 АПЛ</div>
+        <div class="menu-item" onclick="openLeague('PD')">🇪🇸 Ла Лига</div>
+        <div class="menu-item" onclick="openLeague('BL1')">🇩🇪 Бундеслига</div>
+        <div class="menu-item" onclick="openLeague('SA')">🇮🇹 Серия А</div>
+        <div class="menu-item" onclick="openLeague('CL')">🏆 ЛЧ</div>
+        <div class="menu-item" onclick="openLeague('FL1')">🇫🇷 Лига 1</div>
+        <div class="menu-item" onclick="openLeague('DED')">🇳🇱 Эредивизи</div>
+        <div class="menu-item" onclick="openLeague('PPL')">🇵🇹 Примейра</div>
+
+    </div>
+
 </div>
 
 <script>
@@ -160,17 +167,26 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
+function openPredictions(){
+    document.getElementById("mainMenu").classList.add("hidden");
+    document.getElementById("leagueMenu").classList.remove("hidden");
+}
+
+function back(){
+    document.getElementById("leagueMenu").classList.add("hidden");
+    document.getElementById("mainMenu").classList.remove("hidden");
+}
+
 function openLeague(code){
-    alert("Нажата лига: " + code);
+    alert("Лига: " + code);
 }
 
-function openProfile(){
-    alert("Открыт профиль");
-}
-
-function openBonus(){
-    alert("Открыты бонусы");
-}
+function vip(){ alert("VIP раздел"); }
+function referral(){ alert("Реферальная система"); }
+function jbDay(){ alert("ЖБ дня"); }
+function stats(){ alert("Статистика"); }
+function profile(){ alert("Профиль"); }
+function bonus(){ alert("Бонусы"); }
 </script>
 
 </body>
