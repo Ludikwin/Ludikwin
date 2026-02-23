@@ -12,155 +12,158 @@
             --neon: #bc13fe;
             --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        html, body { height: 100%; width: 100%; overflow: hidden; background: var(--bg); font-family: 'Inter', sans-serif; color: white; position: fixed; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        html, body { 
+            height: 100%; width: 100%; 
+            overflow: hidden; background: var(--bg); 
+            font-family: 'Inter', sans-serif; color: white; 
+            position: fixed; touch-action: none; /* Запрещаем скролл всей страницы */
+        }
+        
         body { display: flex; flex-direction: column; align-items: center; padding: 20px; }
         
         .app-title { font-family: 'Orbitron', sans-serif; font-size: 20px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; margin: 10px 0 20px; text-shadow: 0 0 15px rgba(188, 19, 254, 0.6); }
         
-        .main-card { width: 100%; max-width: 420px; background: rgba(15,15,15,0.98); border: 2px solid var(--neon); border-radius: 30px; padding: 20px; box-shadow: 0 0 20px var(--neon); z-index: 10; position: relative; }
+        .main-card { 
+            width: 100%; max-width: 420px; 
+            background: rgba(15,15,15,0.98); 
+            border: 2px solid var(--neon); border-radius: 30px; 
+            padding: 20px; box-shadow: 0 0 20px var(--neon); 
+            z-index: 10; position: relative; 
+            touch-action: auto; /* Разрешаем касания внутри карты */
+        }
+        
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         
-        .menu-item { background: #111; border: 2px solid var(--neon); border-radius: 25px; padding: 22px 10px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 0 10px rgba(188, 19, 254, 0.3); }
-        .menu-item:active { transform: scale(0.95); border-color: #ffe57e; }
+        /* ГЛАВНОЕ: Увеличиваем область нажатия и ставим z-index */
+        .menu-item { 
+            background: #111; border: 2px solid var(--neon); 
+            border-radius: 25px; padding: 25px 10px; 
+            text-align: center; cursor: pointer; 
+            position: relative; z-index: 20;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
         
-        .gold-icon { font-size: 26px; display: block; margin-bottom: 5px; pointer-events: none; }
-        .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 900; pointer-events: none; }
+        .menu-item:active { background: #222; transform: scale(0.95); border-color: #ffe57e; }
         
+        .gold-icon { font-size: 28px; display: block; margin-bottom: 5px; pointer-events: none; }
+        .item-label { font-size: 11px; color: #f3cf7a; text-transform: uppercase; font-weight: 900; pointer-events: none; }
+        
+        /* Попапы */
         .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 900; }
         .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 380px; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 20px; z-index: 1000; text-align: center; }
         
-        .close-btn { background: #222; color: #888; padding: 12px; width: 100%; border-radius: 15px; margin-top: 15px; border: 1px solid #444; font-weight: bold; cursor: pointer; }
-        .action-btn { background: var(--gold); color: black; padding: 14px; width: 100%; border-radius: 15px; margin-top: 10px; border: none; font-weight: 900; cursor: pointer; text-decoration: none; display: inline-block; }
+        .close-btn { background: #222; color: #888; padding: 12px; width: 100%; border-radius: 15px; margin-top: 15px; border: 1px solid #444; font-weight: bold; }
+        .action-btn { background: var(--gold); color: black; padding: 14px; width: 100%; border-radius: 15px; margin-top: 10px; border: none; font-weight: 900; display: inline-block; text-decoration: none; }
         
-        .league-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
-        .league-btn { background: #1a1a1a; color: white; border: 1px solid #333; padding: 10px; border-radius: 12px; font-size: 11px; cursor: pointer; }
+        .league-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .league-btn { background: #1a1a1a; color: white; border: 1px solid #333; padding: 10px; border-radius: 12px; font-size: 11px; }
         
         .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; font-size: 14px; }
         .gold-t { color: #d4af37; font-weight: bold; }
-        .bonus-link { display: block; background: #111; color: #ffe57e; padding: 12px; margin: 8px 0; border-radius: 12px; text-decoration: none; border: 1px solid #d4af37; font-weight: bold; font-size: 13px; }
+        .bonus-link { display: block; background: #111; color: #ffe57e; padding: 12px; margin: 8px 0; border-radius: 12px; text-decoration: none; border: 1px solid #d4af37; font-weight: bold; }
     </style>
 </head>
 <body ontouchstart="tg.expand()">
 
-    <div class="app-title">LUDIK AI</div>
-
-    <div class="main-card">
+    <div class="app-title">LUDIK AI</div><div class="main-card">
         <div class="menu-grid">
-            <div class="menu-item" id="predictBtn"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
-            <div class="menu-item" id="vipBtn"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div><div class="menu-item" id="profileBtn"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
-            <div class="menu-item" id="bonusBtn"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
-            <div class="menu-item" id="refBtn"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
-            <div class="menu-item" id="statsBtn"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
+            <div class="menu-item" onclick="openPredict()" ontouchend="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
+            <div class="menu-item" onclick="openP('vipP')" ontouchend="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
+            <div class="menu-item" onclick="openP('profileP')" ontouchend="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
+            <div class="menu-item" onclick="openP('bonusP')" ontouchend="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+            <div class="menu-item" onclick="openP('refP')" ontouchend="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
+            <div class="menu-item" onclick="openP('statsP')" ontouchend="openP('statsP')"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
         </div>
     </div>
 
-    <div class="overlay" id="overlay"></div>
+    <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
     <div id="predictP" class="popup">
-        <h3 style="color:#ffe57e">ВЫБЕРИТЕ ЛИГУ</h3>
+        <h3 style="color:#ffe57e">ЛИГИ</h3>
         <div class="league-grid" id="leagueBox"></div>
-        <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px; min-height:40px; border-top: 1px solid #222; padding-top: 10px;"></div>
+        <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px;"></div>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
 
     <div id="vipP" class="popup">
-        <h2 style="color:#bc13fe">VIP ПРЕДИКТОР</h2>
-        <p style="font-size:12px; margin:15px 0; line-height: 1.4;">Доступ к VIP прогнозам на <b style="color:#ffe57e">2 недели</b>.<br>Точность AI моделей выше на 15%.</p>
-        <div class="stat-row"><span>Стоимость:</span><span class="gold-t">15.00 USDT</span></div>
-        <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">ОПЛАТИТЬ В CRYPTO BOT</a>
+        <h2 style="color:#bc13fe">VIP ПАКЕТ</h2>
+        <p style="font-size:12px; margin:15px 0;">Доступ к VIP прогнозам на 2 недели.</p>
+        <div class="stat-row"><span>Цена:</span><span class="gold-t">15.00 USDT</span></div>
+        <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">ОПЛАТИТЬ</a>
         <button class="close-btn" onclick="closeAll()">ОТМЕНА</button>
     </div>
 
     <div id="profileP" class="popup">
-        <h2>МОЙ ПРОФИЛЬ</h2>
-        <div style="margin:15px 0; text-align:left;">
-            <div class="stat-row"><span>ID Пользователя:</span><span id="uID" class="gold-t">---</span></div>
-            <div class="stat-row"><span>Ludik Coin:</span><span class="gold-t">100.00 LC</span></div>
-            <div class="stat-row"><span>VIP Статус:</span><span style="color: #888;">Не активен</span></div>
-        </div>
+        <h2>ПРОФИЛЬ</h2>
+        <div class="stat-row"><span>ID:</span><span id="uID" class="gold-t">---</span></div>
+        <div class="stat-row"><span>Баланс:</span><span class="gold-t">100.00 LC</span></div>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
 
     <div id="bonusP" class="popup">
-        <h3 style="margin-bottom: 10px;">БОНУСЫ ЛУДИКА</h3>
-        <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">🚀 1WIN: +500% К ДЕПО</a>
-        <a href="https://stake.com/ru?c=oeVgnFIa" class="bonus-link">🎲 STAKE: VIP КАЗИНО</a>
-        <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="bonus-link">📢 НАШ КАНАЛ</a>
-        <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="bonus-link">💬 ЧАТ ЛУДИКОВ</a>
+        <h3>БОНУСЫ</h3>
+        <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">💰 1WIN</a>
+        <a href="https://stake.com/ru?c=oeVgnFIa" class="bonus-link">🎲 STAKE</a>
+        <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="bonus-link">📢 КАНАЛ</a>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
 
     <div id="refP" class="popup">
-        <h2>РЕФЕРАЛЬНАЯ ПРОГРАММА</h2>
-        <p style="font-size:11px; margin:10px 0; color: #ccc;">Пригласи 3-х друзей и получи 50 Ludik Coin!</p>
-        <div style="background:#111; padding:12px; border-radius:10px; font-size:10px; color:#888; word-break:break-all; border: 1px dashed #444;" id="refLink">
-            https://t.me/LudikWin_bot?start=user
-        </div>
-        <div class="stat-row" style="margin-top:15px;"><span>Приглашено:</span><span class="gold-t">0 / 3</span></div>
-        <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ ССЫЛКУ</button>
+        <h2>РЕФЕРАЛЫ</h2>
+        <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
+        <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ</button>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
 
     <div id="statsP" class="popup">
-        <h2>СТАТИСТИКА AI</h2>
-        <div style="margin:15px 0;">
-            <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00; font-weight:bold;">84.2%</span></div>
-            <div class="stat-row"><span>ROI (месяц):</span><span class="gold-t">+24.5%</span></div>
-            <div class="stat-row"><span>Средний кэф:</span><span>1.85</span></div>
-        </div>
+        <h2>AI СТАТИСТИКА</h2>
+        <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00;">84.2%</span></div>
         <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
+        tg.ready();
+        tg.expand();
 
-        // Данные пользователя
+        // Данные юзера
         const user = tg.initDataUnsafe?.user;
         if(user) {
             document.getElementById('uID').innerText = user.id;
-            document.getElementById('refLink').innerText = https://t.me/LudikWin_bot?start=${user.id};
+            document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start=' + user.id;
         }
 
-        const leagues = {
-            "PL":"🏴󠁧󠁢󠁥󠁮󠁧󠁿 АПЛ", "PD":"🇪🇸 Ла Лига", "BL1":"🇩🇪 Бундеслига", 
-            "SA":"🇮🇹 Серия А", "FL1":"🇫🇷 Лига 1", "CL":"🇪🇺 ЛЧ",
-            "EL":"🇪🇺 ЛЕ", "RPL":"🇷🇺 РПЛ", "MLS":"🇺🇸 MLS", "DED":"🇳🇱 Эредивизи"
-        };
-
-        function openPopup(id){
+        function openP(id) {
+            closeAll();
             document.getElementById('overlay').style.display = 'block';
             document.getElementById(id).style.display = 'block';
+            tg.expand(); // На всякий случай расширяем при клике
         }
 
-        function closeAll(){
+        function closeAll() {
             document.getElementById('overlay').style.display = 'none';
-            document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
-        }
+            const popups = document.querySelectorAll('.popup');
+            popups.forEach(p => p.style.display = 'none');}
 
-        const bind = (id, act) => {
-            const el = document.getElementById(id);
-            el.addEventListener('click', act);
-            el.addEventListener('touchstart', (e) => { e.preventDefault(); act(); });
-        };
-
-        bind('predictBtn', () => {
-            openPopup('predictP');
+        function openPredict() {
+            openP('predictP');
             const box = document.getElementById('leagueBox');
             box.innerHTML = "";
+            const leagues = {"PL":"АПЛ", "PD":"Ла Лига", "BL1":"Бундес", "SA":"Серия А", "CL":"ЛЧ", "RPL":"РПЛ", "MLS":"MLS", "EL":"ЛЕ"};
             Object.keys(leagues).forEach(code => {
                 const btn = document.createElement('button');
                 btn.className = "league-btn";
-                btn.textContent = leagues[code];
+                btn.innerText = leagues[code];
                 btn.onclick = () => getPredict(code);
                 box.appendChild(btn);
             });
-        });
+        }
 
         async function getPredict(code) {
             const resBox = document.getElementById('pRes');
-            resBox.innerText = "АНАЛИЗИРУЮ МАТЧИ...";
+            resBox.innerText = "АНАЛИЗ...";
             try {
                 const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
                     headers: {'X-Auth-Token': '7a5d573e9f134d42b4edaa35c408e019'}
@@ -168,21 +171,20 @@
                 const data = await res.json();
                 if(data.matches && data.matches.length > 0) {
                     const m = data.matches[0];
-                    resBox.innerHTML = <b style="color:white">${m.homeTeam.name} vs ${m.awayTeam.name}</b><br>Прогноз: <span style="color:#ffe57e">ОЗ (ДА)</span><br>Уверенность AI: 87%;
-                } else { resBox.innerText = "На сегодня игр больше нет"; }
-            } catch(e) { resBox.innerText = "Ошибка загрузки API"; }
+                    resBox.innerHTML = m.homeTeam.name + ' vs ' + m.awayTeam.name + '<br><span style="color:#ffe57e">Прогноз: ТБ 2.5</span>';
+                } else { resBox.innerText = "Матчей нет"; }
+            } catch(e) { resBox.innerText = "Ошибка API"; }
         }
-
-        bind('vipBtn', () => openPopup('vipP'));
-        bind('profileBtn', () => openPopup('profileP'));
-        bind('bonusBtn', () => openPopup('bonusP'));
-        bind('refBtn', () => openPopup('refP'));
-        bind('statsBtn', () => openPopup('statsP'));
 
         function copyRef() {
             const link = document.getElementById('refLink').innerText;
-            navigator.clipboard.writeText(link);
-            tg.showAlert("Реферальная ссылка скопирована!");
+            const el = document.createElement('textarea');
+            el.value = link;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            tg.showAlert("Скопировано!");
         }
     </script>
 </body>
