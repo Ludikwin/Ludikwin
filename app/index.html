@@ -15,116 +15,175 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         html, body { height: 100%; width: 100%; overflow: hidden; background: var(--bg); font-family: 'Inter', sans-serif; color: white; position: fixed; }
         body { display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .app-title { font-family: 'Orbitron', sans-serif; font-size: 20px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; margin: 15px 0 20px; text-shadow: 0 0 10px #ffe57e, 0 0 20px #bc13fe; }
+        
+        .app-title { font-family: 'Orbitron', sans-serif; font-size: 20px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; margin: 10px 0 20px; text-shadow: 0 0 15px rgba(188, 19, 254, 0.6); }
+        
         .main-card { width: 100%; max-width: 420px; background: rgba(15,15,15,0.98); border: 2px solid var(--neon); border-radius: 30px; padding: 20px; box-shadow: 0 0 20px var(--neon); z-index: 10; position: relative; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .menu-item { background: #111; border: 2px solid var(--neon); border-radius: 25px; padding: 25px 10px; text-align: center; cursor: pointer; box-shadow: 0 0 15px var(--neon); pointer-events: auto !important; }
-        .menu-item:active { background: #222; border-color: #ffe57e; transform: scale(0.95); }
-        .gold-icon { font-size: 28px; display: block; margin-bottom: 8px; pointer-events: none; }
-        .item-label { font-size: 11px; color: #f3cf7a; text-transform: uppercase; font-weight: 900; pointer-events: none; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        
+        .menu-item { background: #111; border: 2px solid var(--neon); border-radius: 25px; padding: 22px 10px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 0 10px rgba(188, 19, 254, 0.3); }
+        .menu-item:active { transform: scale(0.95); border-color: #ffe57e; }
+        
+        .gold-icon { font-size: 26px; display: block; margin-bottom: 5px; pointer-events: none; }
+        .item-label { font-size: 10px; color: #f3cf7a; text-transform: uppercase; font-weight: 900; pointer-events: none; }
+        
         .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 900; }
-        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 380px; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 25px; z-index: 1000; text-align: center; }
-        .close-btn { background: #222; color: white; padding: 15px; width: 100%; border-radius: 15px; margin-top: 15px; border: 1px solid #444; font-weight: bold; }
-        .league-btn { background: #1a1a1a; color: #f3cf7a; border: 1px solid #d4af37; padding: 10px; margin: 4px; border-radius: 10px; font-size: 12px; cursor: pointer; }
+        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 380px; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 20px; z-index: 1000; text-align: center; }
+        
+        .close-btn { background: #222; color: #888; padding: 12px; width: 100%; border-radius: 15px; margin-top: 15px; border: 1px solid #444; font-weight: bold; cursor: pointer; }
+        .action-btn { background: var(--gold); color: black; padding: 14px; width: 100%; border-radius: 15px; margin-top: 10px; border: none; font-weight: 900; cursor: pointer; text-decoration: none; display: inline-block; }
+        
+        .league-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .league-btn { background: #1a1a1a; color: white; border: 1px solid #333; padding: 10px; border-radius: 12px; font-size: 11px; cursor: pointer; }
+        
+        .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; font-size: 14px; }
+        .gold-t { color: #d4af37; font-weight: bold; }
+        .bonus-link { display: block; background: #111; color: #ffe57e; padding: 12px; margin: 8px 0; border-radius: 12px; text-decoration: none; border: 1px solid #d4af37; font-weight: bold; font-size: 13px; }
     </style>
 </head>
 <body ontouchstart="tg.expand()">
 
-<div class="app-title">LUDIK AI</div>
+    <div class="app-title">LUDIK AI</div>
 
-<div class="main-card">
-    <div class="menu-grid">
-        <div class="menu-item" id="predictBtn"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
-        <div class="menu-item" id="vipBtn"><span class="gold-icon">💎</span><span class="item-label">VIP</span></div>
-        <div class="menu-item" id="profileBtn"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
-        <div class="menu-item" id="bonusBtn"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
-        <div class="menu-item" id="refBtn"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
-        <div class="menu-item" id="statsBtn"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
+    <div class="main-card">
+        <div class="menu-grid">
+            <div class="menu-item" id="predictBtn"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
+            <div class="menu-item" id="vipBtn"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div><div class="menu-item" id="profileBtn"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
+            <div class="menu-item" id="bonusBtn"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+            <div class="menu-item" id="refBtn"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
+            <div class="menu-item" id="statsBtn"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
+        </div>
     </div>
-</div>
 
-<div class="overlay" id="overlay"></div>
+    <div class="overlay" id="overlay"></div>
 
-<div id="predictP" class="popup">
-    <h2>ВЫБЕРИТЕ ЛИГУ</h2>
-    <div id="leagueButtons" style="margin-top:10px;"></div>
-    <div id="pStats" style="white-space: pre-line; margin-top: 15px; color:#00ff00; font-size:14px;"></div>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
+    <div id="predictP" class="popup">
+        <h3 style="color:#ffe57e">ВЫБЕРИТЕ ЛИГУ</h3>
+        <div class="league-grid" id="leagueBox"></div>
+        <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px; min-height:40px; border-top: 1px solid #222; padding-top: 10px;"></div>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
 
-<div id="profileP" class="popup"><h2>ПРОФИЛЬ</h2>
-    <p style="margin-top:15px;">Баланс: <span style="color:#ffe57e;">100 LC</span></p>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
+    <div id="vipP" class="popup">
+        <h2 style="color:#bc13fe">VIP ПРЕДИКТОР</h2>
+        <p style="font-size:12px; margin:15px 0; line-height: 1.4;">Доступ к VIP прогнозам на <b style="color:#ffe57e">2 недели</b>.<br>Точность AI моделей выше на 15%.</p>
+        <div class="stat-row"><span>Стоимость:</span><span class="gold-t">15.00 USDT</span></div>
+        <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">ОПЛАТИТЬ В CRYPTO BOT</a>
+        <button class="close-btn" onclick="closeAll()">ОТМЕНА</button>
+    </div>
 
-<div id="bonusP" class="popup">
-    <h2>БОНУСЫ</h2>
-    <p style="margin-top:10px;"><a href="https://t.me/+oEnEz7IOZ90wN2Ri" style="color:#ffe57e;">ПОДПИСАТЬСЯ НА КАНАЛ</a></p>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
+    <div id="profileP" class="popup">
+        <h2>МОЙ ПРОФИЛЬ</h2>
+        <div style="margin:15px 0; text-align:left;">
+            <div class="stat-row"><span>ID Пользователя:</span><span id="uID" class="gold-t">---</span></div>
+            <div class="stat-row"><span>Ludik Coin:</span><span class="gold-t">100.00 LC</span></div>
+            <div class="stat-row"><span>VIP Статус:</span><span style="color: #888;">Не активен</span></div>
+        </div>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
 
-<script>
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
+    <div id="bonusP" class="popup">
+        <h3 style="margin-bottom: 10px;">БОНУСЫ ЛУДИКА</h3>
+        <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">🚀 1WIN: +500% К ДЕПО</a>
+        <a href="https://stake.com/ru?c=oeVgnFIa" class="bonus-link">🎲 STAKE: VIP КАЗИНО</a>
+        <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="bonus-link">📢 НАШ КАНАЛ</a>
+        <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="bonus-link">💬 ЧАТ ЛУДИКОВ</a>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
 
-function openPopup(id){
-    document.getElementById('overlay').style.display = 'block';
-    document.getElementById(id).style.display = 'block';
-}
+    <div id="refP" class="popup">
+        <h2>РЕФЕРАЛЬНАЯ ПРОГРАММА</h2>
+        <p style="font-size:11px; margin:10px 0; color: #ccc;">Пригласи 3-х друзей и получи 50 Ludik Coin!</p>
+        <div style="background:#111; padding:12px; border-radius:10px; font-size:10px; color:#888; word-break:break-all; border: 1px dashed #444;" id="refLink">
+            https://t.me/LudikWin_bot?start=user
+        </div>
+        <div class="stat-row" style="margin-top:15px;"><span>Приглашено:</span><span class="gold-t">0 / 3</span></div>
+        <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ ССЫЛКУ</button>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
 
-function closeAll(){
-    document.getElementById('overlay').style.display = 'none';
-    document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
-}
+    <div id="statsP" class="popup">
+        <h2>СТАТИСТИКА AI</h2>
+        <div style="margin:15px 0;">
+            <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00; font-weight:bold;">84.2%</span></div>
+            <div class="stat-row"><span>ROI (месяц):</span><span class="gold-t">+24.5%</span></div>
+            <div class="stat-row"><span>Средний кэф:</span><span>1.85</span></div>
+        </div>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
 
-// Починил клики для всех кнопок
-const setup = (id, fn) => {
-    const el = document.getElementById(id);
-    el.addEventListener('click', fn);
-    el.addEventListener('touchstart', (e) => { e.preventDefault(); fn(); });
-}
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready(); tg.expand();
 
-setup('predictBtn', () => {
-    openPopup('predictP');
-    const box = document.getElementById('leagueButtons');
-    box.innerHTML = "";
-    const leagues = {"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А"};
-    Object.keys(leagues).forEach(code => {
-        const btn = document.createElement('button');
-        btn.className = "league-btn";
-        btn.textContent = leagues[code];
-        btn.onclick = () => getPredict(code);
-        box.appendChild(btn);
-    });
-});
-
-async function getPredict(code) {
-    document.getElementById('pStats').innerText = "АНАЛИЗ...";
-    try {
-        const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
-            headers: {'X-Auth-Token': '7a5d573e9f134d42b4edaa35c408e019'}
-        });
-        const data = await res.json();
-        if(data.matches && data.matches.length > 0) {
-            const m = data.matches[0];
-            document.getElementById('pStats').innerText = ${m.homeTeam.name} - ${m.awayTeam.name}\nПрогноз: ТБ 2.5\nДоверие: ${Math.floor(Math.random()*15+75)}%;
-        } else {
-            document.getElementById('pStats').innerText = "Матчей нет";
+        // Данные пользователя
+        const user = tg.initDataUnsafe?.user;
+        if(user) {
+            document.getElementById('uID').innerText = user.id;
+            document.getElementById('refLink').innerText = https://t.me/LudikWin_bot?start=${user.id};
         }
-    } catch(e) { document.getElementById('pStats').innerText = "Ошибка сети"; }
-}
 
-setup('vipBtn', () => {
-    // Прямая ссылка на оплату (замени на свою ссылку из CryptoBot, если есть готовая)
-    tg.openTelegramLink("https://t.me/CryptoBot?start=pay");
-});
+        const leagues = {
+            "PL":"🏴󠁧󠁢󠁥󠁮󠁧󠁿 АПЛ", "PD":"🇪🇸 Ла Лига", "BL1":"🇩🇪 Бундеслига", 
+            "SA":"🇮🇹 Серия А", "FL1":"🇫🇷 Лига 1", "CL":"🇪🇺 ЛЧ",
+            "EL":"🇪🇺 ЛЕ", "RPL":"🇷🇺 РПЛ", "MLS":"🇺🇸 MLS", "DED":"🇳🇱 Эредивизи"
+        };
 
-setup('profileBtn', () => openPopup('profileP'));
-setup('bonusBtn', () => openPopup('bonusP'));
-setup('refBtn', () => alert("Реферальная система в разработке"));
-setup('statsBtn', () => alert("Статистика: 78% побед"));
+        function openPopup(id){
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(id).style.display = 'block';
+        }
 
-</script>
+        function closeAll(){
+            document.getElementById('overlay').style.display = 'none';
+            document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
+        }
+
+        const bind = (id, act) => {
+            const el = document.getElementById(id);
+            el.addEventListener('click', act);
+            el.addEventListener('touchstart', (e) => { e.preventDefault(); act(); });
+        };
+
+        bind('predictBtn', () => {
+            openPopup('predictP');
+            const box = document.getElementById('leagueBox');
+            box.innerHTML = "";
+            Object.keys(leagues).forEach(code => {
+                const btn = document.createElement('button');
+                btn.className = "league-btn";
+                btn.textContent = leagues[code];
+                btn.onclick = () => getPredict(code);
+                box.appendChild(btn);
+            });
+        });
+
+        async function getPredict(code) {
+            const resBox = document.getElementById('pRes');
+            resBox.innerText = "АНАЛИЗИРУЮ МАТЧИ...";
+            try {
+                const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
+                    headers: {'X-Auth-Token': '7a5d573e9f134d42b4edaa35c408e019'}
+                });
+                const data = await res.json();
+                if(data.matches && data.matches.length > 0) {
+                    const m = data.matches[0];
+                    resBox.innerHTML = <b style="color:white">${m.homeTeam.name} vs ${m.awayTeam.name}</b><br>Прогноз: <span style="color:#ffe57e">ОЗ (ДА)</span><br>Уверенность AI: 87%;
+                } else { resBox.innerText = "На сегодня игр больше нет"; }
+            } catch(e) { resBox.innerText = "Ошибка загрузки API"; }
+        }
+
+        bind('vipBtn', () => openPopup('vipP'));
+        bind('profileBtn', () => openPopup('profileP'));
+        bind('bonusBtn', () => openPopup('bonusP'));
+        bind('refBtn', () => openPopup('refP'));
+        bind('statsBtn', () => openPopup('statsP'));
+
+        function copyRef() {
+            const link = document.getElementById('refLink').innerText;
+            navigator.clipboard.writeText(link);
+            tg.showAlert("Реферальная ссылка скопирована!");
+        }
+    </script>
 </body>
 </html>
