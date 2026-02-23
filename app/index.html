@@ -139,25 +139,15 @@ function openPredict() {
     const box = document.getElementById('leagueBox');
     box.innerHTML = "";
 
-    // 🔥 Фиксированные прогнозы
-    const leagues = {
-        "PL": {name: "АПЛ", predict: "ТБ 2.5"},
-        "PD": {name: "Ла Лига", predict: "ТМ 2.5"},
-        "BL1": {name: "Бундес", predict: "Победа хозяев"},
-        "SA": {name: "Серия А", predict: "Ничья"},
-        "CL": {name: "ЛЧ", predict: "ТБ 3.0"},
-        "RPL": {name: "РПЛ", predict: "ТМ 2.0"},
-        "MLS": {name: "MLS", predict: "Победа гостей"},
-        "EL": {name: "ЛЕ", predict: "ТБ 2.5"}
-    };
+    const leagues = {"PL":"АПЛ", "PD":"Ла Лига", "BL1":"Бундес", "SA":"Серия А", "CL":"ЛЧ", "RPL":"РПЛ", "MLS":"MLS", "EL":"ЛЕ"};
+    const fixedPredictions = {"PL":"ТБ 2.5","PD":"ТМ 2.5","BL1":"Победа хозяев","SA":"Ничья","CL":"ТБ 3.0","RPL":"ТМ 2.0","MLS":"Победа гостей","EL":"ТБ 2.5"};
 
     Object.keys(leagues).forEach(code => {
         const btn = document.createElement('button');
         btn.className = "league-btn";
-        btn.innerText = leagues[code].name;
+        btn.innerText = leagues[code];
         btn.onclick = () => {
-            document.getElementById('pRes').innerHTML =
-                <span style="color:#ffe57e">Прогноз: ${leagues[code].predict}</span>;
+            document.getElementById('pRes').innerHTML = leagues[code] + ' - <span style="color:#ffe57e">Прогноз: ' + fixedPredictions[code] + '</span>';
         };
         box.appendChild(btn);
     });
@@ -167,7 +157,8 @@ function copyRef() {
     const link = document.getElementById('refLink').innerText;
     const el = document.createElement('textarea');
     el.value = link;
-    document.body.appendChild(el);el.select();
+    document.body.appendChild(el);
+    el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
     tg.showAlert("Скопировано!");
