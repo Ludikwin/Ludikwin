@@ -13,43 +13,42 @@
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
 * { box-sizing: border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
-html, body {height:100%; width:100%; overflow:hidden; background: var(--bg); font-family: 'Inter', sans-serif; color:white; position: relative;}
-body {display:flex; flex-direction:column; align-items:center; padding:20px;}
-.app-title {font-family:'Orbitron', sans-serif; font-size:20px; background: var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:10px 0 20px; text-shadow:0 0 15px rgba(188,19,254,0.6); animation: neonGlow 2s infinite alternate;}
+html, body {height:100%; width:100%; overflow:hidden; font-family: 'Inter', sans-serif; color:white; position: relative;}
+body {display:flex; flex-direction:column; align-items:center; padding:20px; background:#050505;}
+canvas#bgCanvas {position:fixed; inset:0; z-index:0;}
+
+.app-title {font-family:'Orbitron', sans-serif; font-size:20px; background: var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:10px 0 20px; text-shadow:0 0 15px rgba(188,19,254,0.6);}
 .main-card {width:100%; max-width:420px; background:rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 20px var(--neon); z-index:10; position:relative; touch-action:auto;}
 .menu-grid {display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-.menu-item {background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; position:relative; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; touch-action: manipulation; transition: all 0.3s ease-in-out;}
-.menu-item:hover { box-shadow: 0 0 20px #bc13fe, 0 0 40px #bc13fe inset; transform: scale(1.05); border-color: #ffe57e;}
+.menu-item {background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; position:relative; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; touch-action: manipulation; transition: transform 0.2s, box-shadow 0.3s;}
+.menu-item:hover {transform:scale(1.03); box-shadow:0 0 15px var(--neon);}
 .menu-item:active {background:#222; transform:scale(0.95); border-color:#ffe57e;}
-.gold-icon {font-size:28px; display:block; margin-bottom:5px; pointer-events:none;}
+.gold-icon {font-size:28px; display:block; margin-bottom:5px; pointer-events:none; transition: transform 0.3s;}
+.menu-item:hover .gold-icon {transform: rotate(10deg);}
 .item-label {font-size:11px; color:#f3cf7a; text-transform:uppercase; font-weight:900; pointer-events:none;}
 .overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:900;}
-.popup {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0.8); width:90%; max-width:380px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:20px; z-index:1000; text-align:center; overflow-y:auto; max-height:80%; opacity:0; transition: transform 0.3s ease, opacity 0.3s ease;}
-.popup.open {transform:translate(-50%, -50%) scale(1); opacity:1;}
-.close-btn {background:#222; color:#888; padding:12px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; font-weight:bold; transition: all 0.2s;}
-.close-btn:hover {background:#333; color:#fff;}
-.action-btn {background:var(--gold); color:black; padding:14px; width:100%; border-radius:15px; margin-top:10px; border:none; font-weight:900; display:inline-block; text-decoration:none; transition: all 0.2s;}
-.action-btn:hover {box-shadow: 0 0 15px #ffe57e, 0 0 25px #d4af37 inset; transform: scale(1.02);}
+.popup {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:90%; max-width:380px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:20px; z-index:1000; text-align:center; overflow-y:auto; max-height:80%;}
+.close-btn {background:#222; color:#888; padding:12px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; font-weight:bold; cursor:pointer;}
+.action-btn {background:var(--gold); color:black; padding:14px; width:100%; border-radius:15px; margin-top:10px; border:none; font-weight:900; display:inline-block; text-decoration:none; cursor:pointer;}
 .league-grid {display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;}
-.league-btn {background:#1a1a1a; color:white; border:1px solid #333; padding:10px; border-radius:12px; font-size:11px; cursor:pointer; transition: all 0.2s;}
-.league-btn:hover {background:#222; border-color:#ffe57e;}
+.league-btn {background:#1a1a1a; color:white; border:1px solid #333; padding:10px; border-radius:12px; font-size:11px; cursor:pointer;}
 .stat-row {display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222; font-size:14px;}
 .gold-t {color:#d4af37; font-weight:bold;}
-.bonus-link {display:block; background:#111; color:#ffe57e; padding:12px; margin:8px 0; border-radius:12px; text-decoration:none; border:1px solid #d4af37; font-weight:bold; transition: all 0.2s;}
-.bonus-link:hover {background:#222; color:#fff;}
+.bonus-link {display:block; background:#111; color:#ffe57e; padding:12px; margin:8px 0; border-radius:12px; text-decoration:none; border:1px solid #d4af37; font-weight:bold;}
 table {width:100%; border-collapse:collapse; margin-top:10px;}
 th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;}
-th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc13fe,0 0 20px #bc13fe,0 0 30px #bc13fe,0 0 40px #bc13fe;}50%{text-shadow:0 0 20px #ffe57e,0 0 30px #ffe57e,0 0 40px #ffe57e,0 0 50px #ffe57e;}}
+th {background:#1a1a1a;}
 </style>
 </head>
 <body ontouchstart="tg.expand()">
+
+<canvas id="bgCanvas"></canvas>
 
 <div class="app-title">LUDIK AI</div>
 
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
-        <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
+        <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div><div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
         <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
         <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
         <div class="menu-item" onclick="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
@@ -116,21 +115,21 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
 <div id="battleP" class="popup">
     <h2 style="color:#bc13fe">Битва Лудиков</h2>
     <p style="font-size:12px; margin:15px 0;">Сегодняшний матч: Победа К1 / Ничья / Победа К2</p>
-    <div id="battleBox"></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <div id="battleBox"></div>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
     <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
-    <p id="jbContent" style="font-size:12px; margin:15px 0;">Прогноз дня: ТБ 2.5 – Лудик уверен!</p>
+    <p id="jbContent" style="font-size:12px; margin:15px 0;">Сегодня: Самый уверенный прогноз дня – ТБ 2.5 ⚽</p>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <!-- ИСТОРИЯ ПРОГНОЗОВ -->
 <div id="historyP" class="popup">
     <h2 style="color:#bc13fe">История прогнозов</h2>
-    <table>
-        <tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
+    <table><tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
         <tr><td>23.02</td><td>Бенфика - Реал</td><td>ТБ 2.5</td><td>✔️</td></tr>
         <tr><td>22.02</td><td>МЮ - Ливерпуль</td><td>П2</td><td>❌</td></tr>
         <tr><td>21.02</td><td>Барса - Атлетико</td><td>Ничья</td><td>✔️</td></tr>
@@ -160,18 +159,13 @@ if(user){
 function openP(id){
     closeAll();
     document.getElementById('overlay').style.display='block';
-    const popup=document.getElementById(id);
-    popup.style.display='block';
-    popup.classList.add('open');
+    document.getElementById(id).style.display='block';
     tg.expand();
 }
 
 function closeAll(){
     document.getElementById('overlay').style.display='none';
-    document.querySelectorAll('.popup').forEach(p=>{
-        p.style.display='none';
-        p.classList.remove('open');
-    });
+    document.querySelectorAll('.popup').forEach(p=>p.style.display='none');
 }
 
 function openPredict(){
@@ -228,6 +222,47 @@ function generateBattle(){
     });
 }
 generateBattle();
+
+// ==================== ФОН АНИМАЦИЯ ====================
+const canvas=document.getElementById('bgCanvas');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+const particles=[];
+for(let i=0;i<80;i++){
+    particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        size:Math.random()*2+1,
+        speedX:Math.random()*0.5-0.25,
+        speedY:Math.random()*0.5-0.25,
+        color:'rgba(188,19,254,0.6)'
+    });
+}
+
+function animate(){
+    ctx.fillStyle='rgba(5,5,5,0.2)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+        p.x+=p.speedX;
+        p.y+=p.speedY;
+        if(p.x>canvas.width)p.x=0;
+        if(p.x<0)p.x=canvas.width;
+        if(p.y>canvas.height)p.y=0;
+        if(p.y<0)p.y=canvas.height;
+        ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+        ctx.fillStyle=p.color;
+        ctx.fill();
+    });
+    requestAnimationFrame(animate);
+}
+animate();
+
+window.addEventListener('resize',()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+});
 </script>
 
 </body>
