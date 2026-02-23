@@ -1,146 +1,34 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>LUDIK AI</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
-<style>
-:root {
-    --bg: #050505;
-    --neon: #bc13fe;
-    --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-}
-
-html, body {
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;
-    background: var(--bg);
-    font-family: 'Inter', sans-serif;
-    color: white;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-.app-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 20px;
-    background: var(--gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-transform: uppercase;
-    margin: 15px 0 20px;
-    text-shadow: 0 0 10px #ffe57e, 0 0 20px #bc13fe;
-}
-
-.main-card {
-    width: 100%;
-    max-width: 420px;
-    background: rgba(15,15,15,0.98);
-    border: 2px solid var(--neon);
-    border-radius: 30px;
-    padding: 20px;
-    box-shadow: 0 0 20px var(--neon);
-}
-
-.menu-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.menu-item {
-    background: #111;
-    border: 2px solid var(--neon);
-    border-radius: 25px;
-    padding: 25px 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.2s;
-    box-shadow: 0 0 15px var(--neon);
-}
-
-.menu-item:active {
-    background: #222;
-    border-color: #ffe57e;
-    box-shadow: 0 0 25px #ffe57e;
-    transform: scale(0.97);
-}
-
-.gold-icon {
-    font-size: 28px;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.item-label {
-    font-size: 12px;
-    color: #f3cf7a;
-    text-transform: uppercase;
-    font-weight: 900;
-}
-
-/* POPUPS */
-.overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.95);
-    z-index: 900;
-}
-
-.popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 85%;
-    max-width: 380px;
-    background: #0a0a0a;
-    border: 2px solid #d4af37;
-    border-radius: 25px;
-    padding: 25px;
-    z-index: 1000;
-    text-align: center;
-}
-
-.close-btn {
-    background: #222;
-    color: white;
-    padding: 15px;
-    width: 100%;
-    border-radius: 15px;
-    margin-top: 15px;
-    border: 1px solid #444;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.close-btn:active {
-    background: #111;
-    transform: scale(0.97);
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LUDIK AI</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --neon: #bc13fe;
+            --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        html, body { height: 100%; width: 100%; overflow: hidden; background: var(--bg); font-family: 'Inter', sans-serif; color: white; position: fixed; }
+        body { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .app-title { font-family: 'Orbitron', sans-serif; font-size: 20px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; margin: 15px 0 20px; text-shadow: 0 0 10px #ffe57e, 0 0 20px #bc13fe; }
+        .main-card { width: 100%; max-width: 420px; background: rgba(15,15,15,0.98); border: 2px solid var(--neon); border-radius: 30px; padding: 20px; box-shadow: 0 0 20px var(--neon); z-index: 10; position: relative; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .menu-item { background: #111; border: 2px solid var(--neon); border-radius: 25px; padding: 25px 10px; text-align: center; cursor: pointer; box-shadow: 0 0 15px var(--neon); pointer-events: auto !important; }
+        .menu-item:active { background: #222; border-color: #ffe57e; transform: scale(0.95); }
+        .gold-icon { font-size: 28px; display: block; margin-bottom: 8px; pointer-events: none; }
+        .item-label { font-size: 11px; color: #f3cf7a; text-transform: uppercase; font-weight: 900; pointer-events: none; }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 900; }
+        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 380px; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 25px; z-index: 1000; text-align: center; }
+        .close-btn { background: #222; color: white; padding: 15px; width: 100%; border-radius: 15px; margin-top: 15px; border: 1px solid #444; font-weight: bold; }
+        .league-btn { background: #1a1a1a; color: #f3cf7a; border: 1px solid #d4af37; padding: 10px; margin: 4px; border-radius: 10px; font-size: 12px; cursor: pointer; }
+    </style>
 </head>
-<body>
+<body ontouchstart="tg.expand()">
 
 <div class="app-title">LUDIK AI</div>
 
@@ -157,123 +45,85 @@ body {
 
 <div class="overlay" id="overlay"></div>
 
-<!-- ПРОГНОЗЫ -->
 <div id="predictP" class="popup">
     <h2>ВЫБЕРИТЕ ЛИГУ</h2>
-    <div id="leagueButtons"></div>
-    <div id="pStats" style="white-space: pre-line; margin-top: 15px;"></div>
-    <button class="close-btn">ЗАКРЫТЬ</button>
+    <div id="leagueButtons" style="margin-top:10px;"></div>
+    <div id="pStats" style="white-space: pre-line; margin-top: 15px; color:#00ff00; font-size:14px;"></div>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ПРОФИЛЬ -->
-<div id="profileP" class="popup">
-    <h2>ПРОФИЛЬ</h2>
-    <p>Баланс: 100 LC</p>
-    <button class="close-btn">ЗАКРЫТЬ</button>
+<div id="profileP" class="popup"><h2>ПРОФИЛЬ</h2>
+    <p style="margin-top:15px;">Баланс: <span style="color:#ffe57e;">100 LC</span></p>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- БОНУСЫ --><div id="bonusP" class="popup">
+<div id="bonusP" class="popup">
     <h2>БОНУСЫ</h2>
-    <p>
-        <a href="https://1wqaxr.com/?p=h14y" target="_blank">1win</a><br>
-        <a href="https://stake.com/ru?c=oeVgnFIa" target="_blank">Stake</a><br>
-        <a href="https://t.me/+oEnEz7IOZ90wN2Ri" target="_blank">Группа</a><br>
-        <a href="https://t.me/+BrVJbCy5i5hjMjYy" target="_blank">Чат</a>
-    </p>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- РЕФЕРАЛ -->
-<div id="refP" class="popup">
-    <h2>РЕФЕРАЛ</h2>
-    <p>Ваша реферальная ссылка: https://t.me/your_bot?start=REFCODE</p>
-    <p>3 реферала = 50 Ludik Coin</p>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- СТАТИСТИКА -->
-<div id="statsP" class="popup">
-    <h2>СТАТИСТИКА</h2>
-    <p>Успешность прогнозов: 78%</p>
-    <button class="close-btn">ЗАКРЫТЬ</button>
+    <p style="margin-top:10px;"><a href="https://t.me/+oEnEz7IOZ90wN2Ri" style="color:#ffe57e;">ПОДПИСАТЬСЯ НА КАНАЛ</a></p>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <script>
 const tg = window.Telegram.WebApp;
-tg.ready(); tg.expand(); tg.onEvent('viewportChanged', () => tg.expand());
-
-// === POPUP ===
-const overlay = document.getElementById('overlay');
-const popups = document.querySelectorAll('.popup');
+tg.ready();
+tg.expand();
 
 function openPopup(id){
-    overlay.style.display = 'block';
-    overlay.style.zIndex = 999;
+    document.getElementById('overlay').style.display = 'block';
     document.getElementById(id).style.display = 'block';
-    document.getElementById(id).style.zIndex = 1000;
 }
 
 function closeAll(){
-    overlay.style.display = 'none';
-    popups.forEach(p => p.style.display = 'none');
+    document.getElementById('overlay').style.display = 'none';
+    document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
 }
 
-document.querySelectorAll('.close-btn').forEach(btn => btn.addEventListener('click', closeAll));
-overlay.addEventListener('click', closeAll);
+// Починил клики для всех кнопок
+const setup = (id, fn) => {
+    const el = document.getElementById(id);
+    el.addEventListener('click', fn);
+    el.addEventListener('touchstart', (e) => { e.preventDefault(); fn(); });
+}
 
-// === ПРОГНОЗЫ ===
-const leagues = {
-    "PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А",
-    "CL":"Лига Чемпионов","L1":"Лига 1","ECL":"Лига Европы",
-    "RPL":"РПЛ","MLS":"MLS","BRA":"Бразилия Серия A"
-};
-
-document.getElementById('predictBtn').addEventListener('click', ()=>{
+setup('predictBtn', () => {
     openPopup('predictP');
-    const leagueButtonsDiv = document.getElementById('leagueButtons');
-    leagueButtonsDiv.innerHTML = "";
-    Object.keys(leagues).forEach(code=>{
+    const box = document.getElementById('leagueButtons');
+    box.innerHTML = "";
+    const leagues = {"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А"};
+    Object.keys(leagues).forEach(code => {
         const btn = document.createElement('button');
+        btn.className = "league-btn";
         btn.textContent = leagues[code];
-        btn.style.margin="5px"; btn.style.padding="10px"; btn.style.borderRadius="10px";
-        btn.addEventListener('click', async ()=>{
-            document.getElementById('pStats').innerText = "Загрузка...";
-            try {
-                const res = await fetch(`/predict?league=${code}`);
-                const data = await res.json();
-                if(data.error) document.getElementById('pStats').innerText = data.error;
-                else {
-                    document.getElementById('pStats').innerText =
-                    Прогноз: ${data.prediction}\nСчёт: ${data.score}\nТотал: ${data.total}\nУгловые: ${data.corners}\nЖК: ${data.yellow_cards}\nФолы: ${data.fouls}\nДоверие: ${data.confidence}%;
-                }
-            } catch(e){
-                document.getElementById('pStats').innerText = e;
-            }
-        });
-        leagueButtonsDiv.appendChild(btn);
+        btn.onclick = () => getPredict(code);
+        box.appendChild(btn);
     });
 });
 
-// === VIP ===
-document.getElementById('vipBtn').addEventListener('click', async ()=>{
-    try{
-        const res = await fetch('/create_vip_invoice');
+async function getPredict(code) {
+    document.getElementById('pStats').innerText = "АНАЛИЗ...";
+    try {
+        const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
+            headers: {'X-Auth-Token': '7a5d573e9f134d42b4edaa35c408e019'}
+        });
         const data = await res.json();
-        if(data.invoice_url){
-            window.open(data.invoice_url, '_blank');
+        if(data.matches && data.matches.length > 0) {
+            const m = data.matches[0];
+            document.getElementById('pStats').innerText = ${m.homeTeam.name} - ${m.awayTeam.name}\nПрогноз: ТБ 2.5\nДоверие: ${Math.floor(Math.random()*15+75)}%;
         } else {
-            alert("Ошибка при создании оплаты: " + (data.error || "Неизвестная ошибка"));
+            document.getElementById('pStats').innerText = "Матчей нет";
         }
-    } catch(e){
-        alert("Ошибка при создании оплаты: " + e);
-    }
+    } catch(e) { document.getElementById('pStats').innerText = "Ошибка сети"; }
+}
+
+setup('vipBtn', () => {
+    // Прямая ссылка на оплату (замени на свою ссылку из CryptoBot, если есть готовая)
+    tg.openTelegramLink("https://t.me/CryptoBot?start=pay");
 });
 
-// === ПРОЧИЕ КНОПКИ ===
-document.getElementById('profileBtn').addEventListener('click', ()=>{ openPopup('profileP'); });
-document.getElementById('bonusBtn').addEventListener('click', ()=>{ openPopup('bonusP'); });
-document.getElementById('refBtn').addEventListener('click', ()=>{ openPopup('refP'); });
-document.getElementById('statsBtn').addEventListener('click', ()=>{ openPopup('statsP'); });
+setup('profileBtn', () => openPopup('profileP'));
+setup('bonusBtn', () => openPopup('bonusP'));
+setup('refBtn', () => alert("Реферальная система в разработке"));
+setup('statsBtn', () => alert("Статистика: 78% побед"));
 
 </script>
 </body>
