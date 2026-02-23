@@ -146,30 +146,33 @@ body {
 
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" data-code="PL"><span class="gold-icon">🏴</span><span class="item-label">АПЛ</span></div>
-        <div class="menu-item" data-code="PD"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
-        <div class="menu-item" data-code="BL1"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундес</span></div>
-        <div class="menu-item" data-code="SA"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
-        <div class="menu-item" data-code="CL"><span class="gold-icon">🏆</span><span class="item-label">Лига Чемпионов</span></div>
+        <div class="menu-item" id="predictBtn"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
         <div class="menu-item" id="vipBtn"><span class="gold-icon">💎</span><span class="item-label">VIP</span></div>
         <div class="menu-item" id="profileBtn"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
         <div class="menu-item" id="bonusBtn"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+        <div class="menu-item" id="refBtn"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
+        <div class="menu-item" id="statsBtn"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
     </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
+<!-- ПРОГНОЗЫ -->
 <div id="predictP" class="popup">
-    <h2 id="pTitle">АНАЛИЗ...</h2>
-    <div id="pStats"></div>
+    <h2>ВЫБЕРИТЕ ЛИГУ</h2>
+    <div id="leagueButtons"></div>
+    <div id="pStats" style="white-space: pre-line; margin-top: 15px;"></div>
     <button class="close-btn">ЗАКРЫТЬ</button>
-</div><div id="profileP" class="popup">
+</div>
+
+<!-- ПРОФИЛЬ -->
+<div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
     <p>Баланс: 100 LC</p>
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<div id="bonusP" class="popup">
+<!-- БОНУСЫ --><div id="bonusP" class="popup">
     <h2>БОНУСЫ</h2>
     <p>
         <a href="https://1wqaxr.com/?p=h14y" target="_blank">1win</a><br>
@@ -180,13 +183,25 @@ body {
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
+<!-- РЕФЕРАЛ -->
+<div id="refP" class="popup">
+    <h2>РЕФЕРАЛ</h2>
+    <p>Ваша реферальная ссылка: https://t.me/your_bot?start=REFCODE</p>
+    <p>3 реферала = 50 Ludik Coin</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<!-- СТАТИСТИКА -->
+<div id="statsP" class="popup">
+    <h2>СТАТИСТИКА</h2>
+    <p>Успешность прогнозов: 78%</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready(); tg.expand(); tg.onEvent('viewportChanged', () => tg.expand());
 
-// ============================
-// POPUP ЛОГИКА
-// ============================
 const overlay = document.getElementById('overlay');
 const popups = document.querySelectorAll('.popup');
 
@@ -204,38 +219,50 @@ document.querySelectorAll('.close-btn').forEach(btn => btn.addEventListener('cli
 overlay.addEventListener('click', closeAll);
 
 // ============================
-// КНОПКИ
+// ПРОГНОЗЫ
 // ============================
-document.getElementById('profileBtn').addEventListener('click', ()=>{ openPopup('profileP'); });
-document.getElementById('bonusBtn').addEventListener('click', ()=>{ openPopup('bonusP'); });
+const leagues = {
+    "PL":"АПЛ",
+    "PD":"Ла Лига",
+    "BL1":"Бундес",
+    "SA":"Серия А",
+    "CL":"Лига Чемпионов",
+    "L1":"Лига 1",
+    "ECL":"Лига Европы",
+    "RPL":"РПЛ",
+    "MLS":"MLS",
+    "BRA":"Бразилия Серия A"
+};
 
-// Прогноз
-document.querySelectorAll('[data-code]').forEach(btn=>{
-    btn.addEventListener('click', async ()=>{
-        openPopup('predictP');
-        document.getElementById('pTitle').innerText = "АНАЛИЗ...";
-        document.getElementById('pStats').innerText = "";
-
-        try {
-            const res = await fetch(`/predict?league=${btn.dataset.code}`);
-            const data = await res.json();
-            if(data.error){
-                document.getElementById('pTitle').innerText = "ОШИБКА";
-                document.getElementById('pStats').innerText = data.error;
-            } else {
-                document.getElementById('pTitle').innerText = ${data.home_team} - ${data.away_team};
-                document.getElementById('pStats').innerText =
+document.getElementById('predictBtn').addEventListener('click', ()=>{
+    openPopup('predictP');
+    const leagueButtonsDiv = document.getElementById('leagueButtons');
+    leagueButtonsDiv.innerHTML = "";
+    Object.keys(leagues).forEach(code=>{
+        const btn = document.createElement('button');
+        btn.textContent = leagues[code];
+        btn.style.margin="5px"; btn.style.padding="10px"; btn.style.borderRadius="10px";
+        btn.addEventListener('click', async ()=>{
+            document.getElementById('pStats').innerText = "Загрузка...";
+            try {
+                const res = await fetch(`/predict?league=${code}`);
+                const data = await res.json();
+                if(data.error) document.getElementById('pStats').innerText = data.error;
+                else {
+                    document.getElementById('pStats').innerText =
                     Прогноз: ${data.prediction}\nСчёт: ${data.score}\nТотал: ${data.total}\nУгловые: ${data.corners}\nЖК: ${data.yellow_cards}\nФолы: ${data.fouls}\nДоверие: ${data.confidence}%;
+                }
+            } catch(e){
+                document.getElementById('pStats').innerText = e;
             }
-        } catch(e){
-            document.getElementById('pTitle').innerText = "ОШИБКА";
-            document.getElementById('pStats').innerText = e;
-        }
+        });
+        leagueButtonsDiv.appendChild(btn);
     });
 });
 
 // ============================
 // VIP кнопка
+// ============================
 document.getElementById('vipBtn').addEventListener('click', async ()=>{
     try{
         const res = await fetch('/create_vip_invoice');
@@ -249,6 +276,13 @@ document.getElementById('vipBtn').addEventListener('click', async ()=>{
         alert("Ошибка при создании оплаты: " + e);
     }
 });
+
+// ПРОФИЛЬ, БОНУСЫ, РЕФ, СТАТИСТИКА
+document.getElementById('profileBtn').addEventListener('click', ()=>{ openPopup('profileP'); });
+document.getElementById('bonusBtn').addEventListener('click', ()=>{ openPopup('bonusP'); });
+document.getElementById('refBtn').addEventListener('click', ()=>{ openPopup('refP'); });
+document.getElementById('statsBtn').addEventListener('click', ()=>{ openPopup('statsP'); });
+
 </script>
 </body>
 </html>
