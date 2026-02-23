@@ -13,18 +13,14 @@
             --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
         html, body { 
             height: 100%; width: 100%; 
             overflow: hidden; background: var(--bg); 
             font-family: 'Inter', sans-serif; color: white; 
             position: relative;
         }
-        
         body { display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        
         .app-title { font-family: 'Orbitron', sans-serif; font-size: 20px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; margin: 10px 0 20px; text-shadow: 0 0 15px rgba(188, 19, 254, 0.6); }
-        
         .main-card { 
             width: 100%; max-width: 420px; 
             background: rgba(15,15,15,0.98); 
@@ -33,9 +29,7 @@
             z-index: 10; position: relative; 
             touch-action: auto;
         }
-        
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        
         .menu-item { 
             background: #111; border: 2px solid var(--neon); 
             border-radius: 25px; padding: 25px 10px; 
@@ -44,33 +38,27 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             touch-action: manipulation;
         }
-        
         .menu-item:active { background: #222; transform: scale(0.95); border-color: #ffe57e; }
-        
         .gold-icon { font-size: 28px; display: block; margin-bottom: 5px; pointer-events: none; }
         .item-label { font-size: 11px; color: #f3cf7a; text-transform: uppercase; font-weight: 900; pointer-events: none; }
-        
-        /* Попапы */
         .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 900; }
         .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 380px; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 20px; z-index: 1000; text-align: center; }
-        
         .close-btn { background: #222; color: #888; padding: 12px; width: 100%; border-radius: 15px; margin-top: 15px; border: 1px solid #444; font-weight: bold; }
         .action-btn { background: var(--gold); color: black; padding: 14px; width: 100%; border-radius: 15px; margin-top: 10px; border: none; font-weight: 900; display: inline-block; text-decoration: none; }
-        
-        .league-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .league-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; max-height: 200px; overflow-y: auto; }
         .league-btn { background: #1a1a1a; color: white; border: 1px solid #333; padding: 10px; border-radius: 12px; font-size: 11px; }
-        
         .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; font-size: 14px; }
         .gold-t { color: #d4af37; font-weight: bold; }
         .bonus-link { display: block; background: #111; color: #ffe57e; padding: 12px; margin: 8px 0; border-radius: 12px; text-decoration: none; border: 1px solid #d4af37; font-weight: bold; font-size: 14px; }
         .bonus-info { font-size: 12px; color: #00ff00; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; }
     </style>
 </head>
-<body ontouchstart="tg.expand()"><div class="app-title">LUDIK AI</div>
+<body ontouchstart="tg.expand()">
+
+    <div class="app-title">LUDIK AI</div>
 
     <div class="main-card">
-        <div class="menu-grid">
-            <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
+        <div class="menu-grid"><div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
             <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
             <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
             <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
@@ -105,7 +93,7 @@
 
     <div id="bonusP" class="popup">
         <h3>БОНУСЫ</h3>
-        <div class="bonus-info">🎁 +50 LUDIK COIN ЗА ПЕРЕХОД ПО ССЫЛКАМ!</div>
+        <div class="bonus-info">🎁 +50 LUDIK COIN ЗА ПЕРЕХОД!</div>
         <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">💰 1WIN (БОНУС 500%)</a>
         <a href="https://stake.com/ru?c=oeVgnFIa" class="bonus-link">🎲 STAKE (КЭШБЭК)</a>
         <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="bonus-link">📢 НАШ КАНАЛ</a>
@@ -129,7 +117,7 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
+        tg.expand(); // Раскрываем на весь экран
 
         const user = tg.initDataUnsafe?.user;
         if(user) {
@@ -141,16 +129,16 @@
             closeAll();
             document.getElementById('overlay').style.display = 'block';
             document.getElementById(id).style.display = 'block';
-            tg.expand();
         }
 
         function closeAll() {
             document.getElementById('overlay').style.display = 'none';
             document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
-        }function openPredict() {
+        }
+
+        function openPredict() {
             openP('predictP');
-            const box = document.getElementById('leagueBox');
-            box.innerHTML = "";
+            const box = document.getElementById('leagueBox');box.innerHTML = "";
             const leagues = {"PL":"АПЛ", "PD":"Ла Лига", "BL1":"Бундес", "SA":"Серия А", "CL":"ЛЧ", "RPL":"РПЛ", "MLS":"MLS", "EL":"ЛЕ"};
             Object.keys(leagues).forEach(code => {
                 const btn = document.createElement('button');
@@ -163,7 +151,7 @@
 
         async function getPredict(code) {
             const resBox = document.getElementById('pRes');
-            resBox.innerText = "АНАЛИЗ...";
+            resBox.innerText = "АНАЛИЗ AI...";
             try {
                 const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
                     headers: {'X-Auth-Token': '7a5d573e9f134d42b4edaa35c408e019'}
@@ -173,7 +161,7 @@
                     const m = data.matches[0];
                     resBox.innerHTML = m.homeTeam.name + ' vs ' + m.awayTeam.name + '<br><span style="color:#ffe57e">Прогноз: ТБ 2.5</span>';
                 } else { resBox.innerText = "Матчей нет"; }
-            } catch(e) { resBox.innerText = "Ошибка API"; }
+            } catch(e) { resBox.innerText = "Ошибка загрузки данных"; }
         }
 
         function copyRef() {
@@ -184,7 +172,7 @@
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            tg.showAlert("Скопировано!");
+            tg.showAlert("Реферальная ссылка скопирована!");
         }
     </script>
 </body>
