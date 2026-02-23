@@ -50,6 +50,8 @@ th {background:#1a1a1a;}
         <div class="menu-item" onclick="openP('battleP')"><span class="gold-icon">⚔️</span><span class="item-label">БИТВА ЛУДИКОВ</span></div>
         <div class="menu-item" onclick="openP('jbP')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
         <div class="menu-item" onclick="openP('historyP')"><span class="gold-icon">📜</span><span class="item-label">ИСТОРИЯ ПРОГНОЗОВ</span></div>
+        <!-- ДОБАВЛЕН ЧАТ -->
+        <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
     </div>
 </div>
 
@@ -131,6 +133,13 @@ th {background:#1a1a1a;}
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
+<!-- ЧАТ --><div id="chatP" class="popup">
+    <h2 style="color:#bc13fe">ЧАТ</h2>
+    <p style="font-size:12px; margin:15px 0;">Присоединяйтесь к чату Ludik:</p>
+    <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="action-btn" target="_blank">ОТКРЫТЬ ЧАТ</a>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+</div>
+
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready();
@@ -138,7 +147,8 @@ tg.expand();
 
 const user = tg.initDataUnsafe?.user;
 if(user){
-    document.getElementById('uID').innerText = user.id;document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start='+user.id;
+    document.getElementById('uID').innerText = user.id;
+    document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start='+user.id;
 }
 
 function openP(id){
