@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>LUDIK AI</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
@@ -14,143 +13,107 @@
     --neon: #bc13fe;
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
-* { box-sizing: border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
-html, body {height:100%; width:100%; font-family: 'Inter', sans-serif; color:white; background:var(--bg);}
-body {display:flex; flex-direction:column; align-items:center; padding:20px;}
-.app-title {font-family:'Orbitron', sans-serif; font-size:22px; background:var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:15px 0 20px; text-shadow:0 0 10px #ffe57e,0 0 20px #bc13fe;}
-.main-card {width:100%; max-width:420px; background:rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 20px var(--neon);}
-.menu-grid {display:grid; grid-template-columns:1fr 1fr; gap:15px;}
-.menu-item {background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; transition:0.2s; box-shadow:0 0 15px var(--neon);}
-.menu-item:active {background:#222; border-color:#ffe57e; box-shadow:0 0 25px #ffe57e; transform:scale(0.97);}
-.gold-icon {font-size:28px; display:block; margin-bottom:8px;}
-.item-label {font-size:12px; color:#f3cf7a; text-transform:uppercase; font-weight:900;}
-.overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000;}
-.popup {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:85%; max-width:380px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:25px; z-index:1001; text-align:center;}
-.close-btn {background:#222; color:white; padding:15px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; cursor:pointer; transition:0.2s;}
-.close-btn:active {background:#111; transform:scale(0.97);}
-.menu-item-small {font-size:10px;}
+
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; width:100%; overflow-x:hidden; background:var(--bg); font-family:'Inter',sans-serif; color:white; }
+body { display:flex; flex-direction:column; align-items:center; padding:20px; }
+
+.app-title { font-family:'Orbitron',sans-serif; font-size:20px; background:var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:15px 0 20px; text-shadow:0 0 10px #ffe57e,0 0 20px #bc13fe; }
+
+.main-card { width:100%; max-width:420px; background:rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 20px var(--neon); }
+
+.menu-grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+
+.menu-item { background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; transition:0.2s; box-shadow:0 0 15px var(--neon); }
+.menu-item:active { background:#222; border-color:#ffe57e; box-shadow:0 0 25px #ffe57e; transform:scale(0.97); }
+
+.gold-icon { font-size:28px; display:block; margin-bottom:8px; }
+.item-label { font-size:12px; color:#f3cf7a; text-transform:uppercase; font-weight:900; }
+
+/* POPUPS */
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000; }
+.popup { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:85%; max-width:400px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:25px; z-index:1001; text-align:center; }
+.close-btn { background:#222; color:white; padding:15px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; cursor:pointer; transition:0.2s; }
+.close-btn:active { background:#111; transform:scale(0.97); }
 </style>
 </head>
-
 <body>
+
 <div class="app-title">LUDIK AI</div>
 
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" id="prognosesBtn">
-            <span class="gold-icon">⚽️</span>
-            <span class="item-label">Прогнозы</span>
-        </div>
-        <div class="menu-item" id="jbBtn">
-            <span class="gold-icon">🔥</span>
-            <span class="item-label">ЖБ Дня</span>
-        </div>
-        <div class="menu-item" id="vipBtn">
-            <span class="gold-icon">💎</span>
-            <span class="item-label">VIP (15$)</span>
-        </div>
-        <div class="menu-item" id="refBtn">
-            <span class="gold-icon">👥</span>
-            <span class="item-label">Рефералы</span>
-        </div>
-        <div class="menu-item" id="statsBtn">
-            <span class="gold-icon">📈</span>
-            <span class="item-label">Статистика</span>
-        </div>
-        <div class="menu-item" id="bonusBtn">
-            <span class="gold-icon">🎁</span>
-            <span class="item-label">Бонусы</span>
-        </div>
+        <div class="menu-item" id="predictBtn"><span class="gold-icon">⚽️</span><span class="item-label">ПРОГНОЗЫ</span></div>
+        <div class="menu-item" id="jbBtn"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
+        <div class="menu-item" id="vipBtn"><span class="gold-icon">💎</span><span class="item-label">VIP 15$</span></div>
+        <div class="menu-item" id="refBtn"><span class="gold-icon">👥</span><span class="item-label">РЕФЕРАЛЫ</span></div>
+        <div class="menu-item" id="bonusBtn"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+        <div class="menu-item" id="statsBtn"><span class="gold-icon">📈</span><span class="item-label">СТАТИСТИКА</span></div>
     </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
-<!-- ПОПАПЫ -->
+<!-- POPUPS -->
 <div id="predictP" class="popup"><h2 id="pTitle">АНАЛИЗ...</h2><div id="pStats"></div><button class="close-btn">ЗАКРЫТЬ</button></div>
-<div id="prognosesP" class="popup"><h2>Лиги</h2>
-    <div id="leagueBtns" class="menu-grid"></div>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-<div id="profileP" class="popup"><h2>ПРОФИЛЬ</h2><p id="profileBalance">Баланс: 100 LC</p><button class="close-btn">ЗАКРЫТЬ</button></div>
+<div id="jbP" class="popup"><h2>ЖБ ДНЯ</h2><div id="jbStats"></div><button class="close-btn">ЗАКРЫТЬ</button></div>
+<div id="vipP" class="popup"><h2>VIP 15$</h2><p>Оплата через CryptoPay (2 недели)</p><button class="close-btn">ЗАКРЫТЬ</button></div>
+<div id="refP" class="popup"><h2>РЕФЕРАЛЫ</h2><p>Приглашайте друзей и зарабатывайте Ludik Coin!</p><button class="close-btn">ЗАКРЫТЬ</button></div>
 <div id="bonusP" class="popup"><h2>БОНУСЫ</h2>
-    <div class="menu-grid">
-        <div class="menu-item menu-item-small" onclick="window.open('https://1wqaxr.com/?p=h14y')">1WIN (+50 LC)</div><div class="menu-item menu-item-small" onclick="window.open('https://stake.com/ru?c=oeVgnFIa')">STAKE (+50 LC)</div>
-        <div class="menu-item menu-item-small" onclick="window.open('https://t.me/+oEnEz7IOZ90wN2Ri')">ГРУППА (+50 LC)</div>
-        <div class="menu-item menu-item-small" onclick="window.open('https://t.me/+BrVJbCy5i5hjMjYy')">ЧАТ (+50 LC)</div>
-    </div>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-<div id="vipP" class="popup"><h2>VIP ДОСТУП</h2><p>Стоимость: 15 $ на 2 недели</p><button class="close-btn">Оплатить</button></div>
-<div id="refP" class="popup"><h2>РЕФЕРАЛЬНАЯ СИСТЕМА</h2><p id="refLink">Твоя ссылка: <code>https://t.me/YourBot?start=USERID</code></p><p>За каждого друга +50 LC (максимум 3)</p><button class="close-btn">ЗАКРЫТЬ</button></div>
-<div id="statsP" class="popup"><h2>СТАТИСТИКА</h2><p id="statsText">Успешные прогнозы: 0</p><button class="close-btn">ЗАКРЫТЬ</button></div>
+<p><a href="https://1wqaxr.com/?p=h14y" target="_blank">1WIN БОНУС</a></p>
+<p><a href="https://stake.com/ru?c=oeVgnFIa" target="_blank">STAKE БОНУС</a></p>
+<p><a href="https://t.me/+oEnEz7IOZ90wN2Ri" target="_blank">ГРУППА</a></p><p><a href="https://t.me/+BrVJbCy5i5hjMjYy" target="_blank">ЧАТ</a></p>
+<button class="close-btn">ЗАКРЫТЬ</button></div>
+<div id="statsP" class="popup"><h2>СТАТИСТИКА</h2><div id="statsContent">Успешность прогнозов: 0%</div><button class="close-btn">ЗАКРЫТЬ</button></div>
 
 <script>
 const tg = window.Telegram.WebApp;
-tg.ready(); tg.expand(); setTimeout(()=>tg.expand(),200);
+tg.ready(); tg.expand();
 
+// POPUP ЛОГИКА
 const overlay = document.getElementById('overlay');
 const popups = document.querySelectorAll('.popup');
+
 function openPopup(id){ overlay.style.display='block'; document.getElementById(id).style.display='block'; }
 function closeAll(){ overlay.style.display='none'; popups.forEach(p=>p.style.display='none'); }
-document.querySelectorAll('.close-btn').forEach(btn=>btn.addEventListener('click', closeAll));
-overlay.addEventListener('click', closeAll);
 
-// ========================
-// КНОПКИ МЕНЮ
-// ========================
-document.getElementById('prognosesBtn').addEventListener('click', ()=>{
-    openPopup('prognosesP'); populateLeagues();
-});
-document.getElementById('jbBtn').addEventListener('click', ()=>openPopup('predictP'));
-document.getElementById('vipBtn').addEventListener('click', ()=>openPopup('vipP'));
-document.getElementById('refBtn').addEventListener('click', ()=>openPopup('refP'));
-document.getElementById('statsBtn').addEventListener('click', ()=>openPopup('statsP'));
-document.getElementById('bonusBtn').addEventListener('click', ()=>openPopup('bonusP'));
+document.querySelectorAll('.close-btn').forEach(btn=>btn.addEventListener('click',closeAll));
+overlay.addEventListener('click',closeAll);
 
-// ========================
-// Лиги
-// ========================
-const LEAGUES = {
-    "PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"Лига Чемпионов",
-    "L1":"Лига 1","ECL":"Лига Европы","RPL":"РПЛ","MLS":"MLS","BRA":"Бразилия Серия A"
-};
+// КНОПКИ
+document.getElementById('predictBtn').addEventListener('click',()=>openPopup('predictP'));
+document.getElementById('jbBtn').addEventListener('click',()=>openPopup('jbP'));
+document.getElementById('vipBtn').addEventListener('click',()=>openPopup('vipP'));
+document.getElementById('refBtn').addEventListener('click',()=>openPopup('refP'));
+document.getElementById('bonusBtn').addEventListener('click',()=>openPopup('bonusP'));
+document.getElementById('statsBtn').addEventListener('click',()=>openPopup('statsP'));
 
-function populateLeagues(){
-    const container = document.getElementById('leagueBtns');
-    container.innerHTML='';
-    for(let code in LEAGUES){
-        const div = document.createElement('div');
-        div.className='menu-item menu-item-small';
-        div.innerHTML=`${LEAGUES[code]}`;
-        div.addEventListener('click', ()=>apiFetch(code));
-        container.appendChild(div);
-    }
+// API ФУНКЦИЯ (пока рандом, потом платный API)
+async function fetchPrediction(league){
+    const leagues = ["PL","PD","BL1","SA","CL"];
+    const home = "Команда " + String.fromCharCode(65+Math.floor(Math.random()*5));
+    const away = "Команда " + String.fromCharCode(70+Math.floor(Math.random()*5));
+    const scoreHome = Math.floor(Math.random()*4);
+    const scoreAway = Math.floor(Math.random()*4);
+    const total = (scoreHome+scoreAway)>2.5?"ТБ 2.5":"ТМ 2.5";
+    const corners = Math.floor(Math.random()*11)+5;
+    const yellow = Math.floor(Math.random()*7);
+    const fouls = Math.floor(Math.random()*13)+8;
+    const confidence = Math.floor(Math.random()*(95-60)+60);
+
+    document.getElementById('pTitle').innerText = home+" - "+away;
+    document.getElementById('pStats').innerHTML = `
+    Прогноз: П1/П2<br>
+    Счет: ${scoreHome}:${scoreAway}<br>
+    Тотал: ${total}<br>
+    Углы: ${corners}<br>
+    ЖК: ${yellow}<br>
+    Фолы: ${fouls}<br>
+    Уверенность: ${confidence}%
+    `;
 }
 
-// ========================
-// API ПРОГНОЗЫ
-// ========================
-async function apiFetch(code){
-    openPopup('predictP');
-    document.getElementById('pTitle').innerText='АНАЛИЗ...';
-    document.getElementById('pStats').innerText='';
-    try{
-        const res=await fetch(`https://ludik-server.example.com/predict?league=${code}`);
-        const data=await res.json();
-        document.getElementById('pTitle').innerText=`${data.home_team} - ${data.away_team}`;
-        document.getElementById('pStats').innerHTML=
-            `Прогноз: <b>${data.prediction}</b><br>`+
-            `Счет: ${data.score}<br>`+
-            `Тотал: ${data.total}<br>`+
-            `Углы: ${data.corners}<br>`+
-            `ЖК: ${data.yellow_cards}<br>`+
-            `Фолы: ${data.fouls}<br>`+
-            Уверенность: ${data.confidence}%;
-    }catch(e){
-        document.getElementById('pTitle').innerText='ОШИБКА ПРИ ЗАПРОСЕ';
-    }
-}
+// Можно вызывать fetchPrediction("PL") для генерации прогноза
 </script>
 </body>
 </html>
