@@ -108,11 +108,108 @@ body { display: flex; flex-direction: column; align-items: center; padding: 20px
     <button class="close-btn">Закрыть</button>
 </div>
 
-<div id="vipP" class="popup">
-    <h2>VIP 15$ (2 недели)</h2><a href="https://t.me/Ludikwin?start=vip" target="_blank">
-        <button class="close-btn">Оплатить VIP</button>
-    </a>
+<!-- VIP-кнопка уже интегрирована, остальной дизайн и кнопки остаются как есть -->
+<div class="menu-item" id="vipBtn">
+    <span class="gold-icon">💎</span>
+    <span class="item-label">VIP (15$)</span>
 </div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+// === Overlay и popup логика ===
+const overlay = document.getElementById('overlay');
+const popups = document.querySelectorAll('.popup');
+
+function openPopup(id){
+    overlay.style.display = 'block';
+    document.getElementById(id).style.display = 'block';
+}
+
+function closeAll(){
+    overlay.style.display = 'none';
+    popups.forEach(p => p.style.display = 'none');
+}
+
+document.querySelectorAll('.close-btn').forEach(btn=>{
+    btn.addEventListener('click', closeAll);
+});
+overlay.addEventListener('click', closeAll);
+
+// === Существующие кнопки ===
+document.getElementById('profileBtn').addEventListener('click', ()=>{
+    openPopup('profileP');
+});
+
+document.getElementById('bonusBtn').addEventListener('click', ()=>{
+    openPopup('bonusP');
+});
+
+// === API прогнозы ===
+document.querySelectorAll('[data-code]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        apiFetch(btn.dataset.code);
+    });
+});
+
+async function apiFetch(code){
+    openPopup('predictP');
+    document.getElementById('pTitle').innerText = "АНАЛИЗ...";
+    document.getElementById('pStats').innerText = "";
+
+    try{
+        const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
+            headers:{ 'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019' }
+        });
+
+        const data = await res.json();
+
+        if(data.matches && data.matches.length > 0){
+            const m = data.matches[0];
+            document.getElementById('pTitle').innerText =
+                m.homeTeam.name + " - " + m.awayTeam.name;
+            document.getElementById('pStats').innerText = "АНАЛИЗ ГОТОВ (тут можно вставить прогноз AI)";
+        } else {
+            document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
+        }
+
+    } catch(e){
+        document.getElementById('pTitle').innerText = "ОШИБКА ПРИ ЗАПРОСЕ API";
+    }
+}
+
+// === VIP оплата через CryptoPay ===
+document.getElementById('vipBtn').addEventListener('click', async ()=>{
+    try{
+        // Создаём инвойс через CryptoPay API
+        const res = await fetch("https://api.cryptopay.me/v1/invoices", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer 536044:AA6T5fMPXZ3s6EuJhXnrt55X2TrHWcW8mXP"
+            },
+            body: JSON.stringify({
+                asset: "USDT",
+                amount: 15,
+                comment: "VIP Ludik AI 2 недели",
+                // callback_url: "https://ваш_сервер/crypto/callback" // если нужен сервер
+            })
+        });
+        const data = await res.json();
+
+        if(data && data.bot_invoice_url){
+            // Открываем платеж в браузере/Telegram
+            window.open(data.bot_invoice_url, "_blank");
+        } else {
+            alert("Ошибка создания платежа");
+        }
+    } catch(e){
+        alert("Ошибка при оплате VIP: " + e.message);
+    }
+});
+</script>
 
 <div id="jbP" class="popup">
     <h2>ЖБ дня</h2>
