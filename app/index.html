@@ -51,7 +51,7 @@
         .item-label { font-size: 11px; color: #f3cf7a; text-transform: uppercase; font-weight: 900; pointer-events: none; }
         
         .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 900; }
-        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 380px; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 20px; z-index: 1000; text-align: center; }
+        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 380px; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 20px; z-index: 1000; text-align: center; overflow-y:auto; max-height:80%; }
         
         .close-btn { background: #222; color: #888; padding: 12px; width: 100%; border-radius: 15px; margin-top: 15px; border: 1px solid #444; font-weight: bold; }
         .action-btn { background: var(--gold); color: black; padding: 14px; width: 100%; border-radius: 15px; margin-top: 10px; border: none; font-weight: 900; display: inline-block; text-decoration: none; }
@@ -62,29 +62,98 @@
         .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; font-size: 14px; }
         .gold-t { color: #d4af37; font-weight: bold; }
         .bonus-link { display: block; background: #111; color: #ffe57e; padding: 12px; margin: 8px 0; border-radius: 12px; text-decoration: none; border: 1px solid #d4af37; font-weight: bold; }
-    </style>
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #444; padding: 8px; font-size: 12px; text-align: center; }
+        th { background: #1a1a1a; }</style>
 </head>
 <body ontouchstart="tg.expand()">
 
     <div class="app-title">LUDIK AI</div>
 
     <div class="main-card">
-        <div class="menu-grid"><div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
+        <div class="menu-grid">
+            <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
             <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
             <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
             <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
             <div class="menu-item" onclick="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
             <div class="menu-item" onclick="openP('statsP')"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
-
-            <!-- ДОБАВЛЕН ЧАТ -->
-            <div class="menu-item" onclick="openChat()">
-                <span class="gold-icon">💬</span>
-                <span class="item-label">ЧАТ</span>
-            </div>
+            <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
+            <div class="menu-item" onclick="openP('battleP')"><span class="gold-icon">⚔️</span><span class="item-label">БИТВА ЛУДИКОВ</span></div>
         </div>
     </div>
 
-    <!-- весь остальной код БЕЗ ИЗМЕНЕНИЙ -->
+    <div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+    <!-- ПРОГНОЗЫ -->
+    <div id="predictP" class="popup">
+        <h3 style="color:#ffe57e">ЛИГИ</h3>
+        <div class="league-grid" id="leagueBox"></div>
+        <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px;"></div>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
+
+    <!-- VIP -->
+    <div id="vipP" class="popup">
+        <h2 style="color:#bc13fe">VIP ПАКЕТ</h2>
+        <p style="font-size:12px; margin:15px 0;">Доступ к VIP прогнозам на 2 недели.</p>
+        <div class="stat-row"><span>Цена:</span><span class="gold-t">15.00 USDT</span></div>
+        <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">ОПЛАТИТЬ</a>
+        <button class="close-btn" onclick="closeAll()">ОТМЕНА</button>
+    </div>
+
+    <!-- ПРОФИЛЬ -->
+    <div id="profileP" class="popup">
+        <h2>ПРОФИЛЬ</h2>
+        <div class="stat-row"><span>ID:</span><span id="uID" class="gold-t">---</span></div>
+        <div class="stat-row"><span>Баланс:</span><span class="gold-t">100.00 LC</span></div>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
+
+    <!-- БОНУСЫ -->
+    <div id="bonusP" class="popup">
+        <h3>БОНУСЫ</h3>
+        <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">💰 1WIN</a>
+        <a href="https://stake.com/ru?c=oeVgnFIa" class="bonus-link">🎲 STAKE</a>
+        <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="bonus-link">📢 КАНАЛ</a>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
+
+    <!-- РЕФЕРАЛ -->
+    <div id="refP" class="popup">
+        <h2>РЕФЕРАЛЫ</h2>
+        <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
+        <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ</button>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
+
+    <!-- СТАТИСТИКА -->
+    <div id="statsP" class="popup">
+        <h2>AI СТАТИСТИКА</h2>
+        <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00;">84.2%</span></div>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
+
+    <!-- ЧАТ -->
+    <div id="chatP" class="popup">
+        <h2 style="color:#bc13fe">ЧАТ</h2>
+        <p style="font-size:12px; margin:15px 0;">Присоединяйтесь к чату Ludik:</p>
+        <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="action-btn" target="_blank">ОТКРЫТЬ ЧАТ</a>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
+
+    <!-- БИТВА ЛУДИКОВ -->
+    <div id="battleP" class="popup">
+        <h2 style="color:#bc13fe">Битва Лудиков</h2><p style="font-size:12px; margin:15px 0;">Текущие битвы и турнирная таблица:</p>
+        <table>
+            <tr><th>Игрок</th><th>Победы</th><th>Очки</th></tr>
+            <tr><td>Ludik1</td><td>5</td><td>150</td></tr>
+            <tr><td>Ludik2</td><td>4</td><td>120</td></tr>
+            <tr><td>Ludik3</td><td>3</td><td>90</td></tr>
+            <tr><td>Ludik4</td><td>2</td><td>60</td></tr>
+        </table>
+        <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    </div>
 
     <script>
         const tg = window.Telegram.WebApp;
@@ -95,10 +164,6 @@
         if(user) {
             document.getElementById('uID').innerText = user.id;
             document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start=' + user.id;
-        }
-
-        function openChat() {
-            tg.openTelegramLink("https://t.me/+BrVJbCy5i5hjMjYy");
         }
 
         function openP(id) {
