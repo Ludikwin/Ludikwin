@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>LUDIK AI</title>
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
@@ -14,319 +15,147 @@
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; width: 100%; overflow-x: hidden; background: var(--bg); font-family: 'Inter', sans-serif; color: white; }
-body { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+* { box-sizing: border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
+html, body { height:100%; width:100%; overflow-x:hidden; background:var(--bg); font-family:'Inter', sans-serif; color:white;}
+body { display:flex; flex-direction:column; align-items:center; padding:20px;}
 
-.app-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 20px;
-    background: var(--gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-transform: uppercase;
-    margin: 15px 0 20px;
-    text-shadow: 0 0 10px #ffe57e, 0 0 20px #bc13fe;
-}
+.app-title { font-family:'Orbitron', sans-serif; font-size:20px; background:var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:15px 0 20px; text-shadow:0 0 10px #ffe57e, 0 0 20px #bc13fe;}
 
-.main-card {
-    width: 100%; max-width: 420px;
-    background: rgba(15,15,15,0.98);
-    border: 2px solid var(--neon); border-radius: 30px; padding: 20px; box-shadow: 0 0 20px var(--neon);
-}
+.main-card { width:100%; max-width:420px; background: rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 20px var(--neon);}
+.menu-grid { display:grid; grid-template-columns: 1fr 1fr; gap:15px;}
+.menu-item { background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; transition:0.2s; box-shadow:0 0 15px var(--neon);}
+.menu-item:active { background:#222; border-color:#ffe57e; box-shadow:0 0 25px #ffe57e; transform: scale(0.97);}
+.gold-icon { font-size:28px; display:block; margin-bottom:8px;}
+.item-label { font-size:12px; color:#f3cf7a; text-transform:uppercase; font-weight:900;}
 
-.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-
-.menu-item {
-    background: #111; border: 2px solid var(--neon);
-    border-radius: 25px; padding: 25px 10px; text-align: center; cursor: pointer;
-    transition: 0.2s; box-shadow: 0 0 15px var(--neon);
-}
-.menu-item:active { background: #222; border-color: #ffe57e; box-shadow: 0 0 25px #ffe57e; transform: scale(0.97); }
-
-.gold-icon { font-size: 28px; display: block; margin-bottom: 8px; }
-.item-label { font-size: 12px; color: #f3cf7a; text-transform: uppercase; font-weight: 900; }
-
-.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; }
-.popup {
-    display: none; position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%; max-width: 400px;
-    background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px;
-    padding: 25px; z-index: 1001; text-align: center;
-}
-.close-btn {
-    background: #222; color: white; padding: 15px; width: 100%; border-radius: 15px;
-    margin-top: 15px; border: 1px solid #444; cursor: pointer; transition: 0.2s;
-}
-.close-btn:active { background: #111; transform: scale(0.97); }
-
-.league-button { background:#222; color:white; padding:10px 15px; margin:5px; border-radius:12px; cursor:pointer; }
-.league-button:hover { background:#bc13fe; color:#fff; }
+/* POPUPS */
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000;}
+.popup { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:85%; max-width:380px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:25px; z-index:1001; text-align:center;}
+.close-btn { background:#222; color:white; padding:15px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; cursor:pointer; transition:0.2s;}
+.close-btn:active { background:#111; transform: scale(0.97);}
 </style>
 </head>
+
 <body>
 
 <div class="app-title">LUDIK AI</div>
 
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" id="predictionsBtn">
-            <span class="gold-icon">📊</span>
-            <span class="item-label">Прогнозы</span>
-        </div>
-        <div class="menu-item" id="vipBtn">
-            <span class="gold-icon">💎</span>
-            <span class="item-label">VIP</span>
-        </div>
-        <div class="menu-item" id="jbBtn">
-            <span class="gold-icon">🔥</span>
-            <span class="item-label">ЖБ дня</span>
-        </div>
-        <div class="menu-item" id="refBtn">
-            <span class="gold-icon">👥</span>
-            <span class="item-label">Рефералы</span>
-        </div>
-        <div class="menu-item" id="bonusBtn">
-            <span class="gold-icon">🎁</span>
-            <span class="item-label">Бонусы</span>
-        </div>
-        <div class="menu-item" id="statsBtn">
-            <span class="gold-icon">📈</span>
-            <span class="item-label">Статистика</span>
-        </div>
+        <div class="menu-item" data-code="PL"><span class="gold-icon">🏴</span><span class="item-label">АПЛ</span></div>
+        <div class="menu-item" data-code="PD"><span class="gold-icon">🇪🇸</span><span class="item-label">Ла Лига</span></div>
+        <div class="menu-item" data-code="BL1"><span class="gold-icon">🇩🇪</span><span class="item-label">Бундес</span></div>
+        <div class="menu-item" data-code="SA"><span class="gold-icon">🇮🇹</span><span class="item-label">Серия А</span></div>
+        <div class="menu-item" data-code="CL"><span class="gold-icon">🏆</span><span class="item-label">Лига Чемпионов</span></div>
+        <div class="menu-item" id="profileBtn"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
+        <div class="menu-item" id="bonusBtn"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+        <div class="menu-item" id="vipBtn"><span class="gold-icon">💎</span><span class="item-label">VIP</span></div>
     </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
 
-<!-- POPUPS -->
-<div id="predictionsP" class="popup">
-    <h2>Выберите лигу</h2>
-    <div id="leaguesContainer"></div>
-    <div id="predictionResult" style="margin-top:15px;"></div>
-    <button class="close-btn">Закрыть</button>
+<!-- Прогноз -->
+<div id="predictP" class="popup">
+    <h2 id="pTitle">АНАЛИЗ...</h2>
+    <div id="pStats"></div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- VIP-кнопка уже интегрирована, остальной дизайн и кнопки остаются как есть -->
-<div class="menu-item" id="vipBtn">
-    <span class="gold-icon">💎</span>
-    <span class="item-label">VIP (15$)</span>
+<!-- Профиль -->
+<div id="profileP" class="popup">
+    <h2>ПРОФИЛЬ</h2>
+    <p>Баланс: 100 LC</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<script>
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
-
-// === Overlay и popup логика ===
-const overlay = document.getElementById('overlay');
-const popups = document.querySelectorAll('.popup');
-
-function openPopup(id){
-    overlay.style.display = 'block';
-    document.getElementById(id).style.display = 'block';
-}
-
-function closeAll(){
-    overlay.style.display = 'none';
-    popups.forEach(p => p.style.display = 'none');
-}
-
-document.querySelectorAll('.close-btn').forEach(btn=>{
-    btn.addEventListener('click', closeAll);
-});
-overlay.addEventListener('click', closeAll);
-
-// === Существующие кнопки ===
-document.getElementById('profileBtn').addEventListener('click', ()=>{
-    openPopup('profileP');
-});
-
-document.getElementById('bonusBtn').addEventListener('click', ()=>{
-    openPopup('bonusP');
-});
-
-// === API прогнозы ===
-document.querySelectorAll('[data-code]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-        apiFetch(btn.dataset.code);
-    });
-});
-
-async function apiFetch(code){
-    openPopup('predictP');
-    document.getElementById('pTitle').innerText = "АНАЛИЗ...";
-    document.getElementById('pStats').innerText = "";
-
-    try{
-        const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
-            headers:{ 'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019' }
-        });
-
-        const data = await res.json();
-
-        if(data.matches && data.matches.length > 0){
-            const m = data.matches[0];
-            document.getElementById('pTitle').innerText =
-                m.homeTeam.name + " - " + m.awayTeam.name;
-            document.getElementById('pStats').innerText = "АНАЛИЗ ГОТОВ (тут можно вставить прогноз AI)";
-        } else {
-            document.getElementById('pTitle').innerText = "МАТЧЕЙ НЕТ";
-        }
-
-    } catch(e){
-        document.getElementById('pTitle').innerText = "ОШИБКА ПРИ ЗАПРОСЕ API";
-    }
-}
-
-// === VIP оплата через CryptoPay ===
-document.getElementById('vipBtn').addEventListener('click', async ()=>{
-    try{
-        // Создаём инвойс через CryptoPay API
-        const res = await fetch("https://api.cryptopay.me/v1/invoices", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer 536044:AA6T5fMPXZ3s6EuJhXnrt55X2TrHWcW8mXP"
-            },
-            body: JSON.stringify({
-                asset: "USDT",
-                amount: 15,
-                comment: "VIP Ludik AI 2 недели",
-                // callback_url: "https://ваш_сервер/crypto/callback" // если нужен сервер
-            })
-        });
-        const data = await res.json();
-
-        if(data && data.bot_invoice_url){
-            // Открываем платеж в браузере/Telegram
-            window.open(data.bot_invoice_url, "_blank");
-        } else {
-            alert("Ошибка создания платежа");
-        }
-    } catch(e){
-        alert("Ошибка при оплате VIP: " + e.message);
-    }
-});
-</script>
-
-<div id="jbP" class="popup">
-    <h2>ЖБ дня</h2>
-    <p>🔥 Сегодня топ матч: Команда A vs Команда B 🔥</p>
-    <button class="close-btn">Закрыть</button>
-</div>
-
-<div id="refP" class="popup">
-    <h2>Рефералы</h2>
-    <p>Ваша реферальная ссылка:</p>
-    <input type="text" id="refLink" style="width:100%; text-align:center;" readonly>
-    <p>За 3 реферала вы получаете 50 Ludik Coin</p>
-    <button class="close-btn">Закрыть</button>
-</div>
-
+<!-- Бонусы -->
 <div id="bonusP" class="popup">
-    <h2>Бонусы</h2>
-    <p><a href="https://1wqaxr.com/?p=h14y" target="_blank">1WIN</a></p>
-    <p><a href="https://stake.com/ru?c=oeVgnFIa" target="_blank">Stake</a></p>
-    <p><a href="https://t.me/+oEnEz7IOZ90wN2Ri" target="_blank">Группа</a></p>
-    <p><a href="https://t.me/+BrVJbCy5i5hjMjYy" target="_blank">Чат</a></p>
-    <button class="close-btn">Закрыть</button>
+    <h2>БОНУСЫ</h2>
+    <p>
+        <a href="https://1wqaxr.com/?p=h14y" target="_blank">1Win</a><br>
+        <a href="https://stake.com/ru?c=oeVgnFIa" target="_blank">Stake</a><br>
+        <a href="https://t.me/+oEnEz7IOZ90wN2Ri" target="_blank">Группа</a><br>
+        <a href="https://t.me/+BrVJbCy5i5hjMjYy" target="_blank">Чат</a>
+    </p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<div id="statsP" class="popup">
-    <h2>Статистика прогнозов</h2>
-    <div id="statsContent">Успешность прогнозов: 0%</div>
-    <button class="close-btn">Закрыть</button>
+<!-- VIP -->
+<div id="vipP" class="popup">
+    <h2 id="vipTitle">VIP</h2>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready(); tg.expand();
 
-// ====================
-// POPUP ЛОГИКА
-// ====================
+// Попапы
 const overlay = document.getElementById('overlay');
 const popups = document.querySelectorAll('.popup');
-
-function openPopup(id){
-    overlay.style.display = 'block';
-    document.getElementById(id).style.display = 'block';
-}
-function closeAll(){
-    overlay.style.display = 'none';
-    popups.forEach(p => p.style.display = 'none');
-}
+function openPopup(id){ overlay.style.display='block'; document.getElementById(id).style.display='block'; }
+function closeAll(){ overlay.style.display='none'; popups.forEach(p=>p.style.display='none'); }
 document.querySelectorAll('.close-btn').forEach(btn=>btn.addEventListener('click', closeAll));
 overlay.addEventListener('click', closeAll);
 
-// ====================
-// КНОПКИ МЕНЮ
-// ====================
-document.getElementById('predictionsBtn').addEventListener('click', ()=>{
-    openPopup('predictionsP');
-    loadLeagues();
-});
-
-document.getElementById('vipBtn').addEventListener('click', ()=>openPopup('vipP'));
-document.getElementById('jbBtn').addEventListener('click', ()=>openPopup('jbP'));
-document.getElementById('refBtn').addEventListener('click', ()=>{
-    openPopup('refP');
-    document.getElementById('refLink').value = "https://t.me/LudikBot?start=USERID";
-});
+// Профиль и бонусы
+document.getElementById('profileBtn').addEventListener('click', ()=>openPopup('profileP'));
 document.getElementById('bonusBtn').addEventListener('click', ()=>openPopup('bonusP'));
-document.getElementById('statsBtn').addEventListener('click', ()=>openPopup('statsP'));
 
-// ====================
-// Лиги и прогнозы
-// ====================
-const LEAGUES = {
-    "PL": "АПЛ",
-    "PD": "Ла Лига",
-    "BL1": "Бундес",
-    "SA": "Серия А",
-    "CL": "Лига Чемпионов",
-    "L1": "Лига 1",
-    "ECL": "Лига Европы",
-    "RPL": "РПЛ",
-    "MLS": "MLS",
-    "BRA": "Бразилия Серия A"
-};
+// Прогнозы
+document.querySelectorAll('[data-code]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        apiFetch(btn.dataset.code);
+    });
+});
 
-function loadLeagues(){
-    const container = document.getElementById('leaguesContainer');
-    container.innerHTML = "";
-    for(const code in LEAGUES){
-        const btn = document.createElement('button');
-        btn.className = "league-button";
-        btn.innerText = LEAGUES[code];
-        btn.onclick = ()=>fetchPrediction(code);
-        container.appendChild(btn);
+// API для прогноза (рандом пока)
+async function apiFetch(code){
+    openPopup('predictP');
+    document.getElementById('pTitle').innerText="АНАЛИЗ...";
+    document.getElementById('pStats').innerText="";
+
+    try{
+        const res = await fetch(`http://localhost:8000/predict?league=${code}`);
+        const data = await res.json();
+
+        document.getElementById('pTitle').innerText = ${data.home_team} - ${data.away_team};
+        document.getElementById('pStats').innerHTML = `
+            Прогноз: ${data.prediction}<br>
+            Счет: ${data.score}<br>
+            Тотал: ${data.total}<br>
+            Угловые: ${data.corners}<br>
+            Желтые: ${data.yellow_cards}<br>
+            Фолы: ${data.fouls}<br>
+            Доверие: ${data.confidence}%
+        `;
+    }catch(e){
+        document.getElementById('pTitle').innerText="ОШИБКА ПРИ ЗАПРОСЕ API";
     }
 }
 
-function fetchPrediction(code){
-    // Пока рандомные данные
-    const home = "Команда " + String.fromCharCode(65 + Math.floor(Math.random()*5));
-    const away = "Команда " + String.fromCharCode(70 + Math.floor(Math.random()*5));
-    const scoreH = Math.floor(Math.random()*4);
-    const scoreA = Math.floor(Math.random()*4);
-    const pred = scoreH>scoreA?"П1":scoreA>scoreH?"П2":"П1"; // ничья забирает Ludik AI
-    const total = (scoreH+scoreA>2.5)?"ТБ 2.5":"ТМ 2.5";
-    const corners = 5 + Math.floor(Math.random()*11);
-    const yellow = Math.floor(Math.random()*6);
-    const fouls = 8 + Math.floor(Math.random()*13);
-    const confidence = 60 + Math.floor(Math.random()*36);
+// ======================
+// VIP кнопка с CryptoBot
+// ======================
+document.getElementById('vipBtn').addEventListener('click', async () => {
+    openPopup('vipP');
+    document.getElementById('vipTitle').innerText = "Создание инвойса...";
 
-    document.getElementById('predictionResult').innerHTML = `
-        <h3>${home} - ${away}</h3>
-        <p>Прогноз: ${pred}</p>
-        <p>Счет: ${scoreH}:${scoreA}</p>
-        <p>Тотал: ${total}</p><p>Угловые: ${corners}, Желтые: ${yellow}, Фолы: ${fouls}</p>
-        <p>Доверие: ${confidence}%</p>
-    `;
-}
+    try {
+        const res = await fetch("http://localhost:8000/create_vip_invoice");
+        const data = await res.json();
+
+        if(data.invoice_url){
+            window.open(data.invoice_url, "_blank");
+            document.getElementById('vipTitle').innerText = "💎 VIP: оплата открыта!";
+        } else {
+            document.getElementById('vipTitle').innerText = "❌ Ошибка: " + (data.error || "Не удалось создать инвойс");
+        }
+    } catch(e){
+        document.getElementById('vipTitle').innerText = "❌ Ошибка сервера";
+    }
+});
 </script>
 
 </body>
