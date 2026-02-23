@@ -15,22 +15,27 @@
 * { box-sizing: border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
 html, body {height:100%; width:100%; overflow:hidden; background: var(--bg); font-family: 'Inter', sans-serif; color:white; position: relative;}
 body {display:flex; flex-direction:column; align-items:center; padding:20px;}
-.app-title {font-family:'Orbitron', sans-serif; font-size:20px; background: var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:10px 0 20px; text-shadow:0 0 15px rgba(188,19,254,0.6);}
-.main-card {width:100%; max-width:420px; background:rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 20px var(--neon); z-index:10; position:relative; touch-action:auto;}
+.app-title {font-family:'Orbitron', sans-serif; font-size:22px; background: var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:10px 0 20px; text-shadow:0 0 20px rgba(188,19,254,0.8);}
+.main-card {width:100%; max-width:440px; background:rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 25px var(--neon); z-index:10; position:relative; touch-action:auto; transition: 0.3s;}
 .menu-grid {display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-.menu-item {background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; position:relative; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; touch-action: manipulation;}
-.menu-item:active {background:#222; transform:scale(0.95); border-color:#ffe57e;}
-.gold-icon {font-size:28px; display:block; margin-bottom:5px; pointer-events:none;}
-.item-label {font-size:11px; color:#f3cf7a; text-transform:uppercase; font-weight:900; pointer-events:none;}
-.overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:900;}
-.popup {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:90%; max-width:380px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:20px; z-index:1000; text-align:center; overflow-y:auto; max-height:80%;}
-.close-btn {background:#222; color:#888; padding:12px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; font-weight:bold;}
-.action-btn {background:var(--gold); color:black; padding:14px; width:100%; border-radius:15px; margin-top:10px; border:none; font-weight:900; display:inline-block; text-decoration:none;}
+.menu-item {background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; position:relative; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; touch-action: manipulation; transition: all 0.2s ease;}
+.menu-item:hover {transform: scale(1.05); border-color:#ffe57e;}
+.menu-item:active {background:#222; transform:scale(0.95); border-color:#ffd700;}
+.gold-icon {font-size:30px; display:block; margin-bottom:5px; pointer-events:none;}
+.item-label {font-size:12px; color:#f3cf7a; text-transform:uppercase; font-weight:900; pointer-events:none;}
+.overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:900; transition:0.3s;}
+.popup {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:90%; max-width:400px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:20px; z-index:1000; text-align:center; overflow-y:auto; max-height:80%; transition:0.3s;}
+.close-btn {background:#222; color:#888; padding:12px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; font-weight:bold; cursor:pointer; transition:0.2s;}
+.close-btn:hover {background:#333; color:#fff;}
+.action-btn {background:var(--gold); color:black; padding:14px; width:100%; border-radius:15px; margin-top:10px; border:none; font-weight:900; display:inline-block; text-decoration:none; cursor:pointer; transition:0.2s;}
+.action-btn:hover {filter: brightness(1.2);}
 .league-grid {display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;}
-.league-btn {background:#1a1a1a; color:white; border:1px solid #333; padding:10px; border-radius:12px; font-size:11px;}
+.league-btn {background:#1a1a1a; color:white; border:1px solid #333; padding:10px; border-radius:12px; font-size:11px; cursor:pointer; transition:0.2s;}
+.league-btn:hover {background:#222; border-color:#ffe57e;}
 .stat-row {display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222; font-size:14px;}
 .gold-t {color:#d4af37; font-weight:bold;}
-.bonus-link {display:block; background:#111; color:#ffe57e; padding:12px; margin:8px 0; border-radius:12px; text-decoration:none; border:1px solid #d4af37; font-weight:bold;}
+.bonus-link {display:block; background:#111; color:#ffe57e; padding:12px; margin:8px 0; border-radius:12px; text-decoration:none; border:1px solid #d4af37; font-weight:bold; transition:0.2s;}
+.bonus-link:hover {background:#222;}
 table {width:100%; border-collapse:collapse; margin-top:10px;}
 th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;}
 th {background:#1a1a1a;}
@@ -42,10 +47,10 @@ th {background:#1a1a1a;}
 
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
-        <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
+        <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div><div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
         <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
-        <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div><div class="menu-item" onclick="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
+        <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+        <div class="menu-item" onclick="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
         <div class="menu-item" onclick="openP('statsP')"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
         <div class="menu-item" onclick="openP('battleP')"><span class="gold-icon">⚔️</span><span class="item-label">БИТВА ЛУДИКОВ</span></div>
         <div class="menu-item" onclick="openP('jbP')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
@@ -94,12 +99,6 @@ th {background:#1a1a1a;}
 <div id="refP" class="popup">
     <h2>РЕФЕРАЛЫ</h2>
     <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
-    <div id="refLinks" style="margin-top:10px; font-size:11px;">
-        <b>Ваши ссылки для рефералов:</b><br>
-        <a href="https://t.me/LudikWin_bot?start=ref1" target="_blank">https://t.me/LudikWin_bot?start=ref1</a><br>
-        <a href="https://t.me/LudikWin_bot?start=ref2" target="_blank">https://t.me/LudikWin_bot?start=ref2</a><br>
-        <a href="https://t.me/LudikWin_bot?start=ref3" target="_blank">https://t.me/LudikWin_bot?start=ref3</a>
-    </div>
     <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ</button>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
@@ -122,15 +121,13 @@ th {background:#1a1a1a;}
 <!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
     <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
-    <p id="jbContent" style="font-size:12px; margin:15px 0;">
-        Сегодня: <span>Реал Мадрид 🆚 Барселона — П1 (вероятность 85%)</span>
-    </p>
+    <p id="jbContent" style="font-size:13px; margin:15px 0; color:#00ff00; font-weight:bold;">🔥 Самый уверенный прогноз дня: ТБ 2.5 в матче Бенфика – Реал</p>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <!-- ИСТОРИЯ ПРОГНОЗОВ -->
-<div id="historyP" class="popup"><h2 style="color:#bc13fe">История прогнозов</h2>
-    <table>
+<div id="historyP" class="popup">
+    <h2 style="color:#bc13fe">История прогнозов</h2><table>
         <tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
         <tr><td>23.02</td><td>Бенфика - Реал</td><td>ТБ 2.5</td><td>✔️</td></tr>
         <tr><td>22.02</td><td>МЮ - Ливерпуль</td><td>П2</td><td>❌</td></tr>
