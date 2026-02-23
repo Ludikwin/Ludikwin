@@ -13,47 +13,56 @@
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
 html, body { 
     height: 100%; width: 100%; 
     overflow: hidden; background: var(--bg); 
     font-family: 'Inter', sans-serif; color: white; 
     position: relative;
 }
+
 body { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+
 .app-title { font-family: 'Orbitron', sans-serif; font-size: 20px; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; margin: 10px 0 20px; text-shadow: 0 0 15px rgba(188, 19, 254, 0.6); }
+
 .main-card { 
     width: 100%; max-width: 420px; 
     background: rgba(15,15,15,0.98); 
     border: 2px solid var(--neon); border-radius: 30px; 
     padding: 20px; box-shadow: 0 0 20px var(--neon); 
     z-index: 10; position: relative; 
-    touch-action: auto;
+    touch-action: auto; 
 }
+
 .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
 .menu-item { 
     background: #111; border: 2px solid var(--neon); 
     border-radius: 25px; padding: 25px 10px; 
     text-align: center; cursor: pointer; 
     position: relative; z-index: 20;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    touch-action: manipulation;
+    touch-action: manipulation; 
 }
+
 .menu-item:active { background: #222; transform: scale(0.95); border-color: #ffe57e; }
+
 .gold-icon { font-size: 28px; display: block; margin-bottom: 5px; pointer-events: none; }
 .item-label { font-size: 11px; color: #f3cf7a; text-transform: uppercase; font-weight: 900; pointer-events: none; }
 
 /* Попапы */
 .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 900; }
 .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 380px; background: #0a0a0a; border: 2px solid #d4af37; border-radius: 25px; padding: 20px; z-index: 1000; text-align: center; }
+
 .close-btn { background: #222; color: #888; padding: 12px; width: 100%; border-radius: 15px; margin-top: 15px; border: 1px solid #444; font-weight: bold; }
 .action-btn { background: var(--gold); color: black; padding: 14px; width: 100%; border-radius: 15px; margin-top: 10px; border: none; font-weight: 900; display: inline-block; text-decoration: none; }
+
 .league-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 .league-btn { background: #1a1a1a; color: white; border: 1px solid #333; padding: 10px; border-radius: 12px; font-size: 11px; }
+
 .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; font-size: 14px; }
 .gold-t { color: #d4af37; font-weight: bold; }
 .bonus-link { display: block; background: #111; color: #ffe57e; padding: 12px; margin: 8px 0; border-radius: 12px; text-decoration: none; border: 1px solid #d4af37; font-weight: bold; }
-.choice-btn { background:#222; color:#fff; border:1px solid #555; border-radius:12px; padding:10px; margin:5px; width:100%; cursor:pointer; }
-.choice-btn:active { background:#333; }
 </style>
 </head>
 <body ontouchstart="tg.expand()">
@@ -63,20 +72,19 @@ body { display: flex; flex-direction: column; align-items: center; padding: 20px
 <div class="main-card">
     <div class="menu-grid">
         <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
-        <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div><div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
-        <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
-        <div class="menu-item" onclick="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
+        <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
+        <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
+        <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div><div class="menu-item" onclick="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
         <div class="menu-item" onclick="openP('statsP')"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
-        <div class="menu-item" onclick="openP('battleP')"><span class="gold-icon">⚔️</span><span class="item-label">БИТВА ЛУДИКОВ</span></div>
+        <div class="menu-item" onclick="openP('bitvaP')"><span class="gold-icon">⚔️</span><span class="item-label">БИТВА ЛУДИКОВ</span></div>
         <div class="menu-item" onclick="openP('jbP')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
         <div class="menu-item" onclick="openP('historyP')"><span class="gold-icon">📜</span><span class="item-label">ИСТОРИЯ ПРОГНОЗОВ</span></div>
-        <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
     </div>
 </div>
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
-<!-- ПРОГНОЗЫ -->
+<!-- Прогнозы -->
 <div id="predictP" class="popup">
     <h3 style="color:#ffe57e">ЛИГИ</h3>
     <div class="league-grid" id="leagueBox"></div>
@@ -93,7 +101,7 @@ body { display: flex; flex-direction: column; align-items: center; padding: 20px
     <button class="close-btn" onclick="closeAll()">ОТМЕНА</button>
 </div>
 
-<!-- ПРОФИЛЬ -->
+<!-- Профиль -->
 <div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
     <div class="stat-row"><span>ID:</span><span id="uID" class="gold-t">---</span></div>
@@ -101,7 +109,7 @@ body { display: flex; flex-direction: column; align-items: center; padding: 20px
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- БОНУСЫ -->
+<!-- Бонусы -->
 <div id="bonusP" class="popup">
     <h3>БОНУСЫ</h3>
     <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">💰 1WIN</a>
@@ -110,7 +118,7 @@ body { display: flex; flex-direction: column; align-items: center; padding: 20px
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- РЕФЕРАЛ -->
+<!-- Рефералы -->
 <div id="refP" class="popup">
     <h2>РЕФЕРАЛЫ</h2>
     <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
@@ -118,46 +126,37 @@ body { display: flex; flex-direction: column; align-items: center; padding: 20px
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- СТАТИСТИКА -->
+<!-- Статистика -->
 <div id="statsP" class="popup">
     <h2>AI СТАТИСТИКА</h2>
     <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00;">84.2%</span></div>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- БИТВА ЛУДИКОВ -->
-<div id="battleP" class="popup">
+<!-- Битва Лудиков -->
+<div id="bitvaP" class="popup">
     <h2>БИТВА ЛУДИКОВ</h2>
-    <p>Ставь на победу К1, ничью или победу К2</p>
-    <div id="battleChoices">
-        <button class="choice-btn" onclick="battle('К1')">Победа К1</button>
-        <button class="choice-btn" onclick="battle('Ничья')">Ничья</button>
-        <button class="choice-btn" onclick="battle('К2')">Победа К2</button>
+    <p>Ставки на один матч в день: Победа К1, Ничья, Победа К2</p>
+    <div id="bitvaOptions" style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
+        <button class="league-btn" onclick="bitvaChoice('К1')">К1</button>
+        <button class="league-btn" onclick="bitvaChoice('Ничья')">Ничья</button>
+        <button class="league-btn" onclick="bitvaChoice('К2')">К2</button>
     </div>
-    <div id="battleResult" style="margin-top:10px; color:#00ff00;"></div>
+    <div id="bitvaRes" style="margin-top:15px; color:#00ff00;"></div>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ЖБ ДНЯ -->
+<!-- ЖБ дня -->
 <div id="jbP" class="popup">
     <h2>ЖБ ДНЯ</h2>
-    <div id="jbMatch" style="margin-top:10px; color:#ffe57e;">Матч дня: АПЛ — Ливерпуль vs Ман Сити<br>Прогноз: ТБ 2.5</div>
+    <p style="color:#ffe57e;">🔥 Список самых горячих событий дня</p>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ИСТОРИЯ ПРОГНОЗОВ -->
-<div id="historyP" class="popup"><h2>ИСТОРИЯ ПРОГНОЗОВ</h2>
-    <div id="historyList" style="margin-top:10px; color:#00ff00; font-size:13px;">
-        1. Ливерпуль 2-1 Ман Сити (ТБ 2.5)<br>
-        2. Челси 1-1 Тоттенхэм (ТБ 2.5)
-    </div>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
-
-<!-- ЧАТ -->
-<div id="chatP" class="popup">
-    <h2>ЧАТ</h2>
-    <iframe src="https://t.me/+BrVJbCy5i5hjMjYy" style="width:100%;height:400px;border:none;border-radius:12px;margin-top:10px;"></iframe>
+<!-- История прогнозов -->
+<div id="historyP" class="popup">
+    <h2>ИСТОРИЯ ПРОГНОЗОВ</h2>
+    <p style="color:#00ff00;">📊 Здесь будут результаты ваших прогнозов</p>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
@@ -224,17 +223,18 @@ function copyRef() {
     tg.showAlert("Скопировано!");
 }
 
-// БИТВА ЛУДИКОВ
-function battle(choice) {
-    const options = ['К1','Ничья','К2'];
-    const result = options[Math.floor(Math.random()*options.length)];
-    const resBox = document.getElementById('battleResult');
-    if(choice === result){
-        resBox.innerText = Ты выиграл! Ставка: ${choice}, результат: ${result};
+// Битва Лудиков
+function bitvaChoice(choice) {
+    const outcomes = ["К1","Ничья","К2"];
+    const random = outcomes[Math.floor(Math.random()*3)];
+    const resBox = document.getElementById('bitvaRes');
+    if(choice === random) {
+        resBox.innerText = Вы выбрали ${choice}. Результат: ${random}. Победа! 🎉;
     } else {
-        resBox.innerText = Ты проиграл. Ставка: ${choice}, результат: ${result};
+        resBox.innerText = Вы выбрали ${choice}. Результат: ${random}. Поражение 😢;
     }
 }
 </script>
+
 </body>
 </html>
