@@ -103,7 +103,7 @@ body {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.95);
-    z-index: 1000;
+    z-index: 900;
 }
 
 .popup {
@@ -118,7 +118,7 @@ body {
     border: 2px solid #d4af37;
     border-radius: 25px;
     padding: 25px;
-    z-index: 1001;
+    z-index: 1000;
     text-align: center;
 }
 
@@ -202,12 +202,15 @@ body {
 const tg = window.Telegram.WebApp;
 tg.ready(); tg.expand(); tg.onEvent('viewportChanged', () => tg.expand());
 
+// === POPUP ===
 const overlay = document.getElementById('overlay');
 const popups = document.querySelectorAll('.popup');
 
 function openPopup(id){
     overlay.style.display = 'block';
+    overlay.style.zIndex = 999;
     document.getElementById(id).style.display = 'block';
+    document.getElementById(id).style.zIndex = 1000;
 }
 
 function closeAll(){
@@ -218,20 +221,11 @@ function closeAll(){
 document.querySelectorAll('.close-btn').forEach(btn => btn.addEventListener('click', closeAll));
 overlay.addEventListener('click', closeAll);
 
-// ============================
-// ПРОГНОЗЫ
-// ============================
+// === ПРОГНОЗЫ ===
 const leagues = {
-    "PL":"АПЛ",
-    "PD":"Ла Лига",
-    "BL1":"Бундес",
-    "SA":"Серия А",
-    "CL":"Лига Чемпионов",
-    "L1":"Лига 1",
-    "ECL":"Лига Европы",
-    "RPL":"РПЛ",
-    "MLS":"MLS",
-    "BRA":"Бразилия Серия A"
+    "PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А",
+    "CL":"Лига Чемпионов","L1":"Лига 1","ECL":"Лига Европы",
+    "RPL":"РПЛ","MLS":"MLS","BRA":"Бразилия Серия A"
 };
 
 document.getElementById('predictBtn').addEventListener('click', ()=>{
@@ -260,9 +254,7 @@ document.getElementById('predictBtn').addEventListener('click', ()=>{
     });
 });
 
-// ============================
-// VIP кнопка
-// ============================
+// === VIP ===
 document.getElementById('vipBtn').addEventListener('click', async ()=>{
     try{
         const res = await fetch('/create_vip_invoice');
@@ -277,7 +269,7 @@ document.getElementById('vipBtn').addEventListener('click', async ()=>{
     }
 });
 
-// ПРОФИЛЬ, БОНУСЫ, РЕФ, СТАТИСТИКА
+// === ПРОЧИЕ КНОПКИ ===
 document.getElementById('profileBtn').addEventListener('click', ()=>{ openPopup('profileP'); });
 document.getElementById('bonusBtn').addEventListener('click', ()=>{ openPopup('bonusP'); });
 document.getElementById('refBtn').addEventListener('click', ()=>{ openPopup('refP'); });
