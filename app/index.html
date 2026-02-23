@@ -4,189 +4,168 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>LUDIK AI</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
 <style>
 :root {
     --bg: #050505;
     --neon: #bc13fe;
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-html, body {
-    height: 100%;
-    background: var(--bg);
-    font-family: 'Inter', sans-serif;
-    color: white;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height:100%; width:100%; background: var(--bg); font-family:'Inter',sans-serif; color:white; overflow-x:hidden; }
+body { display:flex; flex-direction:column; align-items:center; padding:20px; }
 .app-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 20px;
-    background: var(--gold);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 15px 0 20px;
-    text-transform: uppercase;
+    font-family:'Orbitron',sans-serif; font-size:22px; background:var(--gold);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase;
+    margin:20px 0 25px; text-shadow:0 0 10px #ffe57e,0 0 20px #bc13fe;
 }
-
 .main-card {
-    width: 100%;
-    max-width: 420px;
-    background: rgba(15,15,15,0.98);
-    border: 2px solid var(--neon);
-    border-radius: 30px;
-    padding: 20px;
-    box-shadow: 0 0 20px var(--neon);
+    width:100%; max-width:440px; background:rgba(15,15,15,0.98); border:2px solid var(--neon);
+    border-radius:30px; padding:20px; box-shadow:0 0 25px var(--neon);
 }
-
 .menu-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    display:grid; grid-template-columns:1fr 1fr; gap:15px;
 }
-
 .menu-item {
-    background: #111;
-    border: 2px solid var(--neon);
-    border-radius: 25px;
-    padding: 25px 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.2s;
-    box-shadow: 0 0 15px var(--neon);
+    background:#111; border:2px solid var(--neon); border-radius:25px;
+    padding:25px 10px; text-align:center; cursor:pointer; transition:0.2s; box-shadow:0 0 15px var(--neon);
 }
-
-.menu-item:active {
-    background: #222;
-    border-color: #ffe57e;
-    transform: scale(0.97);
+.menu-item:hover { transform:scale(1.03); box-shadow:0 0 25px #ffe57e; border-color:#ffe57e; }
+.gold-icon { font-size:28px; display:block; margin-bottom:8px; }
+.item-label { font-size:12px; color:#f3cf7a; text-transform:uppercase; font-weight:900; }
+/* POPUPS */
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:1000; }
+.popup { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+    width:85%; max-width:400px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px;
+    padding:25px; z-index:1001; text-align:center; box-shadow:0 0 25px #bc13fe;
 }
-
-.gold-icon {
-    font-size: 26px;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.item-label {
-    font-size: 12px;
-    color: #f3cf7a;
-    text-transform: uppercase;
-    font-weight: 900;
-}
-
-.hidden { display: none; }
-
-.back-btn {
-    margin-bottom: 15px;
-    font-size: 12px;
-    cursor: pointer;
-    color: #f3cf7a;
-}
+.close-btn { background:#222; color:white; padding:15px; width:100%; border-radius:15px; margin-top:15px;
+    border:1px solid #444; cursor:pointer; transition:0.2s; }
+.close-btn:active { background:#111; transform:scale(0.97); }
+/* PROGNOSIS */
+#pStats { margin-top:10px; font-size:14px; text-align:left; line-height:1.5; }
 </style>
 </head>
-
 <body>
 
 <div class="app-title">LUDIK AI</div>
 
 <div class="main-card">
-
-    <!-- Главное меню -->
-    <div id="mainMenu" class="menu-grid">
-
-        <div class="menu-item" onclick="openPredictions()">
-            <span class="gold-icon">🔮</span>
-            <span class="item-label">Прогнозы</span>
+    <div class="menu-grid">
+        <div class="menu-item" id="btnPredict">
+            <span class="gold-icon">⚽</span>
+            <span class="item-label">ПРОГНОЗЫ</span>
         </div>
-
-        <div class="menu-item" onclick="vip()">
+        <div class="menu-item" id="btnJB">
+            <span class="gold-icon">🔥</span>
+            <span class="item-label">ЖБ ДНЯ</span>
+        </div>
+        <div class="menu-item" id="btnVIP">
             <span class="gold-icon">💎</span>
             <span class="item-label">VIP</span>
         </div>
-
-        <div class="menu-item" onclick="referral()">
-            <span class="gold-icon">🤝</span>
-            <span class="item-label">Реферал</span>
+        <div class="menu-item" id="btnRef">
+            <span class="gold-icon">👥</span>
+            <span class="item-label">РЕФЕРАЛ</span>
         </div>
-
-        <div class="menu-item" onclick="jbDay()">
-            <span class="gold-icon">🔥</span>
-            <span class="item-label">ЖБ дня</span>
-        </div>
-
-        <div class="menu-item" onclick="stats()">
+        <div class="menu-item" id="btnStats">
             <span class="gold-icon">📊</span>
-            <span class="item-label">Статистика</span>
+            <span class="item-label">СТАТИСТИКА</span>
         </div>
-
-        <div class="menu-item" onclick="profile()">
-            <span class="gold-icon">👤</span>
-            <span class="item-label">Профиль</span>
-        </div>
-
-        <div class="menu-item" onclick="bonus()">
+        <div class="menu-item" id="btnBonus">
             <span class="gold-icon">🎁</span>
-            <span class="item-label">Бонусы</span>
+            <span class="item-label">БОНУСЫ</span>
         </div>
-
     </div>
+</div>
 
-    <!-- Меню лиг -->
-    <div id="leagueMenu" class="menu-grid hidden">
+<!-- Overlay и Popups -->
+<div class="overlay" id="overlay"></div>
 
-        <div class="back-btn" onclick="back()">← Назад</div>
+<div id="predictP" class="popup">
+    <h2 id="pTitle">АНАЛИЗ...</h2>
+    <div id="pStats"></div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
 
-        <div class="menu-item" onclick="openLeague('PL')">🇬🇧 АПЛ</div>
-        <div class="menu-item" onclick="openLeague('PD')">🇪🇸 Ла Лига</div>
-        <div class="menu-item" onclick="openLeague('BL1')">🇩🇪 Бундеслига</div>
-        <div class="menu-item" onclick="openLeague('SA')">🇮🇹 Серия А</div>
-        <div class="menu-item" onclick="openLeague('CL')">🏆 ЛЧ</div>
-        <div class="menu-item" onclick="openLeague('FL1')">🇫🇷 Лига 1</div>
-        <div class="menu-item" onclick="openLeague('DED')">🇳🇱 Эредивизи</div>
-        <div class="menu-item" onclick="openLeague('PPL')">🇵🇹 Примейра</div>
+<div id="jbP" class="popup">
+    <h2>ЖБ ДНЯ</h2>
+    <div id="jbStats">Загрузка...</div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
 
-    </div>
+<div id="vipP" class="popup">
+    <h2>VIP</h2>
+    <p>Доступ к расширенным прогнозам</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
 
+<div id="refP" class="popup"><h2>РЕФЕРАЛ</h2>
+    <p>Приглашай друзей и получай LC!</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="statsP" class="popup">
+    <h2>СТАТИСТИКА</h2>
+    <p>Баланс: 100 LC</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="bonusP" class="popup">
+    <h2>БОНУСЫ</h2>
+    <p>Подпишись на канал!</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
 <script>
 const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
+tg.ready(); tg.expand();
 
-function openPredictions(){
-    document.getElementById("mainMenu").classList.add("hidden");
-    document.getElementById("leagueMenu").classList.remove("hidden");
+// Popup логика
+const overlay = document.getElementById('overlay');
+const popups = document.querySelectorAll('.popup');
+function openPopup(id){ overlay.style.display='block'; document.getElementById(id).style.display='block'; }
+function closeAll(){ overlay.style.display='none'; popups.forEach(p=>p.style.display='none'); }
+document.querySelectorAll('.close-btn').forEach(btn=>btn.addEventListener('click', closeAll));
+overlay.addEventListener('click', closeAll);
+
+// ==================
+// Кнопки
+// ==================
+document.getElementById('btnPredict').addEventListener('click', ()=>openPopup('predictP'));
+document.getElementById('btnJB').addEventListener('click', ()=>openPopup('jbP'));
+document.getElementById('btnVIP').addEventListener('click', ()=>openPopup('vipP'));
+document.getElementById('btnRef').addEventListener('click', ()=>openPopup('refP'));
+document.getElementById('btnStats').addEventListener('click', ()=>openPopup('statsP'));
+document.getElementById('btnBonus').addEventListener('click', ()=>openPopup('bonusP'));
+
+// ==================
+// Прогноз с FastAPI
+// ==================
+async function loadPrediction(league){
+    document.getElementById('pTitle').innerText="АНАЛИЗ...";
+    document.getElementById('pStats').innerText="";
+    openPopup('predictP');
+    try{
+        const res = await fetch(`http://127.0.0.1:8000/predict?league=${league}`);
+        const data = await res.json();
+        if(data.error){
+            document.getElementById('pTitle').innerText = data.error;
+            return;
+        }
+        document.getElementById('pTitle').innerText = ${data.home_team} - ${data.away_team};
+        document.getElementById('pStats').innerHTML=`
+            <b>Прогноз:</b> ${data.prediction}<br>
+            <b>Счет:</b> ${data.score}<br>
+            <b>Тотал:</b> ${data.total}<br>
+            <b>Угловые:</b> ${data.corners}<br>
+            <b>ЖК:</b> ${data.yellow_cards}<br>
+            <b>Фолы:</b> ${data.fouls}<br>
+            <b>Уверенность:</b> ${data.confidence}%
+        `;
+    }catch(e){ document.getElementById('pTitle').innerText="ОШИБКА ПРИ ЗАПРОСЕ"; }
 }
-
-function back(){
-    document.getElementById("leagueMenu").classList.add("hidden");
-    document.getElementById("mainMenu").classList.remove("hidden");
-}
-
-function openLeague(code){
-    alert("Лига: " + code);
-}
-
-function vip(){ alert("VIP раздел"); }
-function referral(){ alert("Реферальная система"); }
-function jbDay(){ alert("ЖБ дня"); }
-function stats(){ alert("Статистика"); }
-function profile(){ alert("Профиль"); }
-function bonus(){ alert("Бонусы"); }
 </script>
 
 </body>
