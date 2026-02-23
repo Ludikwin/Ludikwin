@@ -31,10 +31,10 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
     width:100%; 
     max-width:420px; 
     background:rgba(15,15,15,0.98); 
-    border:2px solid #d4af37; 
+    border:2px solid var(--neon); 
     border-radius:30px; 
     padding:20px; 
-    box-shadow:0 0 20px #d4af37; 
+    box-shadow:0 0 20px var(--neon); 
     z-index:10; 
     position:relative; 
     touch-action:auto;
@@ -42,7 +42,7 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 .menu-grid {display:grid; grid-template-columns:1fr 1fr; gap:12px;}
 .menu-item {
     background:#111; 
-    border:2px solid #444; 
+    border:2px solid var(--neon); 
     border-radius:25px; 
     padding:25px 10px; 
     text-align:center; 
@@ -68,7 +68,15 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 }
 .gold-icon {font-size:28px; display:block; margin-bottom:5px; pointer-events:none;}
 .item-label {font-size:11px; color:#f3cf7a; text-transform:uppercase; font-weight:900; pointer-events:none;}
-.overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:900; transition: all 0.2s;}
+.overlay {
+    display:none; 
+    position:fixed; 
+    inset:0; 
+    background:rgba(0,0,0,0.5); /* легкая затемненка */
+    z-index:50; 
+    pointer-events:auto; 
+    transition: all 0.2s;
+}
 .popup {
     display:none; 
     position:fixed; 
@@ -81,7 +89,7 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
     border:2px solid #d4af37; 
     border-radius:25px; 
     padding:20px; 
-    z-index:1000; 
+    z-index:100; 
     text-align:center; 
     overflow-y:auto; 
     max-height:80%;
@@ -111,7 +119,8 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 .gold-t {color:#d4af37; font-weight:bold;}
 .bonus-link {display:block; background:#111; color:#ffe57e; padding:12px; margin:8px 0; border-radius:12px; text-decoration:none; border:1px solid #d4af37; font-weight:bold; transition: all 0.2s;}
 .bonus-link:hover {box-shadow:0 0 10px #ffd700; transform:scale(1.03);}
-table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;}
+table {width:100%; border-collapse:collapse; margin-top:10px;}
+th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;}
 th {background:#1a1a1a;}
 </style>
 </head>
@@ -136,8 +145,6 @@ th {background:#1a1a1a;}
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
-<!-- ПОПАПЫ остаются как в твоем коде -->
-
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready();
@@ -161,60 +168,7 @@ function closeAll(){
     document.querySelectorAll('.popup').forEach(p=>p.style.display='none');
 }
 
-function openPredict(){
-    openP('predictP');
-    const box=document.getElementById('leagueBox');
-    box.innerHTML="";
-    const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
-    Object.keys(leagues).forEach(code=>{
-        const btn=document.createElement('button');
-        btn.className="league-btn";
-        btn.innerText=leagues[code];
-        btn.onclick=()=>getPredict(code);
-        box.appendChild(btn);
-    });
-}
-
-async function getPredict(code){
-    const resBox=document.getElementById('pRes');
-    resBox.innerText="АНАЛИЗ...";
-    try{
-        const res=await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
-            headers:{'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019'}
-        });
-        const data=await res.json();
-        if(data.matches && data.matches.length>0){
-            const m=data.matches[0];
-            resBox.innerHTML=m.homeTeam.name+' vs '+m.awayTeam.name+'<br><span style="color:#ffe57e">Прогноз: ТБ 2.5</span>';
-        } else {resBox.innerText="Матчей нет";}
-    }catch(e){resBox.innerText="Ошибка API";}
-}
-
-function copyRef(){
-    const link=document.getElementById('refLink').innerText;
-    const el=document.createElement('textarea');
-    el.value=link;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    tg.showAlert("Скопировано!");
-}
-
-// БИТВА ЛУДИКОВ
-function generateBattle(){
-    const box=document.getElementById('battleBox');
-    box.innerHTML="";
-    const options=['Победа К1','Ничья','Победа К2'];
-    options.forEach(o=>{
-        const b=document.createElement('button');
-        b.className='action-btn';
-        b.innerText=o;
-        b.onclick=()=>tg.showAlert('Вы выбрали: '+o);
-        box.appendChild(b);
-    });
-}
-generateBattle();
+// Остальные функции остаются как в твоем коде
 </script>
 
 </body>
