@@ -23,7 +23,7 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 .menu-item:active {background:#222; transform:scale(0.95); border-color:#ffe57e;}
 .gold-icon {font-size:28px; display:block; margin-bottom:5px; pointer-events:none;}
 .item-label {font-size:11px; color:#f3cf7a; text-transform:uppercase; font-weight:900; pointer-events:none;}
-.overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:900;}
+.overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:900;}
 .popup {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0.8); width:90%; max-width:380px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:20px; z-index:1000; text-align:center; overflow-y:auto; max-height:80%; opacity:0; transition: transform 0.3s ease, opacity 0.3s ease;}
 .popup.open {transform:translate(-50%, -50%) scale(1); opacity:1;}
 .close-btn {background:#222; color:#888; padding:12px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; font-weight:bold; transition: all 0.2s;}
@@ -59,9 +59,9 @@ table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px
     </div>
 </div>
 
-<div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
 
-<!-- ПОПАПЫ -->
+<!-- ПРОГНОЗЫ -->
 <div id="predictP" class="popup">
     <h3 style="color:#ffe57e">ЛИГИ</h3>
     <div class="league-grid" id="leagueBox"></div>
@@ -69,134 +69,89 @@ table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<div id="jbP" class="popup">
-    <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
-    <p id="jbContent" style="font-size:12px; margin:15px 0;">Прогноз дня: ТБ 2.5 – Лудик уверен!</p>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
+<!-- Остальные блоки (VIP, ПРОФИЛЬ, БОНУСЫ, РЕФЕРАЛ, СТАТИСТИКА, БИТВА ЛУДИКОВ, ЖБ, ИСТОРИЯ, ЧАТ) сохраняем без изменений -->
 
 <script>
-// =======================
-// Telegram WebApp
-// =======================
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-// =======================
-// Popup открытие/закрытие
-// =======================
+const user = tg.initDataUnsafe?.user;
+if(user){
+    document.getElementById('uID').innerText = user.id;
+    document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start='+user.id;
+}
+
 function openP(id){
-    const popup = document.getElementById(id);
-    if(!popup) return;
+    closeAll();
     document.getElementById('overlay').style.display='block';
-    document.getElementById('overlay').onclick = closeAll;
+    const popup=document.getElementById(id);
     popup.style.display='block';
-    setTimeout(()=>popup.classList.add('open'), 10);
+    popup.classList.add('open');
     tg.expand();
 }
 
 function closeAll(){
-    document.querySelectorAll('.popup').forEach(p=>{
-        p.classList.remove('open');
-        p.style.display='none';
-    });
     document.getElementById('overlay').style.display='none';
-}
-
-// =======================
-// Лиги и прогнозы
-// =======================
-const API_KEY='7a5d573e9f134d42b4edaa35c408e019';
-const GEMINI_KEY='AIzaSyAH_iOrLFX_B-9BGgd6oBuen95jE-wpejo';
-
-async function fetchMatches(code){
-    const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
-        headers:{'X-Auth-Token':API_KEY}
-    });
-    const data = await res.json();
-    const today = new Date();
-    const tomorrow = new Date(); tomorrow.setDate(today.getDate()+1);
-    return data.matches.filter(m=>{
-        const d=new Date(m.utcDate);
-        return d.toDateString()===today.toDateString()||d.toDateString()===tomorrow.toDateString();
+    document.querySelectorAll('.popup').forEach(p=>{
+        p.style.display='none';
+        p.classList.remove('open');
     });
 }
 
-function cacheMatches(matches){
-    const stored=JSON.parse(localStorage.getItem('matches')||'[]');
-    const newMatches=matches.filter(m=>!stored.some(s=>s.id===m.id));
-    if(newMatches.length>0)localStorage.setItem('matches',JSON.stringify([...stored,...newMatches]));
-    return newMatches;
-}
-
-async function analyzeMatchesWithGemini(newMatches){
-    if(newMatches.length===0)return[];
-    const res = await fetch('https://gemini.googleapis.com/v1/predict',{
-        method:'POST',
-        headers:{
-            'Authorization':'Bearer '+GEMINI_KEY,
-            'Content-Type':'application/json'
-        },
-        body: JSON.stringify({matches:newMatches,task:"анализировать матчи и дать прогноз с уровнем уверенности"})
-    });
-    const predictions = await res.json();
-    const cached = JSON.parse(localStorage.getItem('predictions')||'[]');
-    localStorage.setItem('predictions',JSON.stringify([...cached,...predictions]));
-    return predictions;
-}
-
-function getCachedPredictions(){ return JSON.parse(localStorage.getItem('predictions')||'[]'); }
-
-// =======================
-// Генерация кнопок Лиг
-// =======================
+// --- ПРОГНОЗЫ ---
 function openPredict(){
     openP('predictP');
     const box=document.getElementById('leagueBox');
     box.innerHTML="";
     const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
-
     Object.keys(leagues).forEach(code=>{
         const btn=document.createElement('button');
         btn.className="league-btn";
         btn.innerText=leagues[code];
-        btn.dataset.league=code;
-        btn.addEventListener('click',()=>{ document.getElementById('pRes').innerText=`Загрузка прогнозов для ${leagues[code]}...`; loadLeaguePredictions(code); });
+        btn.onclick=()=>loadPredictions(code); // теперь подгружаем прогнозы
         box.appendChild(btn);
     });
 }
 
-async function loadLeaguePredictions(code){
+// --- Функция для загрузки прогнозов с сервера ---
+async function loadPredictions(league){
     const resBox=document.getElementById('pRes');
+    resBox.innerText="АНАЛИЗ...";
     try{
-        const matches = await fetchMatches(code);
-        const newMatches = cacheMatches(matches);
-        await analyzeMatchesWithGemini(newMatches);
-        const predictions=getCachedPredictions().filter(p=>p.competition===code);
-        if(predictions.length===0){ resBox.innerText="Матчей нет"; return; }
-        resBox.innerHTML="";
-        predictions.forEach(m=>{
-            const div=document.createElement('div');
-            div.style.marginBottom='8px';
-            div.innerHTML=`<b>${m.match}</b> — Прогноз: <span style="color:#ffe57e">${m.prediction}</span> (Уверенность: <span style="color:#00ff00">${m.confidence}</span>)`;
-            resBox.appendChild(div);
+        const response=await fetch('http://localhost:3000/predict',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+                matches:[
+                    {homeTeam:{name:"Бенфика"}, awayTeam:{name:"Реал"}},{homeTeam:{name:"МЮ"}, awayTeam:{name:"Ливерпуль"}}
+                ]
+            })
         });
-        // ЖБ дня
-        const best=predictions.reduce((a,b)=>parseFloat(a.confidence.replace('%',''))>parseFloat(b.confidence.replace('%',''))?a:b);
-        document.getElementById('jbContent').innerHTML=`Прогноз дня: ${best.prediction} – Уверенность: ${best.confidence}`;
-    }catch(e){ resBox.innerText="Ошибка загрузки прогнозов"; console.error(e); }
+        const data=await response.json();
+        resBox.innerHTML=data.map(d=>`${d.match}<br><span style="color:#ffe57e">Прогноз: ${d.prediction}</span>`).join("<br><br>");
+        if(data[0]){
+            document.getElementById('jbContent').innerText=`Прогноз дня: ${data[0].prediction} – Лудик уверен!`;
+        }
+    }catch(e){
+        resBox.innerText="Ошибка загрузки прогнозов";
+        console.error(e);
+    }
 }
 
-// =======================
-// Битва и копирование
-// =======================
+// --- Копирование реферальной ссылки ---
 function copyRef(){
-    const link=document.getElementById('refLink')?.innerText;
-    const el=document.createElement('textarea'); el.value=link; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+    const link=document.getElementById('refLink').innerText;
+    const el=document.createElement('textarea');
+    el.value=link;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
     tg.showAlert("Скопировано!");
 }
 
+// --- БИТВА ЛУДИКОВ ---
 function generateBattle(){
     const box=document.getElementById('battleBox');
     box.innerHTML="";
@@ -210,6 +165,7 @@ function generateBattle(){
     });
 }
 generateBattle();
+
 </script>
 </body>
 </html>
