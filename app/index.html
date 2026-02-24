@@ -25,7 +25,7 @@ html, body {height:100%;width:100%;background:var(--bg);font-family:'Inter',sans
 .overlay {display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:900;}
 .popup {display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.8);width:90%;max-width:380px;background:#0a0a0a;border:2px solid #d4af37;border-radius:25px;padding:20px;z-index:1000;text-align:center;overflow-y:auto;max-height:80%;opacity:0;transition:transform 0.3s,opacity 0.3s;}
 .popup.open {transform:translate(-50%,-50%) scale(1);opacity:1;}
-.close-btn {background:#222;color:#888;padding:12px;width:100%;border-radius:15px;margin-top:15px;border:1px solid #444;font-weight:bold;transition:all 0.2s;}
+.close-btn {background:#222;color:#888;padding:12px;width:100%;border-radius:15px;margin-top:15px;border:1px solid #444;font-weight:bold;transition:all 0.2s;cursor:pointer;}
 .close-btn:hover {background:#333;color:#fff;}
 .action-btn {background:var(--gold);color:black;padding:14px;width:100%;border-radius:15px;margin-top:10px;border:none;font-weight:900;display:inline-block;text-decoration:none;transition:all 0.2s;}
 .action-btn:hover {box-shadow:0 0 15px #ffe57e,0 0 25px #d4af37 inset;transform:scale(1.02);}
@@ -62,7 +62,7 @@ th {background:#1a1a1a;}
 
 <div class="overlay" id="overlay"></div>
 
-<!-- Прогнозы -->
+<!-- POPUPS -->
 <div id="predictP" class="popup">
     <h3 style="color:#ffe57e">ЛИГИ</h3>
     <div class="league-grid" id="leagueBox"></div>
@@ -70,10 +70,63 @@ th {background:#1a1a1a;}
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ЖБ дня -->
+<div id="vipP" class="popup">
+    <h3>VIP ПАКЕТ</h3>
+    <div class="stat-row"><span>Цена:</span><span class="gold-t">15 USDT</span></div>
+    <a href="#" class="action-btn">ОПЛАТИТЬ</a>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="profileP" class="popup">
+    <h3>ПРОФИЛЬ</h3>
+    <div class="stat-row"><span>ID:</span><span class="gold-t">12345</span></div>
+    <div class="stat-row"><span>Баланс:</span><span class="gold-t">100 LC</span></div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="bonusP" class="popup">
+    <h3>БОНУСЫ</h3>
+    <a href="#" class="bonus-link">1WIN</a>
+    <a href="#" class="bonus-link">STAKE</a>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="refP" class="popup">
+    <h3>РЕФЕРАЛ</h3>
+    <p id="refLink" style="background:#111;padding:10px;border-radius:10px;">https://t.me/LudikWin_bot?start=12345</p>
+    <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ</button>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="statsP" class="popup">
+    <h3>СТАТИСТИКА</h3>
+    <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00;">84.2%</span></div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="battleP" class="popup">
+    <h3>БИТВА ЛУДИКОВ</h3>
+    <div id="battleBox"></div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
 <div id="jbP" class="popup">
-    <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
-    <p id="jbContent" style="font-size:12px;margin:15px 0;">Загрузка...</p>
+    <h3>ЖБ ДНЯ</h3>
+    <p id="jbContent">Загрузка...</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="historyP" class="popup">
+    <h3>ИСТОРИЯ ПРОГНОЗОВ</h3>
+    <table>
+        <tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
+    </table>
+    <button class="close-btn">ЗАКРЫТЬ</button>
+</div>
+
+<div id="chatP" class="popup">
+    <h3>ЧАТ</h3>
+    <a href="#" class="action-btn">ОТКРЫТЬ ЧАТ</a>
     <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
@@ -81,8 +134,6 @@ th {background:#1a1a1a;}
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
-
-// overlay
 const overlay = document.getElementById('overlay');
 
 // закрытие всех popup
@@ -93,55 +144,54 @@ function closeAll(){
         p.classList.remove('open');
     });
 }
-
-// клик по overlay
 overlay.addEventListener('click',closeAll);
+document.querySelectorAll('.close-btn').forEach(btn=>btn.addEventListener('click',closeAll));
 
-// закрытие кнопкам
-document.querySelectorAll('.close-btn').forEach(btn=>{
-    btn.addEventListener('click',closeAll);
-});
-
-// меню
+// меню кнопок
 document.querySelectorAll('.menu-item').forEach(item=>{
     item.addEventListener('click',()=>{
         const label = item.querySelector('.item-label').innerText;
         const map = {
             'ПРОГНОЗЫ':'predictP',
-            'ЖБ ДНЯ':'jbP'
+            'VIP ДОСТУП':'vipP',
+            'ПРОФИЛЬ':'profileP',
+            'БОНУСЫ':'bonusP',
+            'РЕФЕРАЛ':'refP','СТАТИСТИКА':'statsP',
+            'БИТВА ЛУДИКОВ':'battleP',
+            'ЖБ ДНЯ':'jbP',
+            'ИСТОРИЯ ПРОГНОЗОВ':'historyP',
+            'ЧАТ':'chatP'
         };
         if(map[label]){
             openP(map[label]);
             if(label==='ПРОГНОЗЫ') openPredict();
             if(label==='ЖБ ДНЯ') openJB();
+            if(label==='БИТВА ЛУДИКОВ') generateBattle();
         }
     });
 });
 
 function openP(id){
     const popup = document.getElementById(id);
-    if(!popup) return alert('Попап не найден: '+id);
+    if(!popup) return;
     overlay.style.display='block';
     popup.style.display='block';
     popup.classList.add('open');
 }
 
-// Прогнозы
+// Лиги и прогнозы
 const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
 const leagueBox = document.getElementById('leagueBox');
-
 function openPredict(){
     leagueBox.innerHTML="";
     Object.keys(leagues).forEach(code=>{
-        const btn = document.createElement('button');
+        const btn=document.createElement('button');
         btn.className='league-btn';
-        btn.innerText = leagues[code];
+        btn.innerText=leagues[code];
         btn.onclick=()=>getPredict(code);
         leagueBox.appendChild(btn);
     });
 }
-
-// fetch прогнозов
 async function getPredict(code){
     const resBox=document.getElementById('pRes');
     resBox.innerText='Загрузка...';
@@ -157,9 +207,27 @@ async function getPredict(code){
 // ЖБ дня
 function openJB(){
     const jb = document.getElementById('jbContent');
-    jb.innerText = 'Прогноз дня: ТБ 2.5 – Лудик уверен!';
+    jb.innerText='Прогноз дня: ТБ 2.5 – Лудик уверен!';
+}
+
+// Битва Лудиков
+function generateBattle(){
+    const box = document.getElementById('battleBox');
+    box.innerHTML='';
+    ['Победа К1','Ничья','Победа К2'].forEach(o=>{
+        const b=document.createElement('button');
+        b.className='action-btn';
+        b.innerText=o;
+        b.onclick=()=>tg.showAlert('Вы выбрали: '+o);
+        box.appendChild(b);
+    });
+}
+
+// Реферальная копия
+function copyRef(){
+    const link=document.getElementById('refLink').innerText;
+    navigator.clipboard.writeText(link).then(()=>tg.showAlert('Скопировано!'));
 }
 </script>
-
 </body>
 </html>
