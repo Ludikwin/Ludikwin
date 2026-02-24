@@ -69,17 +69,23 @@ table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- Остальные блоки (VIP, ПРОФИЛЬ, БОНУСЫ, РЕФЕРАЛ, СТАТИСТИКА, БИТВА ЛУДИКОВ, ЖБ, ИСТОРИЯ, ЧАТ) сохраняем без изменений -->
+<!-- ЖБ ДНЯ -->
+<div id="jbP" class="popup">
+    <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
+    <p id="jbContent" style="font-size:12px; margin:15px 0;"></p>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+</div>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
+// User
 const user = tg.initDataUnsafe?.user;
 if(user){
-    document.getElementById('uID').innerText = user.id;
-    document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start='+user.id;
+    document.getElementById('uID')?.innerText = user.id;
+    document.getElementById('refLink')?.innerText = 'https://t.me/LudikWin_bot?start='+user.id;
 }
 
 function openP(id){
@@ -99,7 +105,7 @@ function closeAll(){
     });
 }
 
-// --- ПРОГНОЗЫ ---
+// === ПРОГНОЗЫ ===
 function openPredict(){
     openP('predictP');
     const box=document.getElementById('leagueBox');
@@ -109,51 +115,37 @@ function openPredict(){
         const btn=document.createElement('button');
         btn.className="league-btn";
         btn.innerText=leagues[code];
-        btn.onclick=()=>loadPredictions(code); // теперь подгружаем прогнозы
+        btn.onclick=()=>loadPredictions();
         box.appendChild(btn);
     });
 }
 
-// --- Функция для загрузки прогнозов с сервера ---
-async function loadPredictions(league){
+async function loadPredictions(){
     const resBox=document.getElementById('pRes');
     resBox.innerText="АНАЛИЗ...";
     try{
-        const response=await fetch('http://localhost:3000/predict',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({
-                matches:[
-                    {homeTeam:{name:"Бенфика"}, awayTeam:{name:"Реал"}},{homeTeam:{name:"МЮ"}, awayTeam:{name:"Ливерпуль"}}
-                ]
-            })
-        });
-        const data=await response.json();
-        resBox.innerHTML=data.map(d=>`${d.match}<br><span style="color:#ffe57e">Прогноз: ${d.prediction}</span>`).join("<br><br>");
-        if(data[0]){
-            document.getElementById('jbContent').innerText=`Прогноз дня: ${data[0].prediction} – Лудик уверен!`;
+        const res=await fetch('http://localhost:3000/predict');
+        const data=await res.json();
+        if(data.length>0){
+            let html="";
+            data.forEach(m=>{
+                html+=m.match + " — Прогноз: " + m.prediction + "\n";
+            });
+            resBox.innerText=html;
+            // ЖБ дня берём первый матч
+            document.getElementById('jbContent').innerText = "Прогноз дня: " + data[0].match + " — " + data[0].prediction;
+        } else {
+            resBox.innerText="Матчей нет";
         }
     }catch(e){
         resBox.innerText="Ошибка загрузки прогнозов";
-        console.error(e);
     }
 }
 
-// --- Копирование реферальной ссылки ---
-function copyRef(){
-    const link=document.getElementById('refLink').innerText;
-    const el=document.createElement('textarea');
-    el.value=link;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    tg.showAlert("Скопировано!");
-}
-
-// --- БИТВА ЛУДИКОВ ---
+// === БИТВА ЛУДИКОВ ===
 function generateBattle(){
     const box=document.getElementById('battleBox');
+    if(!box) return;
     box.innerHTML="";
     const options=['Победа К1','Ничья','Победа К2'];
     options.forEach(o=>{
@@ -165,7 +157,7 @@ function generateBattle(){
     });
 }
 generateBattle();
-
 </script>
+
 </body>
 </html>
