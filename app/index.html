@@ -70,85 +70,23 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<div id="vipP" class="popup">
-    <h2 style="color:#bc13fe">VIP ПАКЕТ</h2>
-    <p style="font-size:12px; margin:15px 0;">Доступ к VIP прогнозам на 2 недели.</p>
-    <div class="stat-row"><span>Цена:</span><span class="gold-t">15.00 USDT</span></div>
-    <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">ОПЛАТИТЬ</a>
-    <button class="close-btn" onclick="closeAll()">ОТМЕНА</button>
-</div>
-
-<div id="profileP" class="popup">
-    <h2>ПРОФИЛЬ</h2>
-    <div class="stat-row"><span>ID:</span><span id="uID" class="gold-t">---</span></div>
-    <div class="stat-row"><span>Баланс:</span><span class="gold-t">100.00 LC</span></div>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
-
-<div id="bonusP" class="popup">
-    <h3>БОНУСЫ</h3>
-    <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">💰 1WIN</a>
-    <a href="https://stake.com/ru?c=oeVgnFIa" class="bonus-link">🎲 STAKE</a>
-    <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="bonus-link">📢 КАНАЛ</a>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
-
-<div id="refP" class="popup">
-    <h2>РЕФЕРАЛЫ</h2>
-    <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
-    <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ</button>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
-
-<div id="statsP" class="popup">
-    <h2>AI СТАТИСТИКА</h2>
-    <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00;">84.2%</span></div>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
-
-<div id="battleP" class="popup">
-    <h2 style="color:#bc13fe">Битва Лудиков</h2>
-    <p style="font-size:12px; margin:15px 0;">Сегодняшний матч: Победа К1 / Ничья / Победа К2</p>
-    <div id="battleBox"></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
-
-<div id="jbP" class="popup">
-    <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
-    <p id="jbContent" style="font-size:12px; margin:15px 0;">Прогноз дня: ТБ 2.5 – Лудик уверен!</p>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
-
-<div id="historyP" class="popup">
-    <h2 style="color:#bc13fe">История прогнозов</h2>
-    <table>
-        <tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
-        <tr><td>23.02</td><td>Бенфика - Реал</td><td>ТБ 2.5</td><td>✔️</td></tr>
-        <tr><td>22.02</td><td>МЮ - Ливерпуль</td><td>П2</td><td>❌</td></tr>
-        <tr><td>21.02</td><td>Барса - Атлетико</td><td>Ничья</td><td>✔️</td></tr>
-    </table>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
-
-<div id="chatP" class="popup">
-    <h2 style="color:#bc13fe">ЧАТ</h2>
-    <p style="font-size:12px; margin:15px 0;">Присоединяйтесь к чату Ludik:</p>
-    <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="action-btn" target="_blank">ОТКРЫТЬ ЧАТ</a>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
+<div id="vipP" class="popup"><h2>VIP</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
+<div id="profileP" class="popup"><h2>ПРОФИЛЬ</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
+<div id="bonusP" class="popup"><h2>БОНУСЫ</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
+<div id="refP" class="popup"><h2>РЕФЕРАЛ</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
+<div id="statsP" class="popup"><h2>СТАТИСТИКА</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
+<div id="battleP" class="popup"><h2>БИТВА</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
+<div id="jbP" class="popup"><h2>ЖБ ДНЯ</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
+<div id="historyP" class="popup"><h2>ИСТОРИЯ</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
+<div id="chatP" class="popup"><h2>ЧАТ</h2><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-// Ссылка Ngrok без лишних слэшей
+// Убедись, что эта ссылка совпадает с той, что выдал Ngrok!
 const SERVER_URL = "https://procensure-sirena-fernlike.ngrok-free.dev";
-
-const user = tg.initDataUnsafe?.user;
-if(user){
-    document.getElementById('uID').innerText = user.id;
-    document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start='+user.id;
-}
 
 function openP(id){
     closeAll();
@@ -156,7 +94,6 @@ function openP(id){
     const popup=document.getElementById(id);
     popup.style.display='block';
     popup.classList.add('open');
-    tg.expand();
 }
 
 function closeAll(){
@@ -183,57 +120,32 @@ function openPredict(){
 
 async function getPredict(code){
     const resBox=document.getElementById('pRes');
-    resBox.innerHTML="<div style='color:#bc13fe;'>АНАЛИЗ AI...</div><div style='font-size:10px; color:#666;'>Ищем лучшие коэффиценты</div>";
+    resBox.innerHTML="<div style='color:#bc13fe;'>АНАЛИЗ AI...</div>";
     
     try {
-        const response = await fetch(`${SERVER_URL}/predict?league=${code}`, {
+        // Добавляем t=${Date.now()}, чтобы браузер не брал старый ответ из памяти
+        const res = await fetch(`${SERVER_URL}/predict?league=${code}&t=${Date.now()}`, {
             headers: { 'ngrok-skip-browser-warning': 'true' }
         });
-        const data = await response.json();
+        const data = await res.json();
         
         if(data.home) {
             resBox.innerHTML = `
                 <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px;">
-                    <img src="${data.homeLogo}" width="32" height="32" style="border-radius:50%">
+                    <img src="${data.homeLogo}" width="32">
                     <span style="font-weight:bold; color:#fff">${data.home} vs ${data.away}</span>
-                    <img src="${data.awayLogo}" width="32" height="32" style="border-radius:50%">
+                    <img src="${data.awayLogo}" width="32">
                 </div>
-                <div style="color:#ffe57e; font-weight:bold; font-size:14px;">${data.forecast}</div>
-                <div style="font-size:11px; color:#888; margin-top:8px; line-height:1.2;">${data.ai_logic}</div>
+                <div style="color:#ffe57e; font-weight:bold;">${data.forecast}</div>
+                <div style="font-size:10px; color:#888; margin-top:5px;">${data.ai_logic}</div>
             `;
         } else {
             resBox.innerText = "Матчей не найдено";
         }
     } catch(e) {
-        console.error(e);
-        resBox.innerHTML = "<span style='color:#ff4444'>Ошибка связи с сервером</span>";
+        resBox.innerHTML = "<span style='color:#ff4444'>Ошибка связи. Проверь Ngrok и Server.js!</span>";
     }
 }
-
-function copyRef(){
-    const link=document.getElementById('refLink').innerText;
-    const el=document.createElement('textarea');
-    el.value=link;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    tg.showAlert("Скопировано!");
-}
-
-function generateBattle(){
-    const box=document.getElementById('battleBox');
-    box.innerHTML="";
-    const options=['Победа К1','Ничья','Победа К2'];
-    options.forEach(o=>{
-        const b=document.createElement('button');
-        b.className='action-btn';
-        b.innerText=o;
-        b.onclick=()=>tg.showAlert('Вы выбрали: '+o);
-        box.appendChild(b);
-    });
-}
-generateBattle();
 </script>
 </body>
 </html>
