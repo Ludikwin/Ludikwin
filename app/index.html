@@ -78,7 +78,7 @@ table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px
 
 <script>
 // =======================
-// Инициализация Telegram WebApp
+// Telegram WebApp
 // =======================
 const tg = window.Telegram.WebApp;
 tg.ready();
@@ -108,112 +108,95 @@ function closeAll(){
 }
 
 // =======================
-// Gemini + Football API
+// Кэш и Gemini
 // =======================
 const API_KEY = '7a5d573e9f134d42b4edaa35c408e019';
 const GEMINI_KEY = 'AIzaSyAH_iOrLFX_B-9BGgd6oBuen95jE-wpejo';
 
-async function fetchMatches(code) {
+async function fetchMatches(code){
     const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
-        headers: {'X-Auth-Token': API_KEY}
+        headers:{'X-Auth-Token':API_KEY}
     });
     const data = await res.json();
     const today = new Date();
-    const tomorrow = new Date();
-    tomorrow.setDate(today.getDate()+1);
-    return data.matches.filter(m => {
-        const d = new Date(m.utcDate);
-        return d.toDateString()===today.toDateString() || d.toDateString()===tomorrow.toDateString();
+    const tomorrow = new Date(); tomorrow.setDate(today.getDate()+1);
+    return data.matches.filter(m=>{
+        const d=new Date(m.utcDate);
+        return d.toDateString()===today.toDateString()||d.toDateString()===tomorrow.toDateString();
     });
 }
 
-function cacheMatches(matches) {
-    const stored = JSON.parse(localStorage.getItem('matches')||'[]');const newMatches = matches.filter(m => !stored.some(s => s.id===m.id));
-    if(newMatches.length>0){
-        localStorage.setItem('matches', JSON.stringify([...stored,...newMatches]));
-    }
+function cacheMatches(matches){
+    const stored=JSON.parse(localStorage.getItem('matches')||'[]');
+    const newMatches=matches.filter(m=>!stored.some(s=>s.id===m.id));
+    if(newMatches.length>0)localStorage.setItem('matches',JSON.stringify([...stored,...newMatches]));
     return newMatches;
 }
 
 async function analyzeMatchesWithGemini(newMatches){
-    if(newMatches.length===0) return [];
+    if(newMatches.length===0)return[];
     const res = await fetch('https://gemini.googleapis.com/v1/predict',{
         method:'POST',
         headers:{
             'Authorization':'Bearer '+GEMINI_KEY,
             'Content-Type':'application/json'
         },
-        body: JSON.stringify({
-            matches: newMatches,
-            task: "анализировать матчи и дать прогноз с уровнем уверенности"
-        })
+        body: JSON.stringify({matches:newMatches,task:"анализировать матчи и дать прогноз с уровнем уверенности"})
     });
     const predictions = await res.json();
     const cached = JSON.parse(localStorage.getItem('predictions')||'[]');
-    localStorage.setItem('predictions', JSON.stringify([...cached, ...predictions]));
+    localStorage.setItem('predictions',JSON.stringify([...cached,...predictions]));
     return predictions;
 }
 
-function getCachedPredictions(){
-    return JSON.parse(localStorage.getItem('predictions')||'[]');
-}
+function getCachedPredictions(){ return JSON.parse(localStorage.getItem('predictions')||'[]'); }
 
 // =======================
-// Лиги с прогнозами (кнопки теперь работают)
+// Лиги с прогнозами
 // =======================
-function openPredict() {
-    openP('predictP'); 
-    const box = document.getElementById('leagueBox');
-    box.innerHTML = "";
+function openPredict(){
+    openP('predictP');
+    const box=document.getElementById('leagueBox');
+    box.innerHTML="";
+    const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
 
-    const leagues = {"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
-
-    Object.keys(leagues).forEach(code => {
-        const btn = document.createElement('button');
-        btn.className = "league-btn";
-        btn.innerText = leagues[code];
-        btn.dataset.league = code;
-
-        btn.addEventListener('click', async (e) => {
-            const resBox = document.getElementById('pRes');
-            resBox.innerText = "АНАЛИЗ...";
-            const leagueCode = e.currentTarget.dataset.league;
-
-            const matches = await fetchMatches(leagueCode);
-            const newMatches = cacheMatches(matches);
-            await analyzeMatchesWithGemini(newMatches);
-
-            const predictions = getCachedPredictions().filter(p => p.competition === leagueCode);
-            if(predictions.length === 0) { resBox.innerText = "Матчей нет"; return; }
-
-            resBox.innerHTML = "";
-            predictions.forEach(m=>{
-                const div = document.createElement('div');
-                div.style.marginBottom='8px';
-                div.innerHTML = <b>${m.match}</b> — Прогноз: <span style="color:#ffe57e">${m.prediction}</span> (Уверенность: <span style="color:#00ff00">${m.confidence}</span>);
-                resBox.appendChild(div);
-            });
-
-            // ЖБ дня — самый уверенный прогноз
-            const best = predictions.reduce((a,b)=>parseFloat(a.confidence.replace('%',''))>parseFloat(b.confidence.replace('%',''))?a:b);
-            document.getElementById('jbContent').innerHTML=`Прогноз дня: ${best.prediction} – Уверенность: ${best.confidence}`;
-        });
-
+    Object.keys(leagues).forEach(code=>{
+        const btn=document.createElement('button');
+        btn.className="league-btn";
+        btn.innerText=leagues[code];
+        btn.dataset.league=code;
+        btn.addEventListener('click',()=>{ document.getElementById('pRes').innerText=`Загрузка прогнозов для ${leagues[code]}...`; loadLeaguePredictions(code); });
         box.appendChild(btn);
     });
 }
 
+async function loadLeaguePredictions(code){
+    const resBox=document.getElementById('pRes');
+    try{
+        const matches = await fetchMatches(code);
+        const newMatches = cacheMatches(matches);
+        await analyzeMatchesWithGemini(newMatches);
+        const predictions=getCachedPredictions().filter(p=>p.competition===code);
+        if(predictions.length===0){ resBox.innerText="Матчей нет"; return; }
+        resBox.innerHTML="";
+        predictions.forEach(m=>{
+            const div=document.createElement('div');
+            div.style.marginBottom='8px';
+            div.innerHTML=`<b>${m.match}</b> — Прогноз: <span style="color:#ffe57e">${m.prediction}</span> (Уверенность: <span style="color:#00ff00">${m.confidence}</span>)`;
+            resBox.appendChild(div);
+        });
+        // ЖБ дня
+        const best=predictions.reduce((a,b)=>parseFloat(a.confidence.replace('%',''))>parseFloat(b.confidence.replace('%',''))?a:b);
+        document.getElementById('jbContent').innerHTML=`Прогноз дня: ${best.prediction} – Уверенность: ${best.confidence}`;
+    }catch(e){ resBox.innerText="Ошибка загрузки прогнозов"; console.error(e); }
+}
+
 // =======================
-// Остальная логика (копирование, битва, профили)
+// Копирование, битва
 // =======================
 function copyRef(){
     const link=document.getElementById('refLink').innerText;
-    const el=document.createElement('textarea');
-    el.value=link;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
+    const el=document.createElement('textarea'); el.value=link; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
     tg.showAlert("Скопировано!");
 }
 
@@ -230,7 +213,6 @@ function generateBattle(){
     });
 }
 generateBattle();
-
 </script>
 </body>
 </html>
