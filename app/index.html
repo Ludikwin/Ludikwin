@@ -37,9 +37,7 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 .gold-t {color:#d4af37; font-weight:bold;}
 .bonus-link {display:block; background:#111; color:#ffe57e; padding:12px; margin:8px 0; border-radius:12px; text-decoration:none; border:1px solid #d4af37; font-weight:bold; transition: all 0.2s;}
 .bonus-link:hover {background:#222; color:#fff;}
-table {width:100%; border-collapse:collapse; margin-top:10px;}
-th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;}
-th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc13fe,0 0 20px #bc13fe,0 0 30px #bc13fe,0 0 40px #bc13fe;}50%{text-shadow:0 0 20px #ffe57e,0 0 30px #ffe57e,0 0 40px #ffe57e,0 0 50px #ffe57e;}}
+table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;} th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc13fe,0 0 20px #bc13fe,0 0 30px #bc13fe,0 0 40px #bc13fe;}50%{text-shadow:0 0 20px #ffe57e,0 0 30px #ffe57e,0 0 40px #ffe57e,0 0 50px #ffe57e;}}
 </style>
 </head>
 <body ontouchstart="tg.expand()">
@@ -48,7 +46,7 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
 
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
+        <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽️</span><span class="item-label">ПРОГНОЗЫ</span></div>
         <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
         <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
         <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
@@ -63,15 +61,13 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
-<!-- ПРОГНОЗЫ -->
 <div id="predictP" class="popup">
     <h3 style="color:#ffe57e">ЛИГИ</h3>
     <div class="league-grid" id="leagueBox"></div>
-    <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px;"></div>
+    <div id="pRes" style="margin-top:15px; color:#ffffff; font-size:13px;"></div>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- VIP -->
 <div id="vipP" class="popup">
     <h2 style="color:#bc13fe">VIP ПАКЕТ</h2>
     <p style="font-size:12px; margin:15px 0;">Доступ к VIP прогнозам на 2 недели.</p>
@@ -80,7 +76,6 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
     <button class="close-btn" onclick="closeAll()">ОТМЕНА</button>
 </div>
 
-<!-- ПРОФИЛЬ -->
 <div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
     <div class="stat-row"><span>ID:</span><span id="uID" class="gold-t">---</span></div>
@@ -88,7 +83,6 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- БОНУСЫ -->
 <div id="bonusP" class="popup">
     <h3>БОНУСЫ</h3>
     <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">💰 1WIN</a>
@@ -97,7 +91,6 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- РЕФЕРАЛ -->
 <div id="refP" class="popup">
     <h2>РЕФЕРАЛЫ</h2>
     <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
@@ -105,40 +98,36 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- СТАТИСТИКА -->
 <div id="statsP" class="popup">
     <h2>AI СТАТИСТИКА</h2>
     <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00;">84.2%</span></div>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- БИТВА ЛУДИКОВ -->
 <div id="battleP" class="popup">
     <h2 style="color:#bc13fe">Битва Лудиков</h2>
-    <p style="font-size:12px; margin:15px 0;">Сегодняшний матч: Победа К1 / Ничья / Победа К2</p>
-    <div id="battleBox"></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
+    <p id="battleMatch" style="font-size:12px; margin:15px 0;">Загрузка матча...</p>
+    <div id="battleBox"></div>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div>
 
-<!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
     <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
     <p id="jbContent" style="font-size:12px; margin:15px 0;">Прогноз дня: ТБ 2.5 – Лудик уверен!</p>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ИСТОРИЯ ПРОГНОЗОВ -->
 <div id="historyP" class="popup">
     <h2 style="color:#bc13fe">История прогнозов</h2>
-    <table>
-        <tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
-        <tr><td>23.02</td><td>Бенфика - Реал</td><td>ТБ 2.5</td><td>✔️</td></tr>
-        <tr><td>22.02</td><td>МЮ - Ливерпуль</td><td>П2</td><td>❌</td></tr>
-        <tr><td>21.02</td><td>Барса - Атлетико</td><td>Ничья</td><td>✔️</td></tr>
+    <table id="historyTable">
+        <thead>
+            <tr><th>Дата</th><th>Матч</th><th>Прогноз</th></tr>
+        </thead>
+        <tbody>
+            </tbody>
     </table>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ЧАТ -->
 <div id="chatP" class="popup">
     <h2 style="color:#bc13fe">ЧАТ</h2>
     <p style="font-size:12px; margin:15px 0;">Присоединяйтесь к чату Ludik:</p>
@@ -151,6 +140,9 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
+// Адрес твоего сервера
+const SERVER_URL = "http://localhost:3000";
+
 const user = tg.initDataUnsafe?.user;
 if(user){
     document.getElementById('uID').innerText = user.id;
@@ -162,15 +154,18 @@ function openP(id){
     document.getElementById('overlay').style.display='block';
     const popup=document.getElementById(id);
     popup.style.display='block';
-    popup.classList.add('open');
-    tg.expand();
+    setTimeout(() => popup.classList.add('open'), 10);
+    
+    // Если открываем историю или битву, обновляем данные с сервера
+    if(id === 'historyP') updateHistory();
+    if(id === 'battleP') updateBattle();
 }
 
 function closeAll(){
     document.getElementById('overlay').style.display='none';
     document.querySelectorAll('.popup').forEach(p=>{
-        p.style.display='none';
         p.classList.remove('open');
+        setTimeout(() => { if(!p.classList.contains('open')) p.style.display='none'; }, 300);
     });
 }
 
@@ -178,7 +173,8 @@ function openPredict(){
     openP('predictP');
     const box=document.getElementById('leagueBox');
     box.innerHTML="";
-    const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
+    // Список лиг, поддерживаемых твоим сервером TheSportsDB
+    const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ"};
     Object.keys(leagues).forEach(code=>{
         const btn=document.createElement('button');
         btn.className="league-btn";
@@ -189,18 +185,59 @@ function openPredict(){
 }
 
 async function getPredict(code){
-    const resBox=document.getElementById('pRes');
-    resBox.innerText="АНАЛИЗ...";
-    try{
-        const res=await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
-            headers:{'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019'}
+    const resBox = document.getElementById('pRes');
+    resBox.innerHTML = "<span style='color:#bc13fe'>АНАЛИЗ AI...</span>";
+    try {
+        const r = await fetch(`${SERVER_URL}/predict?league=${code}`);
+        const d = await r.json();
+        
+        // Отрисовка с логотипами
+        resBox.innerHTML = `
+            <div style="display: flex; justify-content: space-around; align-items: center; margin: 10px 0;">
+                <div style="width: 40%;">
+                    <img src="${d.homeLogo || ''}" style="width: 50px; height: 50px; object-fit: contain;">
+                    <div style="font-size: 10px;">${d.home}</div>
+                </div>
+                <div style="color: #d4af37; font-weight: bold;">VS</div>
+                <div style="width: 40%;">
+                    <img src="${d.awayLogo || ''}" style="width: 50px; height: 50px; object-fit: contain;">
+                    <div style="font-size: 10px;">${d.away}</div>
+                </div>
+            </div>
+            <div style="background: #111; padding: 10px; border-radius: 10px; border: 1px solid #bc13fe;">
+                <div style="color: #ffe57e; font-weight: bold;">ПРОГНОЗ: ${d.forecast}</div>
+                <div style="font-size: 11px; color: #aaa; margin-top: 5px; font-style: italic;">${d.ai_logic}</div>
+            </div>
+        `;
+    } catch(e) {
+        resBox.innerText = "Ошибка сервера";
+    }
+}
+
+async function updateHistory() {
+    const tbody = document.querySelector('#historyTable tbody');
+    tbody.innerHTML = "<tr><td colspan='3'>Загрузка...</td></tr>";
+    try {const r = await fetch(`${SERVER_URL}/history`);
+        const d = await r.json();
+        tbody.innerHTML = d.map(h => `<tr><td>${h.date}</td><td>${h.match}</td><td>${h.forecast}</td></tr>`).join('');
+    } catch(e) { tbody.innerHTML = "<tr><td colspan='3'>История пуста</td></tr>"; }
+}
+
+async function updateBattle() {
+    try {
+        const r = await fetch(`${SERVER_URL}/battle`);
+        const d = await r.json();
+        document.getElementById('battleMatch').innerText = d.matchName;
+        const box = document.getElementById('battleBox');
+        box.innerHTML = "";
+        [d.homeTeam, 'Ничья', d.awayTeam].forEach(o => {
+            const b = document.createElement('button');
+            b.className = 'action-btn';
+            b.innerText = o;
+            b.onclick = () => tg.showAlert('Вы выбрали: ' + o);
+            box.appendChild(b);
         });
-        const data=await res.json();
-        if(data.matches && data.matches.length>0){
-            const m=data.matches[0];
-            resBox.innerHTML=m.homeTeam.name+' vs '+m.awayTeam.name+'<br><span style="color:#ffe57e">Прогноз: ТБ 2.5</span>';
-        } else {resBox.innerText="Матчей нет";}
-    }catch(e){resBox.innerText="Ошибка API";}
+    } catch(e) { document.getElementById('battleMatch').innerText = "Ошибка загрузки матча"; }
 }
 
 function copyRef(){
@@ -214,20 +251,8 @@ function copyRef(){
     tg.showAlert("Скопировано!");
 }
 
-// БИТВА ЛУДИКОВ
-function generateBattle(){
-    const box=document.getElementById('battleBox');
-    box.innerHTML="";
-    const options=['Победа К1','Ничья','Победа К2'];
-    options.forEach(o=>{
-        const b=document.createElement('button');
-        b.className='action-btn';
-        b.innerText=o;
-        b.onclick=()=>tg.showAlert('Вы выбрали: '+o);
-        box.appendChild(b);
-    });
-}
-generateBattle();
+// Первичная генерация (заглушка до загрузки с сервера)
+document.getElementById('battleBox').innerHTML = '<button class="action-btn">Загрузка...</button>';
 </script>
 
 </body>
