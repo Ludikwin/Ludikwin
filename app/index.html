@@ -184,12 +184,56 @@ function openPredict(){
     });
 }
 
-async function getPredict(code){
+// 1. Убедись, что ссылка ВНУТРИ кавычек актуальная (из твоего окна ngrok)
+const SERVER_URL = "https://procensure-sirena-fernlike.ngrok-free.dev";
+
+async function getPredict(code) {
     const resBox = document.getElementById('pRes');
-    resBox.innerHTML = "<span style='color:#bc13fe'>АНАЛИЗ AI...</span>";
+    // Показываем статус загрузки
+    resBox.innerHTML = "<span style='color:#bc13fe; font-weight:bold;'>АНАЛИЗ AI...</span>";
+    
     try {
-        const r = await fetch(`${SERVER_URL}/predict?league=${code}`);
+        console.log("Отправляю запрос на:", `${SERVER_URL}/predict?league=${code}`);
+        
+        const r = await fetch(`${SERVER_URL}/predict?league=${code}`, {
+            method: 'GET',
+            headers: {
+                // Этот заголовок заставляет ngrok пропускать предупреждение
+                'ngrok-skip-browser-warning': '69420'
+            }
+        });
+
+        if (!r.ok) throw new Error('Ошибка сети');
+
         const d = await r.json();
+
+        // Обновляем интерфейс данными из твоего server.js
+        resBox.innerHTML = `
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px solid #bc13fe;">
+                <div style="display: flex; justify-content: space-around; align-items: center; margin-bottom: 15px;">
+                    <div style="text-align: center;">
+                        <img src="${d.homeLogo || ''}" style="width: 50px; display: ${d.homeLogo ? 'block' : 'none'}; margin: 0 auto 5px;">
+                        <div style="font-weight: bold; color: #fff;">${d.home}</div>
+                    </div>
+                    <div style="color: #bc13fe; font-weight: bold; font-size: 1.2em;">VS</div>
+                    <div style="text-align: center;">
+                        <img src="${d.awayLogo || ''}" style="width: 50px; display: ${d.awayLogo ? 'block' : 'none'}; margin: 0 auto 5px;">
+                        <div style="font-weight: bold; color: #fff;">${d.away}</div>
+                    </div>
+                </div>
+                <div style="color: #00ffcc; font-size: 1.1em; margin-bottom: 10px; text-align: center;">
+                    <strong>Прогноз:</strong> ${d.forecast}
+                </div>
+                <div style="color: #ccc; font-size: 0.9em; line-height: 1.4; border-top: 1px solid #444; pt: 10px;">
+                    ${d.ai_logic}
+                </div>
+            </div>
+        `;
+    } catch (e) {
+        console.error("Ошибка:", e);
+        resBox.innerHTML = "<span style='color:#ff4444'>ОШИБКА СЕРВЕРА. ПРОВЕРЬТЕ КОНСОЛЬ.</span>";
+    }
+}
         
         // Отрисовка с логотипами
         resBox.innerHTML = `
