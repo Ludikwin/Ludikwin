@@ -119,13 +119,10 @@ function openPredict(){
 
 async function getPredict(code){
     const resBox = document.getElementById('pRes');
-    
-    // ПРОВЕРКА ОБНОВЛЕНИЯ
     console.log("Запуск функции для лиги: " + code);
     resBox.innerHTML = "<div style='color:#bc13fe; font-weight:bold;'>АЙ ДУМАЕТ...</div>";
     
     try {
-        // Добавляем максимально случайный параметр, чтобы убить кэш
         const randomSalt = Math.random().toString(36).substring(7);
         const response = await fetch(`${SERVER_URL}/predict?league=${code}&v=${randomSalt}`, {
             headers: { 'ngrok-skip-browser-warning': 'true' }
@@ -135,26 +132,23 @@ async function getPredict(code){
 
         const data = await response.json();
         
-        // ВСПЛЫВАШКА ДЛЯ ТЕСТА (если ее нет - код старый!)
-        tg.showAlert("Данные получены: " + data.home);
-
-        if(data.home) {
+        // ТЕСТОВАЯ ПРОВЕРКА (теперь проверяем ключ 'match')
+        if(data.match) {
             resBox.innerHTML = `
-                <div style="background: rgba(188,19,254,0.1); padding: 10px; border-radius: 15px; border: 1px solid #bc13fe;">
-                    <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px;">
-                        <img src="${data.homeLogo}" width="30">
-                        <span style="font-weight:bold; color:#fff">${data.home} - ${data.away}</span>
-                        <img src="${data.awayLogo}" width="30">
+                <div style="background: rgba(188,19,254,0.1); padding: 15px; border-radius: 15px; border: 1px solid #bc13fe;">
+                    <div style="margin-bottom:10px;">
+                        <span style="font-weight:bold; color:#fff; font-size:16px;">${data.match}</span>
                     </div>
-                    <div style="color:#ffe57e; font-size:16px; font-weight:900;">${data.forecast}</div>
-                    <div style="font-size:11px; color:#ccc; margin-top:8px;">${data.ai_logic}</div>
+                    <div style="color:#ffe57e; font-size:18px; font-weight:900; margin-bottom:5px;">${data.prediction}</div>
+                    <div style="color:#00ff00; font-size:14px; margin-bottom:10px;">Уверенность: ${data.confidence}</div>
+                    <div style="font-size:12px; color:#ccc; line-height:1.4;">${data.analysis}</div>
                 </div>
             `;
         } else {
             resBox.innerHTML = "Матчи не найдены";
         }
     } catch(e) {
-        tg.showAlert("Ошибка: " + e.message);
+        console.error(e);
         resBox.innerHTML = "<span style='color:red'>Сбой сети</span>";
     }
 }
