@@ -141,7 +141,6 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-// Ссылка на твой ngrok сервер
 const SERVER_URL = "https://procensure-sirena-fernlike.ngrok-free.dev";
 
 const user = tg.initDataUnsafe?.user;
@@ -181,29 +180,41 @@ function openPredict(){
     });
 }
 
+// ВНИМАНИЕ: Здесь добавлена отладка через tg.showAlert
 async function getPredict(code){
-    const resBox=document.getElementById('pRes');
-    resBox.innerHTML="<div style='color:#bc13fe;'>АНАЛИЗ AI...</div>";
+    const resBox = document.getElementById('pRes');
+    resBox.innerHTML = "<div style='color:#bc13fe;'>АНАЛИЗ AI...</div>";
     
     try {
         const response = await fetch(`${SERVER_URL}/predict?league=${code}&t=${Date.now()}`, {
             headers: { 'ngrok-skip-browser-warning': 'true' }
         });
-        const data = await response.json();
         
+        if (!response.ok) {
+            throw new Error('Ошибка сервера: ' + response.status);
+        }
+
+        const data = await response.json();
+        console.log("DATA RECEIVED:", data); // Для отладки в консоли браузера
+
         if(data.home) {
+            // ПРИНУДИТЕЛЬНО ПЕРЕЗАПИСЫВАЕМ HTML
             resBox.innerHTML = `
-                <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px;">
-                    <img src="${data.homeLogo}" width="30" height="30" style="border-radius:50%">
-                    <span style="font-weight:bold; color:#fff">${data.home} vs ${data.away}</span>
-                    <img src="${data.awayLogo}" width="30" height="30" style="border-radius:50%">
+                <div style="margin-bottom:10px;">
+                    <img src="${data.homeLogo}" width="30" onerror="this.style.display='none'"> 
+                    <b style="color:#fff">${data.home} - ${data.away}</b>
+                    <img src="${data.awayLogo}" width="30" onerror="this.style.display='none'">
                 </div>
-                <div style="color:#ffe57e; font-weight:900; font-size:14px;">${data.forecast}</div>
-                <div style="font-size:10px; color:#888; margin-top:8px; line-height:1.2;">${data.ai_logic}</div>
+                <div style="color:#ffe57e; font-size:16px;">${data.forecast}</div>
+                <p style="font-size:11px; color:#aaa;">${data.ai_logic}</p>
             `;
+        } else {
+            resBox.innerHTML = "Нет активных матчей в этой лиге.";
         }
     } catch(e) {
-        resBox.innerHTML = "<span style='color:#ff4444'>Ошибка связи</span>";
+        // Если ошибка — бот покажет её в алерте, чтобы мы поняли в чем дело
+        tg.showAlert("ОШИБКА: " + e.message);
+        resBox.innerHTML = "<span style='color:red'>Ошибка загрузки</span>";
     }
 }
 
@@ -232,6 +243,5 @@ function generateBattle(){
 }
 generateBattle();
 </script>
-
 </body>
 </html>
