@@ -23,7 +23,7 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 .menu-item:active {background:#222; transform:scale(0.95); border-color:#ffe57e;}
 .gold-icon {font-size:28px; display:block; margin-bottom:5px; pointer-events:none;}
 .item-label {font-size:11px; color:#f3cf7a; text-transform:uppercase; font-weight:900; pointer-events:none;}
-.overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:900;}
+.overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:900;}
 .popup {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0.8); width:90%; max-width:380px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:20px; z-index:1000; text-align:center; overflow-y:auto; max-height:80%; opacity:0; transition: transform 0.3s ease, opacity 0.3s ease;}
 .popup.open {transform:translate(-50%, -50%) scale(1); opacity:1;}
 .close-btn {background:#222; color:#888; padding:12px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; font-weight:bold; transition: all 0.2s;}
@@ -59,9 +59,9 @@ table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px
     </div>
 </div>
 
-<div class="overlay" id="overlay" onclick="closeAll()"></div>
+<div class="overlay" id="overlay"></div>
 
-<!-- ПРОГНОЗЫ -->
+<!-- ПОПАПЫ -->
 <div id="predictP" class="popup">
     <h3 style="color:#ffe57e">ЛИГИ</h3>
     <div class="league-grid" id="leagueBox"></div>
@@ -69,7 +69,6 @@ table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
     <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
     <p id="jbContent" style="font-size:12px; margin:15px 0;">Прогноз дня: ТБ 2.5 – Лудик уверен!</p>
@@ -84,34 +83,32 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-const user = tg.initDataUnsafe?.user;
-if(user){
-    document.getElementById('uID')?.innerText = user.id;
-    document.getElementById('refLink')?.innerText = 'https://t.me/LudikWin_bot?start='+user.id;
-}
-
+// =======================
+// Popup открытие/закрытие
+// =======================
 function openP(id){
-    closeAll();
+    const popup = document.getElementById(id);
+    if(!popup) return;
     document.getElementById('overlay').style.display='block';
-    const popup=document.getElementById(id);
+    document.getElementById('overlay').onclick = closeAll;
     popup.style.display='block';
-    popup.classList.add('open');
+    setTimeout(()=>popup.classList.add('open'), 10);
     tg.expand();
 }
 
 function closeAll(){
-    document.getElementById('overlay').style.display='none';
     document.querySelectorAll('.popup').forEach(p=>{
-        p.style.display='none';
         p.classList.remove('open');
+        p.style.display='none';
     });
+    document.getElementById('overlay').style.display='none';
 }
 
 // =======================
-// Кэш и Gemini
+// Лиги и прогнозы
 // =======================
-const API_KEY = '7a5d573e9f134d42b4edaa35c408e019';
-const GEMINI_KEY = 'AIzaSyAH_iOrLFX_B-9BGgd6oBuen95jE-wpejo';
+const API_KEY='7a5d573e9f134d42b4edaa35c408e019';
+const GEMINI_KEY='AIzaSyAH_iOrLFX_B-9BGgd6oBuen95jE-wpejo';
 
 async function fetchMatches(code){
     const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`, {
@@ -152,7 +149,7 @@ async function analyzeMatchesWithGemini(newMatches){
 function getCachedPredictions(){ return JSON.parse(localStorage.getItem('predictions')||'[]'); }
 
 // =======================
-// Лиги с прогнозами
+// Генерация кнопок Лиг
 // =======================
 function openPredict(){
     openP('predictP');
@@ -192,10 +189,10 @@ async function loadLeaguePredictions(code){
 }
 
 // =======================
-// Копирование, битва
+// Битва и копирование
 // =======================
 function copyRef(){
-    const link=document.getElementById('refLink').innerText;
+    const link=document.getElementById('refLink')?.innerText;
     const el=document.createElement('textarea'); el.value=link; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
     tg.showAlert("Скопировано!");
 }
