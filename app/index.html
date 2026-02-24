@@ -77,6 +77,9 @@ table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px
 </div>
 
 <script>
+// =======================
+// Инициализация Telegram WebApp
+// =======================
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
@@ -125,8 +128,8 @@ async function fetchMatches(code) {
 }
 
 function cacheMatches(matches) {
-    const stored = JSON.parse(localStorage.getItem('matches')||'[]');
-    const newMatches = matches.filter(m => !stored.some(s => s.id===m.id));if(newMatches.length>0){
+    const stored = JSON.parse(localStorage.getItem('matches')||'[]');const newMatches = matches.filter(m => !stored.some(s => s.id===m.id));
+    if(newMatches.length>0){
         localStorage.setItem('matches', JSON.stringify([...stored,...newMatches]));
     }
     return newMatches;
@@ -156,42 +159,52 @@ function getCachedPredictions(){
 }
 
 // =======================
-// Открытие Лиг с прогнозами
+// Лиги с прогнозами (кнопки теперь работают)
 // =======================
-async function openPredict(){
-    openP('predictP');
+function openPredict() {
+    openP('predictP'); 
     const box = document.getElementById('leagueBox');
-    box.innerHTML="";
-    const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
-    for(let code of Object.keys(leagues)){
-        const btn=document.createElement('button');
-        btn.className="league-btn";
-        btn.innerText=leagues[code];
-        btn.onclick = async () => {
+    box.innerHTML = "";
+
+    const leagues = {"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
+
+    Object.keys(leagues).forEach(code => {
+        const btn = document.createElement('button');
+        btn.className = "league-btn";
+        btn.innerText = leagues[code];
+        btn.dataset.league = code;
+
+        btn.addEventListener('click', async (e) => {
             const resBox = document.getElementById('pRes');
-            resBox.innerHTML="АНАЛИЗ...";
-            const matches = await fetchMatches(code);
+            resBox.innerText = "АНАЛИЗ...";
+            const leagueCode = e.currentTarget.dataset.league;
+
+            const matches = await fetchMatches(leagueCode);
             const newMatches = cacheMatches(matches);
             await analyzeMatchesWithGemini(newMatches);
-            const predictions = getCachedPredictions().filter(p=>p.competition===code);
-            if(predictions.length===0){ resBox.innerText="Матчей нет"; return; }
-            resBox.innerHTML="";
+
+            const predictions = getCachedPredictions().filter(p => p.competition === leagueCode);
+            if(predictions.length === 0) { resBox.innerText = "Матчей нет"; return; }
+
+            resBox.innerHTML = "";
             predictions.forEach(m=>{
                 const div = document.createElement('div');
                 div.style.marginBottom='8px';
-                div.innerHTML=`<b>${m.match}</b> — Прогноз: <span style="color:#ffe57e">${m.prediction}</span> (Уверенность: <span style="color:#00ff00">${m.confidence}</span>)`;
+                div.innerHTML = <b>${m.match}</b> — Прогноз: <span style="color:#ffe57e">${m.prediction}</span> (Уверенность: <span style="color:#00ff00">${m.confidence}</span>);
                 resBox.appendChild(div);
             });
-            // Обновляем ЖБ дня самым уверенным прогнозом
+
+            // ЖБ дня — самый уверенный прогноз
             const best = predictions.reduce((a,b)=>parseFloat(a.confidence.replace('%',''))>parseFloat(b.confidence.replace('%',''))?a:b);
             document.getElementById('jbContent').innerHTML=`Прогноз дня: ${best.prediction} – Уверенность: ${best.confidence}`;
-        };
+        });
+
         box.appendChild(btn);
-    }
+    });
 }
 
 // =======================
-// Остальная логика (копирование, битва, профили) остаётся прежней
+// Остальная логика (копирование, битва, профили)
 // =======================
 function copyRef(){
     const link=document.getElementById('refLink').innerText;
@@ -204,7 +217,6 @@ function copyRef(){
     tg.showAlert("Скопировано!");
 }
 
-// БИТВА ЛУДИКОВ
 function generateBattle(){
     const box=document.getElementById('battleBox');
     box.innerHTML="";
@@ -218,7 +230,7 @@ function generateBattle(){
     });
 }
 generateBattle();
-</script>
 
+</script>
 </body>
 </html>
