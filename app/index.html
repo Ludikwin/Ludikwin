@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LUDIK AI</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -12,34 +12,34 @@
     --neon: #bc13fe;
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
-* { box-sizing: border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
-html, body {height:100%; width:100%; overflow:hidden; background: var(--bg); font-family: 'Inter', sans-serif; color:white; position: relative;}
-body {display:flex; flex-direction:column; align-items:center; padding:20px;}
-.app-title {font-family:'Orbitron', sans-serif; font-size:20px; background: var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:10px 0 20px; text-shadow:0 0 15px rgba(188,19,254,0.6); animation: neonGlow 2s infinite alternate;}
-.main-card {width:100%; max-width:420px; background:rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 20px var(--neon); z-index:10; position:relative; touch-action:auto;}
-.menu-grid {display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-.menu-item {background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; position:relative; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; touch-action: manipulation; transition: all 0.3s ease-in-out;}
-.menu-item:hover { box-shadow: 0 0 20px #bc13fe, 0 0 40px #bc13fe inset; transform: scale(1.05); border-color: #ffe57e;}
-.menu-item:active {background:#222; transform:scale(0.95); border-color:#ffe57e;}
-.gold-icon {font-size:28px; display:block; margin-bottom:5px; pointer-events:none;}
-.item-label {font-size:11px; color:#f3cf7a; text-transform:uppercase; font-weight:900; pointer-events:none;}
-.overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:900;}
-.popup {display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0.8); width:90%; max-width:380px; background:#0a0a0a; border:2px solid #d4af37; border-radius:25px; padding:20px; z-index:1000; text-align:center; overflow-y:auto; max-height:80%; opacity:0; transition: transform 0.3s ease, opacity 0.3s ease;}
-.popup.open {transform:translate(-50%, -50%) scale(1); opacity:1;}
-.close-btn {background:#222; color:#888; padding:12px; width:100%; border-radius:15px; margin-top:15px; border:1px solid #444; font-weight:bold; transition: all 0.2s;}
-.close-btn:hover {background:#333; color:#fff;}
-.action-btn {background:var(--gold); color:black; padding:14px; width:100%; border-radius:15px; margin-top:10px; border:none; font-weight:900; display:inline-block; text-decoration:none; transition: all 0.2s;}
-.action-btn:hover {box-shadow: 0 0 15px #ffe57e, 0 0 25px #d4af37 inset; transform: scale(1.02);}
-.league-grid {display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;}
-.league-btn {background:#1a1a1a; color:white; border:1px solid #333; padding:10px; border-radius:12px; font-size:11px; cursor:pointer; transition: all 0.2s;}
-.league-btn:hover {background:#222; border-color:#ffe57e;}
-.stat-row {display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222; font-size:14px;}
-.gold-t {color:#d4af37; font-weight:bold;}
-.bonus-link {display:block; background:#111; color:#ffe57e; padding:12px; margin:8px 0; border-radius:12px; text-decoration:none; border:1px solid #d4af37; font-weight:bold; transition: all 0.2s;}
-.bonus-link:hover {background:#222; color:#fff;}
-table {width:100%; border-collapse:collapse; margin-top:10px;}
-th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;}
-th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc13fe,0 0 20px #bc13fe,0 0 30px #bc13fe,0 0 40px #bc13fe;}50%{text-shadow:0 0 20px #ffe57e,0 0 30px #ffe57e,0 0 40px #ffe57e,0 0 50px #ffe57e;}}
+* { box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html, body {height:100%;width:100%;background:var(--bg);font-family:'Inter',sans-serif;color:white;display:flex;flex-direction:column;align-items:center;padding:20px;}
+.app-title {font-family:'Orbitron',sans-serif;font-size:20px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;margin:10px 0 20px;text-shadow:0 0 15px rgba(188,19,254,0.6);animation:neonGlow 2s infinite alternate;}
+.main-card {width:100%;max-width:420px;background:rgba(15,15,15,0.98);border:2px solid var(--neon);border-radius:30px;padding:20px;box-shadow:0 0 20px var(--neon);}
+.menu-grid {display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.menu-item {background:#111;border:2px solid var(--neon);border-radius:25px;padding:25px 10px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all 0.3s;}
+.menu-item:hover {box-shadow:0 0 20px #bc13fe,0 0 40px #bc13fe inset;transform:scale(1.05);border-color:#ffe57e;}
+.menu-item:active {background:#222;transform:scale(0.95);border-color:#ffe57e;}
+.gold-icon {font-size:28px;margin-bottom:5px;}
+.item-label {font-size:11px;color:#f3cf7a;text-transform:uppercase;font-weight:900;}
+.overlay {display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:900;}
+.popup {display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.8);width:90%;max-width:380px;background:#0a0a0a;border:2px solid #d4af37;border-radius:25px;padding:20px;z-index:1000;text-align:center;overflow-y:auto;max-height:80%;opacity:0;transition:transform 0.3s,opacity 0.3s;}
+.popup.open {transform:translate(-50%,-50%) scale(1);opacity:1;}
+.close-btn {background:#222;color:#888;padding:12px;width:100%;border-radius:15px;margin-top:15px;border:1px solid #444;font-weight:bold;transition:all 0.2s;cursor:pointer;}
+.close-btn:hover {background:#333;color:#fff;}
+.action-btn {background:var(--gold);color:black;padding:14px;width:100%;border-radius:15px;margin-top:10px;border:none;font-weight:900;display:inline-block;text-decoration:none;transition:all 0.2s;}
+.action-btn:hover {box-shadow:0 0 15px #ffe57e,0 0 25px #d4af37 inset;transform:scale(1.02);}
+.league-grid {display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.league-btn {background:#1a1a1a;color:white;border:1px solid #333;padding:10px;border-radius:12px;font-size:11px;cursor:pointer;transition:all 0.2s;}
+.league-btn:hover {background:#222;border-color:#ffe57e;}
+.stat-row {display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #222;font-size:14px;}
+.gold-t {color:#d4af37;font-weight:bold;}
+.bonus-link {display:block;background:#111;color:#ffe57e;padding:12px;margin:8px 0;border-radius:12px;text-decoration:none;border:1px solid #d4af37;font-weight:bold;transition:all 0.2s;}
+.bonus-link:hover {background:#222;color:#fff;}
+table {width:100%;border-collapse:collapse;margin-top:10px;}
+th,td {border:1px solid #444;padding:8px;font-size:12px;text-align:center;}
+th {background:#1a1a1a;}
+@keyframes neonGlow {0%,100% {text-shadow:0 0 10px #bc13fe,0 0 20px #bc13fe,0 0 30px #bc13fe,0 0 40px #bc13fe;}50% {text-shadow:0 0 20px #ffe57e,0 0 30px #ffe57e,0 0 40px #ffe57e,0 0 50px #ffe57e;}}
 </style>
 </head>
 <body ontouchstart="tg.expand()">
@@ -48,178 +48,177 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
 
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
-        <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
-        <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
-        <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
-        <div class="menu-item" onclick="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
-        <div class="menu-item" onclick="openP('statsP')"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
-        <div class="menu-item" onclick="openP('battleP')"><span class="gold-icon">⚔️</span><span class="item-label">БИТВА ЛУДИКОВ</span></div>
-        <div class="menu-item" onclick="openP('jbP')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
-        <div class="menu-item" onclick="openP('historyP')"><span class="gold-icon">📜</span><span class="item-label">ИСТОРИЯ ПРОГНОЗОВ</span></div>
-        <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
+        <div class="menu-item"><span class="gold-icon">⚽️</span><span class="item-label">ПРОГНОЗЫ</span></div><div class="menu-item"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
+        <div class="menu-item"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
+        <div class="menu-item"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+        <div class="menu-item"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
+        <div class="menu-item"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
+        <div class="menu-item"><span class="gold-icon">⚔️</span><span class="item-label">БИТВА ЛУДИКОВ</span></div>
+        <div class="menu-item"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
+        <div class="menu-item"><span class="gold-icon">📜</span><span class="item-label">ИСТОРИЯ ПРОГНОЗОВ</span></div>
+        <div class="menu-item"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
     </div>
 </div>
 
-<div class="overlay" id="overlay" onclick="closeAll()"></div>
+<div class="overlay" id="overlay"></div>
 
-<!-- ПРОГНОЗЫ -->
+<!-- POPUPS -->
 <div id="predictP" class="popup">
     <h3 style="color:#ffe57e">ЛИГИ</h3>
     <div class="league-grid" id="leagueBox"></div>
-    <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px;"></div>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <div id="pRes" style="margin-top:15px;color:#00ff00;font-size:13px;"></div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- VIP -->
 <div id="vipP" class="popup">
-    <h2 style="color:#bc13fe">VIP ПАКЕТ</h2>
-    <p style="font-size:12px; margin:15px 0;">Доступ к VIP прогнозам на 2 недели.</p>
-    <div class="stat-row"><span>Цена:</span><span class="gold-t">15.00 USDT</span></div>
-    <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">ОПЛАТИТЬ</a>
-    <button class="close-btn" onclick="closeAll()">ОТМЕНА</button>
+    <h3>VIP ПАКЕТ</h3>
+    <div class="stat-row"><span>Цена:</span><span class="gold-t">15 USDT</span></div>
+    <a href="#" class="action-btn">ОПЛАТИТЬ</a>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ПРОФИЛЬ -->
 <div id="profileP" class="popup">
-    <h2>ПРОФИЛЬ</h2>
-    <div class="stat-row"><span>ID:</span><span id="uID" class="gold-t">---</span></div>
-    <div class="stat-row"><span>Баланс:</span><span class="gold-t">100.00 LC</span></div>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <h3>ПРОФИЛЬ</h3>
+    <div class="stat-row"><span>ID:</span><span class="gold-t">12345</span></div>
+    <div class="stat-row"><span>Баланс:</span><span class="gold-t">100 LC</span></div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- БОНУСЫ -->
 <div id="bonusP" class="popup">
     <h3>БОНУСЫ</h3>
-    <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">💰 1WIN</a>
-    <a href="https://stake.com/ru?c=oeVgnFIa" class="bonus-link">🎲 STAKE</a>
-    <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="bonus-link">📢 КАНАЛ</a>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <a href="#" class="bonus-link">1WIN</a>
+    <a href="#" class="bonus-link">STAKE</a>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- РЕФЕРАЛ -->
 <div id="refP" class="popup">
-    <h2>РЕФЕРАЛЫ</h2>
-    <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
+    <h3>РЕФЕРАЛ</h3>
+    <p id="refLink" style="background:#111;padding:10px;border-radius:10px;">https://t.me/LudikWin_bot?start=12345</p>
     <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ</button>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- СТАТИСТИКА -->
 <div id="statsP" class="popup">
-    <h2>AI СТАТИСТИКА</h2>
+    <h3>СТАТИСТИКА</h3>
     <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00;">84.2%</span></div>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- БИТВА ЛУДИКОВ -->
 <div id="battleP" class="popup">
-    <h2 style="color:#bc13fe">Битва Лудиков</h2>
-    <p style="font-size:12px; margin:15px 0;">Сегодняшний матч: Победа К1 / Ничья / Победа К2</p>
-    <div id="battleBox"></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <h3>БИТВА ЛУДИКОВ</h3>
+    <div id="battleBox"></div>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
-    <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
-    <p id="jbContent" style="font-size:12px; margin:15px 0;">Прогноз дня: ТБ 2.5 – Лудик уверен!</p>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <h3>ЖБ ДНЯ</h3>
+    <p id="jbContent">Загрузка...</p>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ИСТОРИЯ ПРОГНОЗОВ -->
 <div id="historyP" class="popup">
-    <h2 style="color:#bc13fe">История прогнозов</h2>
+    <h3>ИСТОРИЯ ПРОГНОЗОВ</h3>
     <table>
         <tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
-        <tr><td>23.02</td><td>Бенфика - Реал</td><td>ТБ 2.5</td><td>✔️</td></tr>
-        <tr><td>22.02</td><td>МЮ - Ливерпуль</td><td>П2</td><td>❌</td></tr>
-        <tr><td>21.02</td><td>Барса - Атлетико</td><td>Ничья</td><td>✔️</td></tr>
     </table>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ЧАТ -->
 <div id="chatP" class="popup">
-    <h2 style="color:#bc13fe">ЧАТ</h2>
-    <p style="font-size:12px; margin:15px 0;">Присоединяйтесь к чату Ludik:</p>
-    <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="action-btn" target="_blank">ОТКРЫТЬ ЧАТ</a>
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <h3>ЧАТ</h3>
+    <a href="#" class="action-btn">ОТКРЫТЬ ЧАТ</a>
+    <button class="close-btn">ЗАКРЫТЬ</button>
 </div>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
-
-const user = tg.initDataUnsafe?.user;
-if(user){
-    document.getElementById('uID').innerText = user.id;
-    document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start='+user.id;
-}
-
-function openP(id){
-    closeAll();
-    document.getElementById('overlay').style.display='block';
-    const popup=document.getElementById(id);
-    popup.style.display='block';
-    popup.classList.add('open');
-    tg.expand();
-}
+const overlay = document.getElementById('overlay');
 
 function closeAll(){
-    document.getElementById('overlay').style.display='none';
+    overlay.style.display='none';
     document.querySelectorAll('.popup').forEach(p=>{
         p.style.display='none';
         p.classList.remove('open');
     });
 }
+overlay.addEventListener('click',closeAll);
+document.querySelectorAll('.close-btn').forEach(btn=>btn.addEventListener('click',closeAll));
 
+document.querySelectorAll('.menu-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+        const label = item.querySelector('.item-label').innerText;
+        const map = {
+            'ПРОГНОЗЫ':'predictP',
+            'VIP ДОСТУП':'vipP',
+            'ПРОФИЛЬ':'profileP',
+            'БОНУСЫ':'bonusP',
+            'РЕФЕРАЛ':'refP', 'СТАТИСТИКА':'statsP',
+            'БИТВА ЛУДИКОВ':'battleP','ЖБ ДНЯ':'jbP',
+            'ИСТОРИЯ ПРОГНОЗОВ':'historyP',
+            'ЧАТ':'chatP'
+        };
+        if(map[label]){
+            openP(map[label]);
+            if(label==='ПРОГНОЗЫ') openPredict();
+            if(label==='ЖБ ДНЯ') openJB(); // подключение сервера
+            if(label==='БИТВА ЛУДИКОВ') generateBattle();
+        }
+    });
+});
+
+function openP(id){
+    const popup = document.getElementById(id);
+    if(!popup) return;
+    overlay.style.display='block';
+    popup.style.display='block';
+    popup.classList.add('open');
+}
+
+// Прогнозы
+const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
+const leagueBox = document.getElementById('leagueBox');
 function openPredict(){
-    openP('predictP');
-    const box=document.getElementById('leagueBox');
-    box.innerHTML="";
-    const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
+    leagueBox.innerHTML="";
     Object.keys(leagues).forEach(code=>{
         const btn=document.createElement('button');
-        btn.className="league-btn";
+        btn.className='league-btn';
         btn.innerText=leagues[code];
         btn.onclick=()=>getPredict(code);
-        box.appendChild(btn);
+        leagueBox.appendChild(btn);
     });
 }
-
 async function getPredict(code){
     const resBox=document.getElementById('pRes');
-    resBox.innerText="АНАЛИЗ...";
+    resBox.innerText='Загрузка...';
     try{
-        const res=await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
-            headers:{'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019'}
-        });
-        const data=await res.json();
-        if(data.matches && data.matches.length>0){
-            const m=data.matches[0];
-            resBox.innerHTML=m.homeTeam.name+' vs '+m.awayTeam.name+'<br><span style="color:#ffe57e">Прогноз: ТБ 2.5</span>';
-        } else {resBox.innerText="Матчей нет";}
-    }catch(e){resBox.innerText="Ошибка API";}
+        const res = await fetch(`http://localhost:3000/predict?league=${code}`);
+        const data = await res.json();
+        if(data.length>0){
+            resBox.innerHTML = data.map(m=>`${m.match} <br><span style="color:#ffe57e">Прогноз: ${m.prediction}</span>`).join('<hr>');
+        }else resBox.innerText='Матчей нет';
+    }catch(e){resBox.innerText='Ошибка API';}
 }
 
-function copyRef(){
-    const link=document.getElementById('refLink').innerText;
-    const el=document.createElement('textarea');
-    el.value=link;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    tg.showAlert("Скопировано!");
+// ЖБ дня подключение к серверу
+async function openJB(){
+    const jb = document.getElementById('jbContent');
+    jb.innerText='Загрузка...';
+    try{
+        const res = await fetch('http://localhost:3000/jb'); // серверный эндпоинт
+        const data = await res.json();
+        jb.innerText = data.text || 'Прогноз дня отсутствует';
+    }catch(e){
+        jb.innerText='Ошибка API';
+    }
 }
 
-// БИТВА ЛУДИКОВ
+// Битва Лудиков
 function generateBattle(){
-    const box=document.getElementById('battleBox');
-    box.innerHTML="";
-    const options=['Победа К1','Ничья','Победа К2'];
-    options.forEach(o=>{
+    const box = document.getElementById('battleBox');
+    box.innerHTML='';
+    ['Победа К1','Ничья','Победа К2'].forEach(o=>{
         const b=document.createElement('button');
         b.className='action-btn';
         b.innerText=o;
@@ -227,8 +226,12 @@ function generateBattle(){
         box.appendChild(b);
     });
 }
-generateBattle();
-</script>
 
+// Реферальная копия
+function copyRef(){
+    const link=document.getElementById('refLink').innerText;
+    navigator.clipboard.writeText(link).then(()=>tg.showAlert('Скопировано!'));
+}
+</script>
 </body>
 </html>
