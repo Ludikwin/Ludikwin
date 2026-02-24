@@ -141,7 +141,7 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-// ТВОЯ ССЫЛКА NGROK
+// Ссылка Ngrok без лишних слэшей
 const SERVER_URL = "https://procensure-sirena-fernlike.ngrok-free.dev";
 
 const user = tg.initDataUnsafe?.user;
@@ -181,33 +181,32 @@ function openPredict(){
     });
 }
 
-// ВОТ ЗДЕСЬ УБРАНЫ ЗАГЛУШКИ И ПОДКЛЮЧЕН ТВОЙ СЕРВЕР
 async function getPredict(code){
     const resBox=document.getElementById('pRes');
-    resBox.innerHTML="<div style='color:#bc13fe; animation: blink 1s infinite;'>АНАЛИЗ AI...</div>";
+    resBox.innerHTML="<div style='color:#bc13fe;'>АНАЛИЗ AI...</div><div style='font-size:10px; color:#666;'>Ищем лучшие коэффиценты</div>";
     
     try {
-        const res = await fetch(`${SERVER_URL}/predict?league=${code}`, {
+        const response = await fetch(`${SERVER_URL}/predict?league=${code}`, {
             headers: { 'ngrok-skip-browser-warning': 'true' }
         });
-        const data = await res.json();
+        const data = await response.json();
         
         if(data.home) {
             resBox.innerHTML = `
                 <div style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px;">
-                    <img src="${data.homeLogo}" width="24" height="24" style="border-radius:50%">
-                    <span style="font-weight:bold; color:#fff">${data.home} - ${data.away}</span>
-                    <img src="${data.awayLogo}" width="24" height="24" style="border-radius:50%">
+                    <img src="${data.homeLogo}" width="32" height="32" style="border-radius:50%">
+                    <span style="font-weight:bold; color:#fff">${data.home} vs ${data.away}</span>
+                    <img src="${data.awayLogo}" width="32" height="32" style="border-radius:50%">
                 </div>
-                <div style="color:#ffe57e; font-weight:bold;">${data.forecast}</div>
-                <div style="font-size:10px; color:#888; margin-top:5px;">${data.ai_logic}</div>
+                <div style="color:#ffe57e; font-weight:bold; font-size:14px;">${data.forecast}</div>
+                <div style="font-size:11px; color:#888; margin-top:8px; line-height:1.2;">${data.ai_logic}</div>
             `;
         } else {
             resBox.innerText = "Матчей не найдено";
         }
     } catch(e) {
         console.error(e);
-        resBox.innerHTML = "<span style='color:#ff4444'>Ошибка связи с AI сервером</span>";
+        resBox.innerHTML = "<span style='color:#ff4444'>Ошибка связи с сервером</span>";
     }
 }
 
@@ -236,10 +235,5 @@ function generateBattle(){
 }
 generateBattle();
 </script>
-
-<style>
-@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-</style>
-
 </body>
 </html>
