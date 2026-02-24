@@ -180,25 +180,28 @@ function openPredict(){
     });
 }
 
-// ВНИМАНИЕ: Здесь добавлена отладка через tg.showAlert
+// ПРИНУДИТЕЛЬНОЕ ОБНОВЛЕНИЕ ТЕКСТА
 async function getPredict(code){
     const resBox = document.getElementById('pRes');
-    resBox.innerHTML = "<div style='color:#bc13fe;'>АНАЛИЗ AI...</div>";
+    
+    // 1. Сначала полностью очищаем старый текст
+    resBox.innerHTML = ""; 
+    
+    // 2. Показываем статус загрузки
+    const loader = document.createElement('div');
+    loader.style.color = '#bc13fe';
+    loader.innerText = 'АНАЛИЗ AI...';
+    resBox.appendChild(loader);
     
     try {
         const response = await fetch(`${SERVER_URL}/predict?league=${code}&t=${Date.now()}`, {
             headers: { 'ngrok-skip-browser-warning': 'true' }
         });
         
-        if (!response.ok) {
-            throw new Error('Ошибка сервера: ' + response.status);
-        }
-
         const data = await response.json();
-        console.log("DATA RECEIVED:", data); // Для отладки в консоли браузера
-
+        
+        // 3. Если данные пришли — удаляем лоадер и рисуем заново
         if(data.home) {
-            // ПРИНУДИТЕЛЬНО ПЕРЕЗАПИСЫВАЕМ HTML
             resBox.innerHTML = `
                 <div style="margin-bottom:10px;">
                     <img src="${data.homeLogo}" width="30" onerror="this.style.display='none'"> 
@@ -206,15 +209,13 @@ async function getPredict(code){
                     <img src="${data.awayLogo}" width="30" onerror="this.style.display='none'">
                 </div>
                 <div style="color:#ffe57e; font-size:16px;">${data.forecast}</div>
-                <p style="font-size:11px; color:#aaa;">${data.ai_logic}</p>
+                <p style="font-size:11px; color:#aaa; margin-top:5px;">${data.ai_logic}</p>
             `;
         } else {
-            resBox.innerHTML = "Нет активных матчей в этой лиге.";
+            resBox.innerHTML = "Матчей не найдено";
         }
     } catch(e) {
-        // Если ошибка — бот покажет её в алерте, чтобы мы поняли в чем дело
-        tg.showAlert("ОШИБКА: " + e.message);
-        resBox.innerHTML = "<span style='color:red'>Ошибка загрузки</span>";
+        resBox.innerHTML = "<span style='color:red'>Ошибка связи</span>";
     }
 }
 
