@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>LUDIK AI</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -46,102 +46,34 @@ table {width:100%; border-collapse:collapse; margin-top:10px;}th, td {border:1px
 
 <div class="main-card">
     <div class="menu-grid">
-        <div class="menu-item" data-popup="predictP"><span class="gold-icon">⚽️</span><span class="item-label">ПРОГНОЗЫ</span></div>
-        <div class="menu-item" data-popup="vipP"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
-        <div class="menu-item" data-popup="profileP"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
-        <div class="menu-item" data-popup="bonusP"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
-        <div class="menu-item" data-popup="refP"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
-        <div class="menu-item" data-popup="statsP"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
-        <div class="menu-item" data-popup="battleP"><span class="gold-icon">⚔️</span><span class="item-label">БИТВА ЛУДИКОВ</span></div>
-        <div class="menu-item" data-popup="jbP"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
-        <div class="menu-item" data-popup="historyP"><span class="gold-icon">📜</span><span class="item-label">ИСТОРИЯ ПРОГНОЗОВ</span></div>
-        <div class="menu-item" data-popup="chatP"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
+        <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽️</span><span class="item-label">ПРОГНОЗЫ</span></div>
+        <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
+        <div class="menu-item" onclick="openP('profileP')"><span class="gold-icon">👤</span><span class="item-label">ПРОФИЛЬ</span></div>
+        <div class="menu-item" onclick="openP('bonusP')"><span class="gold-icon">🎁</span><span class="item-label">БОНУСЫ</span></div>
+        <div class="menu-item" onclick="openP('refP')"><span class="gold-icon">🔗</span><span class="item-label">РЕФЕРАЛ</span></div>
+        <div class="menu-item" onclick="openP('statsP')"><span class="gold-icon">📊</span><span class="item-label">СТАТИСТИКА</span></div>
+        <div class="menu-item" onclick="openP('battleP')"><span class="gold-icon">⚔️</span><span class="item-label">БИТВА ЛУДИКОВ</span></div>
+        <div class="menu-item" onclick="openP('jbP')"><span class="gold-icon">🔥</span><span class="item-label">ЖБ ДНЯ</span></div>
+        <div class="menu-item" onclick="openP('historyP')"><span class="gold-icon">📜</span><span class="item-label">ИСТОРИЯ ПРОГНОЗОВ</span></div>
+        <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
     </div>
 </div>
 
-<div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
 
 <!-- ПРОГНОЗЫ -->
 <div id="predictP" class="popup">
     <h3 style="color:#ffe57e">ЛИГИ</h3>
     <div class="league-grid" id="leagueBox"></div>
     <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px;"></div>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- VIP -->
-<div id="vipP" class="popup">
-    <h2 style="color:#bc13fe">VIP ПАКЕТ</h2>
-    <p style="font-size:12px; margin:15px 0;">Доступ к VIP прогнозам на 2 недели.</p>
-    <div class="stat-row"><span>Цена:</span><span class="gold-t">15.00 USDT</span></div>
-    <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">ОПЛАТИТЬ</a>
-    <button class="close-btn">ОТМЕНА</button>
-</div>
-
-<!-- ПРОФИЛЬ -->
-<div id="profileP" class="popup">
-    <h2>ПРОФИЛЬ</h2>
-    <div class="stat-row"><span>ID:</span><span id="uID" class="gold-t">---</span></div>
-    <div class="stat-row"><span>Баланс:</span><span class="gold-t">100.00 LC</span></div>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- БОНУСЫ -->
-<div id="bonusP" class="popup">
-    <h3>БОНУСЫ</h3>
-    <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">💰 1WIN</a>
-    <a href="https://stake.com/ru?c=oeVgnFIa" class="bonus-link">🎲 STAKE</a>
-    <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="bonus-link">📢 КАНАЛ</a>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- РЕФЕРАЛ -->
-<div id="refP" class="popup">
-    <h2>РЕФЕРАЛЫ</h2>
-    <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
-    <button class="action-btn" id="copyRefBtn">КОПИРОВАТЬ</button>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- СТАТИСТИКА -->
-<div id="statsP" class="popup">
-    <h2>AI СТАТИСТИКА</h2>
-    <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00;">84.2%</span></div>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- БИТВА ЛУДИКОВ -->
-<div id="battleP" class="popup">
-    <h2 style="color:#bc13fe">Битва Лудиков</h2>
-    <p style="font-size:12px; margin:15px 0;">Сегодняшний матч: Победа К1 / Ничья / Победа К2</p>
-    <div id="battleBox"></div>
-    <button class="close-btn">ЗАКРЫТЬ</button>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
-    <h2 style="color:#bc13fe">ЖБ ДНЯ</h2><p id="jbContent" style="font-size:12px; margin:15px 0;">Прогноз дня: ТБ 2.5 – Лудик уверен!</p>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- ИСТОРИЯ ПРОГНОЗОВ -->
-<div id="historyP" class="popup">
-    <h2 style="color:#bc13fe">История прогнозов</h2>
-    <table>
-        <tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
-        <tr><td>23.02</td><td>Бенфика - Реал</td><td>ТБ 2.5</td><td>✔️</td></tr>
-        <tr><td>22.02</td><td>МЮ - Ливерпуль</td><td>П2</td><td>❌</td></tr>
-        <tr><td>21.02</td><td>Барса - Атлетико</td><td>Ничья</td><td>✔️</td></tr>
-    </table>
-    <button class="close-btn">ЗАКРЫТЬ</button>
-</div>
-
-<!-- ЧАТ -->
-<div id="chatP" class="popup">
-    <h2 style="color:#bc13fe">ЧАТ</h2>
-    <p style="font-size:12px; margin:15px 0;">Присоединяйтесь к чату Ludik:</p>
-    <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="action-btn" target="_blank">ОТКРЫТЬ ЧАТ</a>
-    <button class="close-btn">ЗАКРЫТЬ</button>
+    <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
+    <p id="jbContent" style="font-size:12px; margin:15px 0;">Загрузка...</p>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <script>
@@ -149,22 +81,21 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-// Пользователь и реферал
 const user = tg.initDataUnsafe?.user;
 if(user){
-    document.getElementById('uID').innerText = user.id;
-    document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start='+user.id;
+    document.getElementById('uID')?.innerText = user.id;
+    document.getElementById('refLink')?.innerText = 'https://t.me/LudikWin_bot?start='+user.id;
 }
 
-// Открытие попапов
 function openP(id){
     closeAll();
     document.getElementById('overlay').style.display='block';
-    const popup = document.getElementById(id);
+    const popup=document.getElementById(id);
     popup.style.display='block';
     popup.classList.add('open');
     tg.expand();
 }
+
 function closeAll(){
     document.getElementById('overlay').style.display='none';
     document.querySelectorAll('.popup').forEach(p=>{
@@ -173,81 +104,65 @@ function closeAll(){
     });
 }
 
-// Кнопки меню
-document.querySelectorAll('.menu-item').forEach(item=>{
-    const target = item.dataset.popup;
-    if(target){
-        item.addEventListener('click', ()=>{
-            if(target === 'predictP') openPredict();
-            else openP(target);
-        });
-    }
-});
-
-// Закрытие кнопок
-document.querySelectorAll('.close-btn').forEach(btn=>{
-    btn.addEventListener('click', closeAll);
-});
-
-// Копирование реферальной ссылки
-document.getElementById('copyRefBtn')?.addEventListener('click', ()=>{
-    const link = document.getElementById('refLink').innerText;
-    navigator.clipboard.writeText(link).then(()=>tg.showAlert("Скопировано!"));
-});
-
-// ПРОГНОЗЫ
 function openPredict(){
     openP('predictP');
-    const box = document.getElementById('leagueBox');
+    const box=document.getElementById('leagueBox');
     box.innerHTML="";
-    const leagues = {"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
+    const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
     Object.keys(leagues).forEach(code=>{
-        const btn = document.createElement('button');
+        const btn=document.createElement('button');
         btn.className="league-btn";
         btn.innerText=leagues[code];
-        btn.addEventListener('click', ()=>getPredict(code));
+        btn.onclick=()=>getPredict(code);
         box.appendChild(btn);
     });
-    loadPredictions(); // подгружаем сразу все
 }
 
-// Загрузка прогнозов и ЖБ дня
-async function loadPredictions(){
-    const resBox = document.getElementById('pRes');
-    const jbBox = document.getElementById('jbContent');
-    resBox.innerText = "АНАЛИЗ...";
+async function getPredict(code){
+    const resBox=document.getElementById('pRes');
+    resBox.innerText="АНАЛИЗ...";
     try{
-        const res = await fetch('http://localhost:3000/predict');
-        if(!res.ok) throw new Error('Сервер вернул ошибку');
+        const res=await fetch(`http://192.168.100.2:3000/predict`);
+        const data=await res.json();
+        if(data && data.length>0){
+            const m=data[0];
+            resBox.innerHTML=m.match+'<br><span style="color:#ffe57e">Прогноз: '+m.prediction+'</span>';
+        } else {resBox.innerText="Матчей нет";}
+    }catch(e){resBox.innerText="Ошибка API";}
+}
+
+// ЖБ ДНЯ
+async function loadJB(){
+    const jbEl = document.getElementById('jbContent');
+    try{
+        const res = await fetch('http://192.168.100.2:3000/predict');
         const data = await res.json();
         if(data.length>0){
-            let html = "";
-            data.forEach(m=> html += m.match + " — Прогноз: " + m.prediction + "\n");
-            resBox.innerText = html;
-            jbBox.innerText = "Прогноз дня: " + data[0].match + " — " + data[0].prediction;
+            jbEl.innerHTML = Прогноз дня: ${data[0].match} – ${data[0].prediction};
         } else {
-            resBox.innerText = "Матчей нет";
-            jbBox.innerText = "Прогноз дня отсутствует";
+            jbEl.innerText = "Прогноз дня отсутствует";
         }
     }catch(e){
-        console.error(e);
-        resBox.innerText = "Ошибка загрузки прогнозов";
-        jbBox.innerText = "Прогноз дня отсутствует";
+        jbEl.innerText = "Ошибка загрузки прогнозов";
     }
 }
+loadJB();
 
-// Функция генерации битвы
+// Генерация битвы
 function generateBattle(){
-    const box = document.getElementById('battleBox');
+    const box=document.getElementById('battleBox');
     box.innerHTML="";
-    ['Победа К1','Ничья','Победа К2'].forEach(o=>{const b = document.createElement('button');
+    const options=['Победа К1','Ничья','Победа К2'];
+    options.forEach(o=>{
+        const b=document.createElement('button');
         b.className='action-btn';
         b.innerText=o;
-        b.addEventListener('click', ()=>tg.showAlert('Вы выбрали: '+o));
+        b.onclick=()=>tg.showAlert('Вы выбрали: '+o);
         box.appendChild(b);
     });
 }
 generateBattle();
 </script>
+
 </body>
 </html>
