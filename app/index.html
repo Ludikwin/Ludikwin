@@ -21,6 +21,9 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 .menu-item {background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; position:relative; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; touch-action: manipulation; transition: all 0.3s ease-in-out;}
 .menu-item:hover { box-shadow: 0 0 20px #bc13fe, 0 0 40px #bc13fe inset; transform: scale(1.05); border-color: #ffe57e;}
 .menu-item:active {background:#222; transform:scale(0.95); border-color:#ffe57e;}
+    .daily-wide {
+    grid-column: span 2;
+}
 .gold-icon {font-size:28px; display:block; margin-bottom:5px; pointer-events:none;}
 .item-label {font-size:11px; color:#f3cf7a; text-transform:uppercase; font-weight:900; pointer-events:none;}
 .overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:900;}
@@ -60,7 +63,7 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
         <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
     </div>
 </div>
-    <div class="menu-item" onclick="openP('dailyP')">
+    <div class="menu-item daily-wide" onclick="openP('dailyP')">
     <span class="gold-icon">🎁</span>
     <span class="item-label">DAILY БОНУС</span>
 </div>
