@@ -119,9 +119,30 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
     50%{opacity:0.8;}
     100%{opacity:0.4;}
 }
+    /* ===== DAILY PROGRESS BAR ===== */
+
+.daily-progress{
+    width:100%;
+    height:8px;
+    background:#222;              /* тёмная дорожка */
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:8px;
+}
+
+.daily-progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#bc13fe,#ffe57e);
+    transition:width 0.4s ease;
+}
+    .daily-progress-fill.full{
+    background: linear-gradient(90deg,#ffe57e,#FFD700);
+    box-shadow: 0 0 15px #FFD700, 0 0 25px #FFD700;
+}
 </style>
 </head>
-<body ontouchstart="tg.expand()">
+<body>
 
 <div class="app-title">LUDIK AI</div>
     
@@ -140,13 +161,16 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
         <div class="daily-title">DAILY LUDIK COIN</div>
         <div class="daily-sub">
             День подряд: <span id="dailyTopStreak">0</span>
+            <div class="daily-progress">
+    <div id="dailyProgressBar" class="daily-progress-fill"></div>
+</div>
         </div>
     </div>
 
     <div class="daily-right">
-        <div class="daily-reward">
-            +10 LC
-        </div>
+       <div class="daily-reward" id="dailyRewardText">
+    +10 LC
+</div>
     </div>
 </div>
     <div class="menu-grid">
@@ -264,7 +288,7 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
         <span>Баланс:</span>
         <span id="dailyBalance" class="gold-t">100</span>
     </div>
-    <button class="action-btn" onclick="claimDaily()">ЗАБРАТЬ</button>
+    <button class="action-btn" id="claimBtn" onclick="claimDaily()">ЗАБРАТЬ</button>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
@@ -403,40 +427,80 @@ async function getPredict(code){
 }
 
 // ===== DAILY SYSTEM =====
+
 function initDaily(){
+
     let streak = parseInt(localStorage.getItem("streak") || 0);
+    let today = new Date().toDateString();
+    let lastClaim = localStorage.getItem("lastClaimDate");
 
-    // Обновляем streak в верхнем premium-блоке
-    const topStreak = document.getElementById("dailyTopStreak");
-    if(topStreak){
-        topStreak.innerText = streak;
-    }
-
-    // Обновляем streak в popup
-    const popupStreak = document.getElementById("dailyStreak");
-    if(popupStreak){
-        popupStreak.innerText = streak;
-    }
-
-    // Обновляем баланс в popup
-    const dailyBal = document.getElementById("dailyBalance");
-    if(dailyBal){
-        dailyBal.innerText = getLC();
+    // ===== НАГРАДА В ВЕРХНЕМ БЛОКЕ =====
+    const rewardBox = document.getElementById("dailyRewardText");
+    if(rewardBox){
+    if(lastClaim === today){
+        rewardBox.innerText = "ЗАБРАНО";
+    } else {
+        let nextStreak = streak + 1;
+        let nextReward = (nextStreak % 7 === 0) ? 50 : 10;
+        rewardBox.innerText = "+" + nextReward + " LC";
     }
 }
+
+    // ===== STREAK =====
+    const topStreak = document.getElementById("dailyTopStreak");
+    if(topStreak) topStreak.innerText = streak;
+
+    const popupStreak = document.getElementById("dailyStreak");
+    if(popupStreak) popupStreak.innerText = streak;
+
+    const dailyBal = document.getElementById("dailyBalance");
+    if(dailyBal) dailyBal.innerText = getLC();
+
+    // ===== ПРОГРЕСС =====
+    const progressBar = document.getElementById("dailyProgressBar");
+    if(progressBar){
+        let day = streak % 7;
+        if(day === 0 && streak !== 0) day = 7;
+        progressBar.style.width = (day / 7) * 100 + "%";
+
+        if(day === 7){
+            progressBar.classList.add("full");
+        } else {
+            progressBar.classList.remove("full");
+        }
+    }
+
+    // ===== БЛОКИРОВКА КНОПКИ =====
+    const claimBtn = document.getElementById("claimBtn");
+    if(claimBtn){
+        if(lastClaim === today){
+            claimBtn.style.opacity = "0.5";
+            claimBtn.style.pointerEvents = "none";
+            claimBtn.innerText = "УЖЕ ПОЛУЧЕНО";
+        } else {
+            claimBtn.style.opacity = "1";
+            claimBtn.style.pointerEvents = "auto";
+            claimBtn.innerText = "ЗАБРАТЬ";
+        }
+    }
+}
+
 function claimDaily(){
-    let now = Date.now();
-    let lastClaim = parseInt(localStorage.getItem("lastClaim") || 0);
+
+    let today = new Date().toDateString();
+    let lastClaim = localStorage.getItem("lastClaimDate");
     let streak = parseInt(localStorage.getItem("streak") || 0);
 
-    // Уже забирали сегодня
-    if(now - lastClaim < 86400000){
+    if(lastClaim === today){
         tg.showAlert("Вы уже забрали бонус сегодня!");
         return;
     }
 
-    // Проверка подряд дней
-    if(now - lastClaim < 172800000 && lastClaim !== 0){
+    // проверяем вчерашний день
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if(lastClaim === yesterday.toDateString()){
         streak++;
     } else {
         streak = 1;
@@ -451,7 +515,7 @@ function claimDaily(){
     addLC(reward);
 
     localStorage.setItem("streak", streak);
-    localStorage.setItem("lastClaim", now);
+    localStorage.setItem("lastClaimDate", today);
 
     initDaily();
     tg.showAlert("Вы получили +" + reward + " LC");
@@ -459,32 +523,7 @@ function claimDaily(){
 
 initDaily();
     
-// ===== REF COPY =====
-
-function copyRef(){
-    const link=document.getElementById('refLink').innerText;
-    navigator.clipboard.writeText(link);
-    tg.showAlert("Скопировано!");
-}
-
-// ===== BATTLE =====
-
-function generateBattle(){
-    const box=document.getElementById('battleBox');
-    box.innerHTML="";
-    const options=['Победа К1','Ничья','Победа К2'];
-    options.forEach(o=>{
-        const b=document.createElement('button');
-        b.className='action-btn';
-        b.innerText=o;
-        b.onclick=()=>tg.showAlert('Вы выбрали: '+o);
-        box.appendChild(b);
-    });
-}
-
-generateBattle();
-
 </script>
-    
+   
 </body>
 </html>
