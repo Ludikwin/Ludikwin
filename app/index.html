@@ -79,21 +79,16 @@ th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;}
 th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc13fe,0 0 20px #bc13fe,0 0 30px #bc13fe,0 0 40px #bc13fe;}50%{text-shadow:0 0 20px #ffe57e,0 0 30px #ffe57e,0 0 40px #ffe57e,0 0 50px #ffe57e;}}
 /* ===== PREMIUM DAILY ===== */
 
-.daily-premium{
-    width: 88%;
-    margin: 0 auto 20px auto;
-    padding: 16px;
-    border-radius: 20px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background: linear-gradient(145deg,#1a1a1a,#0e0e0e);
-    border: 1px solid rgba(255,215,0,0.4);
-    box-shadow: 0 0 15px rgba(255,215,0,0.15);
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-    transition:0.3s;
+.daily-premium::before{
+    content:"";
+    position:absolute;
+    top:-50%;
+    left:-50%;
+    width:200%;
+    height:200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 60%);
+    animation: pulseGlow 3s infinite;
+    pointer-events: none;   /* ВАЖНО */
 }
 
 /* золотое свечение */
