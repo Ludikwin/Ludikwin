@@ -13,7 +13,16 @@
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
 * { box-sizing: border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
-html, body {height:100%; width:100%; overflow:hidden; background: var(--bg); font-family: 'Inter', sans-serif; color:white; position: relative;}
+html, body {
+    height:100%;
+    width:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color:white;
+    position: relative;
+}
 body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 .app-title {font-family:'Orbitron', sans-serif; font-size:20px; background: var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:10px 0 20px; text-shadow:0 0 15px rgba(188,19,254,0.6); animation: neonGlow 2s infinite alternate;}
 .main-card {width:100%; max-width:420px; background:rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 20px var(--neon); z-index:10; position:relative; touch-action:auto;}
@@ -21,9 +30,7 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 .menu-item {background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; position:relative; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; touch-action: manipulation; transition: all 0.3s ease-in-out;}
 .menu-item:hover { box-shadow: 0 0 20px #bc13fe, 0 0 40px #bc13fe inset; transform: scale(1.05); border-color: #ffe57e;}
 .menu-item:active {background:#222; transform:scale(0.95); border-color:#ffe57e;}
-    .daily-wide {
-    grid-column: span 2;
-}
+    
 .gold-icon {font-size:28px; display:block; margin-bottom:5px; pointer-events:none;}
 .item-label {font-size:11px; color:#f3cf7a; text-transform:uppercase; font-weight:900; pointer-events:none;}
 .overlay {display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:900;}
@@ -43,6 +50,75 @@ body {display:flex; flex-direction:column; align-items:center; padding:20px;}
 table {width:100%; border-collapse:collapse; margin-top:10px;}
 th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;}
 th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc13fe,0 0 20px #bc13fe,0 0 30px #bc13fe,0 0 40px #bc13fe;}50%{text-shadow:0 0 20px #ffe57e,0 0 30px #ffe57e,0 0 40px #ffe57e,0 0 50px #ffe57e;}}
+/* ===== PREMIUM DAILY ===== */
+
+.daily-premium{
+    width: 88%;
+    margin: 0 auto 20px auto;
+    padding: 16px;
+    border-radius: 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background: linear-gradient(145deg,#1a1a1a,#0e0e0e);
+    border: 1px solid rgba(255,215,0,0.4);
+    box-shadow: 0 0 15px rgba(255,215,0,0.15);
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:0.3s;
+}
+
+/* золотое свечение */
+.daily-premium::before{
+    content:"";
+    position:absolute;
+    top:-50%;
+    left:-50%;
+    width:200%;
+    height:200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 60%);
+    animation: pulseGlow 3s infinite;
+}
+
+/* hover эффект */
+.daily-premium:hover{
+    transform:scale(1.04);
+    box-shadow:0 0 25px rgba(255,215,0,0.4);
+}
+
+/* элементы */
+.daily-icon{
+    font-size:26px;
+}
+
+.daily-title{
+    font-weight:700;
+    color:#FFD700;
+    font-size:14px;
+    letter-spacing:1px;
+}
+
+.daily-sub{
+    font-size:12px;
+    opacity:0.8;
+}
+
+.daily-reward{
+    background:#FFD700;
+    color:#000;
+    padding:6px 12px;
+    border-radius:12px;
+    font-weight:700;
+    font-size:13px;
+}
+
+/* анимация */
+@keyframes pulseGlow{
+    0%{opacity:0.4;}
+    50%{opacity:0.8;}
+    100%{opacity:0.4;}
+}
 </style>
 </head>
 <body ontouchstart="tg.expand()">
@@ -54,6 +130,25 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
 </div>
     
 <div class="main-card">
+    <!-- ===== PREMIUM DAILY TOP ===== -->
+<div class="daily-premium" onclick="openP('dailyP')">
+    <div class="daily-left">
+        <div class="daily-icon">🎁</div>
+    </div>
+
+    <div class="daily-center">
+        <div class="daily-title">DAILY LUDIK COIN</div>
+        <div class="daily-sub">
+            День подряд: <span id="dailyTopStreak">0</span>
+        </div>
+    </div>
+
+    <div class="daily-right">
+        <div class="daily-reward">
+            +10 LC
+        </div>
+    </div>
+</div>
     <div class="menu-grid">
         <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
         <div class="menu-item" onclick="openP('vipP')"><span class="gold-icon">💎</span><span class="item-label">VIP ДОСТУП</span></div>
@@ -66,11 +161,7 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
         <div class="menu-item" onclick="openP('historyP')"><span class="gold-icon">📜</span><span class="item-label">ИСТОРИЯ ПРОГНОЗОВ</span></div>
         <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
 
-        <!-- DAILY ВНУТРИ СЕТКИ -->
-        <div class="menu-item daily-wide" onclick="openP('dailyP')">
-            <span class="gold-icon">🎁</span>
-            <span class="item-label">DAILY БОНУС</span>
-        </div>
+              
 
     </div>
 </div>
@@ -312,24 +403,40 @@ async function getPredict(code){
 }
 
 // ===== DAILY SYSTEM =====
-
 function initDaily(){
-    let streak = localStorage.getItem("streak") || 0;
-    document.getElementById("dailyStreak").innerText = streak;
-    document.getElementById("dailyBalance").innerText = getLC();
-}
-
-function claimDaily(){
-    let now = Date.now();
-    let lastClaim = parseInt(localStorage.getItem("lastClaim"));
     let streak = parseInt(localStorage.getItem("streak") || 0);
 
-    if(lastClaim && now - lastClaim < 86400000){
+    // Обновляем streak в верхнем premium-блоке
+    const topStreak = document.getElementById("dailyTopStreak");
+    if(topStreak){
+        topStreak.innerText = streak;
+    }
+
+    // Обновляем streak в popup
+    const popupStreak = document.getElementById("dailyStreak");
+    if(popupStreak){
+        popupStreak.innerText = streak;
+    }
+
+    // Обновляем баланс в popup
+    const dailyBal = document.getElementById("dailyBalance");
+    if(dailyBal){
+        dailyBal.innerText = getLC();
+    }
+}
+function claimDaily(){
+    let now = Date.now();
+    let lastClaim = parseInt(localStorage.getItem("lastClaim") || 0);
+    let streak = parseInt(localStorage.getItem("streak") || 0);
+
+    // Уже забирали сегодня
+    if(now - lastClaim < 86400000){
         tg.showAlert("Вы уже забрали бонус сегодня!");
         return;
     }
 
-    if(lastClaim && now - lastClaim < 172800000){
+    // Проверка подряд дней
+    if(now - lastClaim < 172800000 && lastClaim !== 0){
         streak++;
     } else {
         streak = 1;
@@ -351,7 +458,7 @@ function claimDaily(){
 }
 
 initDaily();
-
+    
 // ===== REF COPY =====
 
 function copyRef(){
