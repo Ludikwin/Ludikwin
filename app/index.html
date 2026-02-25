@@ -34,15 +34,20 @@ tg.setBackgroundColor("#050505");
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
 }
 * { box-sizing: border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
-html, body {
+html {
+    height: 100%;
+}
+
+body {
     margin: 0;
-    padding: 0;
+    padding: 10px 15px 20px 15px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     min-height: 100vh;
-    width: 100%;
-    overflow-x: hidden;
     background: var(--bg);
-    font-family: 'Inter', sans-serif;
-    color: white;
 }
 body {
     padding: 10px 15px 20px 15px;
@@ -51,7 +56,6 @@ body {
 .main-card {
     width:100%;
     max-width:420px;
-    margin: 0 auto;   /* ВОТ ЭТА СТРОКА */
     background:rgba(15,15,15,0.98);
     border:2px solid var(--neon);
     border-radius:30px;
@@ -87,19 +91,21 @@ th, td {border:1px solid #444; padding:8px; font-size:12px; text-align:center;}
 th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc13fe,0 0 20px #bc13fe,0 0 30px #bc13fe,0 0 40px #bc13fe;}50%{text-shadow:0 0 20px #ffe57e,0 0 30px #ffe57e,0 0 40px #ffe57e,0 0 50px #ffe57e;}}
 /* ===== PREMIUM DAILY ===== */
 
-.daily-premium::before{
-    content:"";
-    position:absolute;
-    top:-50%;
-    left:-50%;
-    width:200%;
-    height:200%;
-    background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 60%);
-    animation: pulseGlow 3s infinite;
-    pointer-events: none;   /* ВАЖНО */
-}
+.daily-premium{
+    position: relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
 
-/* золотое свечение */
+    background: linear-gradient(90deg,#1a1a1a,#111);
+    border:1px solid var(--neon);
+    padding:14px;
+    border-radius:18px;
+    cursor:pointer;
+    overflow:hidden;
+}
+    
 .daily-premium::before{
     content:"";
     position:absolute;
@@ -109,6 +115,7 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
     height:200%;
     background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 60%);
     animation: pulseGlow 3s infinite;
+    pointer-events:none;
 }
 
 /* hover эффект */
@@ -184,6 +191,7 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
     font-weight: 700;
     font-size: 18px;
     text-align: center;
+    width: 100%;
 }
 </style>
 </head>
