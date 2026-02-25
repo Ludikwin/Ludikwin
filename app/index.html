@@ -48,7 +48,19 @@ body {
     padding: 10px 15px 20px 15px;
 }
 .app-title {font-family:'Orbitron', sans-serif; font-size:20px; background: var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:10px 0 20px; text-shadow:0 0 15px rgba(188,19,254,0.6); animation: neonGlow 2s infinite alternate;}
-.main-card {width:100%; max-width:420px; background:rgba(15,15,15,0.98); border:2px solid var(--neon); border-radius:30px; padding:20px; box-shadow:0 0 20px var(--neon); z-index:10; position:relative; touch-action:auto;}
+.main-card {
+    width:100%;
+    max-width:420px;
+    margin: 0 auto;   /* ВОТ ЭТА СТРОКА */
+    background:rgba(15,15,15,0.98);
+    border:2px solid var(--neon);
+    border-radius:30px;
+    padding:20px;
+    box-shadow:0 0 20px var(--neon);
+    z-index:10;
+    position:relative;
+    touch-action:auto;
+}
 .menu-grid {display:grid; grid-template-columns:1fr 1fr; gap:12px;}
 .menu-item {background:#111; border:2px solid var(--neon); border-radius:25px; padding:25px 10px; text-align:center; cursor:pointer; position:relative; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; touch-action: manipulation; transition: all 0.3s ease-in-out;}
 .menu-item:hover { box-shadow: 0 0 20px #bc13fe, 0 0 40px #bc13fe inset; transform: scale(1.05); border-color: #ffe57e;}
