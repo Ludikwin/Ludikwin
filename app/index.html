@@ -60,6 +60,10 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
         <div class="menu-item" onclick="openP('chatP')"><span class="gold-icon">💬</span><span class="item-label">ЧАТ</span></div>
     </div>
 </div>
+    <div class="menu-item" onclick="openP('dailyP')">
+    <span class="gold-icon">🎁</span>
+    <span class="item-label">DAILY БОНУС</span>
+</div>
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
@@ -145,6 +149,20 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
     <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="action-btn" target="_blank">ОТКРЫТЬ ЧАТ</a>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
+    <!-- DAILY БОНУС -->
+<div id="dailyP" class="popup">
+    <h2 style="color:#bc13fe">ЕЖЕДНЕВНЫЙ БОНУС</h2>
+    <div class="stat-row">
+        <span>Streak:</span>
+        <span id="dailyStreak" class="gold-t">0</span>
+    </div>
+    <div class="stat-row">
+        <span>Баланс:</span>
+        <span id="dailyBalance" class="gold-t">100</span>
+    </div>
+    <button class="action-btn" onclick="claimDaily()">ЗАБРАТЬ</button>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+</div>
 
 <script>
 const tg = window.Telegram.WebApp;
@@ -228,6 +246,56 @@ function generateBattle(){
     });
 }
 generateBattle();
+    // ===== DAILY SYSTEM START =====
+
+function initDaily(){
+    let streak = localStorage.getItem("streak") || 0;
+    let balance = localStorage.getItem("balance") || 100;
+
+    const streakEl = document.getElementById("dailyStreak");
+    const balanceEl = document.getElementById("dailyBalance");
+
+    if(streakEl) streakEl.innerText = streak;
+    if(balanceEl) balanceEl.innerText = balance;
+}
+
+function claimDaily(){
+    let now = Date.now();
+    let lastClaim = localStorage.getItem("lastClaim");
+    let streak = parseInt(localStorage.getItem("streak") || 0);
+    let balance = parseInt(localStorage.getItem("balance") || 100);
+
+    if(lastClaim && now - lastClaim < 86400000){
+        tg.showAlert("Вы уже забрали бонус сегодня!");
+        return;
+    }
+
+    if(lastClaim && now - lastClaim < 172800000){
+        streak++;
+    } else {
+        streak = 1;
+    }
+
+    let reward = 10;
+
+    if(streak % 7 === 0){
+        reward = 50;
+        tg.showAlert("🔥 7 дней подряд! Бонус x5!");
+    }
+
+    balance += reward;
+
+    localStorage.setItem("streak", streak);
+    localStorage.setItem("balance", balance);
+    localStorage.setItem("lastClaim", now);
+
+    initDaily();
+    tg.showAlert("Вы получили +" + reward + " LC");
+}
+
+initDaily();
+
+// ===== DAILY SYSTEM END =====
 </script>
 
 </body>
