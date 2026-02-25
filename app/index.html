@@ -48,7 +48,11 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
 <body ontouchstart="tg.expand()">
 
 <div class="app-title">LUDIK AI</div>
-
+    
+<div id="lcBar" style="margin-bottom:15px; font-weight:900; color:#ffe57e;">
+    🪙 <span id="lcBalance">100</span> LC
+</div>
+    
 <div class="main-card">
     <div class="menu-grid">
         <div class="menu-item" onclick="openPredict()"><span class="gold-icon">⚽</span><span class="item-label">ПРОГНОЗЫ</span></div>
@@ -94,7 +98,10 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
 <div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
     <div class="stat-row"><span>ID:</span><span id="uID" class="gold-t">---</span></div>
-    <div class="stat-row"><span>Баланс:</span><span class="gold-t">100.00 LC</span></div>
+    <div class="stat-row">
+    <span>Баланс:</span>
+    <span id="profileBalance" class="gold-t">0 LC</span>
+</div>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
@@ -171,6 +178,7 @@ th {background:#1a1a1a;}@keyframes neonGlow {0%,100% { text-shadow: 0 0 10px #bc
 </div>
 
 <script>
+
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
@@ -178,8 +186,53 @@ tg.expand();
 const user = tg.initDataUnsafe?.user;
 if(user){
     document.getElementById('uID').innerText = user.id;
-    document.getElementById('refLink').innerText = 'https://t.me/LudikWin_bot?start='+user.id;
+    document.getElementById('refLink').innerText =
+        'https://t.me/LudikWin_bot?start='+user.id;
 }
+
+// ===== LUDIK COIN CORE =====
+
+function getLC(){
+    let stored = localStorage.getItem("lc_balance");
+
+    if(stored === null){
+        localStorage.setItem("lc_balance", 100);
+        return 100;
+    }
+
+    return parseInt(stored);
+}
+
+function setLC(amount){
+    localStorage.setItem("lc_balance", amount);
+
+    document.getElementById("lcBalance").innerText = amount;
+
+    const dailyBal = document.getElementById("dailyBalance");
+    if(dailyBal) dailyBal.innerText = amount;
+
+    const profileBal = document.getElementById("profileBalance");
+    if(profileBal) profileBal.innerText = amount + " LC";
+}
+
+function addLC(amount){
+    let current = getLC();
+    setLC(current + amount);
+}
+
+function spendLC(amount){
+    let current = getLC();
+    if(current < amount){
+        tg.showAlert("Недостаточно Ludik Coin");
+        return false;
+    }
+    setLC(current - amount);
+    return true;
+}
+
+setLC(getLC());
+
+// ===== POPUPS =====
 
 function openP(id){
     closeAll();
@@ -187,6 +240,10 @@ function openP(id){
     const popup=document.getElementById(id);
     popup.style.display='block';
     popup.classList.add('open');
+    if(id === "profileP"){
+    const profileBal = document.getElementById("profileBalance");
+    profileBal.innerText = getLC() + " LC";
+}
     tg.expand();
 }
 
@@ -197,6 +254,8 @@ function closeAll(){
         p.classList.remove('open');
     });
 }
+
+// ===== PREDICT =====
 
 function openPredict(){
     openP('predictP');
@@ -213,63 +272,57 @@ function openPredict(){
 }
 
 async function getPredict(code){
+
+    if(window.predictLoading) return;
+    window.predictLoading = true;
+
     const resBox=document.getElementById('pRes');
     resBox.innerText="АНАЛИЗ...";
+
     try{
         const res=await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
             headers:{'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019'}
         });
+
         const data=await res.json();
+
         if(data.matches && data.matches.length>0){
+
+            if(!spendLC(15)){
+                resBox.innerText="";
+                window.predictLoading = false;
+                return;
+            }
+
             const m=data.matches[0];
-            resBox.innerHTML=m.homeTeam.name+' vs '+m.awayTeam.name+'<br><span style="color:#ffe57e">Прогноз: ТБ 2.5</span>';
-        } else {resBox.innerText="Матчей нет";}
-    }catch(e){resBox.innerText="Ошибка API";}
+
+            resBox.innerHTML =
+                m.homeTeam.name+' vs '+m.awayTeam.name+
+                '<br><span style="color:#ffe57e">Прогноз: ТБ 2.5</span>';
+
+        } else {
+            resBox.innerText="Матчей нет";
+        }
+
+    }catch(e){
+        resBox.innerText="Ошибка API";
+    }
+
+    window.predictLoading = false;
 }
 
-function copyRef(){
-    const link=document.getElementById('refLink').innerText;
-    const el=document.createElement('textarea');
-    el.value=link;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    tg.showAlert("Скопировано!");
-}
-
-// БИТВА ЛУДИКОВ
-function generateBattle(){
-    const box=document.getElementById('battleBox');
-    box.innerHTML="";
-    const options=['Победа К1','Ничья','Победа К2'];
-    options.forEach(o=>{
-        const b=document.createElement('button');
-        b.className='action-btn';
-        b.innerText=o;
-        b.onclick=()=>tg.showAlert('Вы выбрали: '+o);
-        box.appendChild(b);
-    });
-}
-generateBattle();
-    // ===== DAILY SYSTEM START =====
+// ===== DAILY SYSTEM =====
 
 function initDaily(){
     let streak = localStorage.getItem("streak") || 0;
-    let balance = localStorage.getItem("balance") || 100;
-
-    const streakEl = document.getElementById("dailyStreak");
-    const balanceEl = document.getElementById("dailyBalance");
-
-    if(streakEl) streakEl.innerText = streak;
-    if(balanceEl) balanceEl.innerText = balance;
+    document.getElementById("dailyStreak").innerText = streak;
+    document.getElementById("dailyBalance").innerText = getLC();
 }
 
 function claimDaily(){
     let now = Date.now();
-    let lastClaim = localStorage.getItem("lastClaim");
+    let lastClaim = parseInt(localStorage.getItem("lastClaim"));
     let streak = parseInt(localStorage.getItem("streak") || 0);
-    let balance = parseInt(localStorage.getItem("balance") || 100);
 
     if(lastClaim && now - lastClaim < 86400000){
         tg.showAlert("Вы уже забрали бонус сегодня!");
@@ -282,17 +335,15 @@ function claimDaily(){
         streak = 1;
     }
 
-    let reward = 10;
+    let reward = (streak % 7 === 0) ? 50 : 10;
 
     if(streak % 7 === 0){
-        reward = 50;
         tg.showAlert("🔥 7 дней подряд! Бонус x5!");
     }
 
-    balance += reward;
+    addLC(reward);
 
     localStorage.setItem("streak", streak);
-    localStorage.setItem("balance", balance);
     localStorage.setItem("lastClaim", now);
 
     initDaily();
@@ -301,8 +352,32 @@ function claimDaily(){
 
 initDaily();
 
-// ===== DAILY SYSTEM END =====
-</script>
+// ===== REF COPY =====
 
+function copyRef(){
+    const link=document.getElementById('refLink').innerText;
+    navigator.clipboard.writeText(link);
+    tg.showAlert("Скопировано!");
+}
+
+// ===== BATTLE =====
+
+function generateBattle(){
+    const box=document.getElementById('battleBox');
+    box.innerHTML="";
+    const options=['Победа К1','Ничья','Победа К2'];
+    options.forEach(o=>{
+        const b=document.createElement('button');
+        b.className='action-btn';
+        b.innerText=o;
+        b.onclick=()=>tg.showAlert('Вы выбрали: '+o);
+        box.appendChild(b);
+    });
+}
+
+generateBattle();
+
+</script>
+    
 </body>
 </html>
