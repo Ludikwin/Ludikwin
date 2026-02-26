@@ -41,7 +41,7 @@ html {
    
     body{
     margin:0;
-    padding:10px 15px 80px 15px;
+    padding:0px 15px 80px 15px;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -52,8 +52,22 @@ html {
     font-family:'Inter', sans-serif;
 }
 
-.app-title {font-family:'Orbitron', sans-serif; font-size:20px; background: var(--gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase; margin:30px 0 20px; padding-bottom:80px; text-shadow:0 0 15px rgba(188,19,254,0.6); animation: neonGlow 2s infinite alternate;}
+.app-title {
+    font-family:'Orbitron', sans-serif;
+    font-size:20px;
+    background: var(--gold);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-transform:uppercase;
+
+    margin:45px 0 5px 0;   /* ниже */
+    padding:0;             /* убрали лишний отступ */
+
+    text-shadow:0 0 15px rgba(188,19,254,0.6);
+    animation: neonGlow 2s infinite alternate;
+}
 .main-card {
+    margin-top:-15px;
     width:100%;
     max-width:420px;
     background:rgba(15,15,15,0.98);
@@ -393,13 +407,19 @@ button,
 </head>
 <body>
 
-<div class="header-block">
-    <div class="app-title">LUDIK AI</div>
-    
-    <div id="lcBar" class="balance">
-        🪙 <span id="lcBalance">100</span> LC
-    </div>
-</div>
+.app-title{
+    font-size:20px;
+    background: var(--gold);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-transform:uppercase;
+
+    margin-top:45px;   /* опускаем LUDIK AI ниже */
+    margin-bottom:5px; /* уменьшаем расстояние до баланса */
+    padding:0;         /* УБИРАЕМ лишний padding */
+
+    text-shadow:0 0 15px rgba(188,19,254,0.6);
+}
     
 <div class="main-card">
     <!-- ===== PREMIUM DAILY TOP ===== -->
