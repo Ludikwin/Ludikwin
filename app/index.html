@@ -86,12 +86,9 @@ html {
 /* ===== V2 PREMIUM CARDS ===== */
 
 .cards-container{
-    width:100%;
-    max-width:420px;
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-    margin-top:10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;  /* главный контроллер расстояния */
 }
 
 .big-card{
@@ -201,7 +198,6 @@ html {
 
     background: linear-gradient(90deg,#1a1a1a,#111);
     border:2px solid var(--neon);
-    margin-bottom:18px;
     padding:14px;
     border-radius:18px;
     cursor:pointer;
@@ -674,24 +670,14 @@ text-shadow:
     padding:12px;
     font-size:14px;
 }
-    .daily-premium{
-    margin-bottom:14px;
-}
+   
 
-.big-card{
-    margin-bottom:14px;
-}
     .card-jb{
     width:100%;
     margin:0;
 }
-    .daily-premium{
-    margin-bottom:10px;
-}
+    
 
-.big-card{
-    margin-bottom:10px;
-}
     .big-card{
     padding:16px 18px;
 }
@@ -720,7 +706,7 @@ body{
 }
 
 .main-card{
-    margin-top:0;
+    margin-top:4px;
 }
 
 /* уменьшаем отступ main */
@@ -743,10 +729,6 @@ body{
 }
 
 /* жб компактнее */
-.card-jb{
-    padding:14px;
-    margin-bottom:8px;
-}
 
 .card-jb h2{
     font-size:16px;
@@ -766,8 +748,7 @@ body{
 /* остальные карточки */
 .cards-container{
     gap:6px;
-    margin-top:6px;
-}
+    }
 
 .big-card{
     padding:14px;
@@ -802,8 +783,7 @@ body{
 .daily-progress{
     height:4px;
 }
-    .card-jb{
-    margin-top:4px;
+
 }
     .main-card{
     padding:14px 14px 14px 14px;
@@ -812,8 +792,12 @@ body{
     margin-bottom:10px !important;
 }
 
-.card-jb{
-    margin-top:0 !important;
+}
+    .card-jb{
+    width:100%;
+}
+    .daily-premium{
+    margin:0;
 }
 </style>
 </head>
@@ -823,82 +807,58 @@ body{
     <div id="lcBar" class="balance">
         🪙 <span id="lcBalance">100</span> LC
     </div>
-</div>
-    
+   
 <div class="main-card">
-    <!-- ===== PREMIUM DAILY TOP ===== -->
-<div class="daily-premium" onclick="openP('dailyP')">
-    <div class="daily-left">
-        <div class="daily-icon">🎁</div>
-    </div>
 
-    <div class="daily-center">
-        <div class="daily-title">DAILY LUDIK COIN</div>
-            
-</div>
-        <div class="daily-sub">
-            День подряд: <span id="dailyTopStreak">0</span>
-            <div class="daily-progress">
-    <div id="dailyProgressBar" class="daily-progress-fill"></div>
-</div>
+    <div class="cards-container">
+
+        <!-- DAILY -->
+        <div class="daily-premium" onclick="openP('dailyP')">
+            <div>
+                <div class="daily-title">DAILY LUDIK</div>
+                <div class="daily-sub">Забирай ежедневный бонус</div>
+            </div>
+            <div class="daily-reward" id="dailyRewardText">+10 LC</div>
         </div>
-    </div>
 
-    <div class="daily-right">
-       <div class="daily-reward" id="dailyRewardText">
-    +10 LC
-</div>
-    </div>
-</div>
-    
-<!-- ЖБ ДНЯ -->
-    <div class="big-card card-jb" onclick="openP('jbP')">
-    <div class="jb-badge">ЖБ ДНЯ</div>
-
-    <h2>ТОП ПРОГНОЗ СЕГОДНЯ</h2>
-    <p>Повышенная вероятность • Обновляется ежедневно</p>
-
-    <div class="jb-meta">
-        <span class="jb-status">🔥 Активно</span>
-        <span class="jb-price">20 LC</span>
-    </div>
-
-    <button class="action-btn">Смотреть прогноз</button>
-</div>
-
-<div class="cards-container">
-    
-    <!-- ПРОГНОЗЫ -->
-    <div class="big-card card-predict" onclick="openPredict()">
-        <div class="card-glow"></div>
-        <div class="card-content">
-            <div class="card-icon">⚽</div>
-            <div class="card-title">AI ПРОГНОЗЫ</div>
-            <div class="card-sub">Анализ матчей • -15 LC</div>
+        <!-- ЖБ ДНЯ -->
+        <div class="big-card card-jb" onclick="openP('jbP')">
+            <h2>ЖБ ДНЯ</h2>
+            <p>Самый уверенный прогноз сегодня</p>
+            <button class="action-btn">ОТКРЫТЬ</button>
         </div>
-    </div>
 
-    <!-- БИТВА -->
-    <div class="big-card card-battle" onclick="openP('battleP')">
-        <div class="card-glow"></div>
-        <div class="card-content">
-            <div class="card-icon">⚔️</div>
-            <div class="card-title">БИТВА ЛУДИКОВ</div>
-            <div class="card-sub">Соревнуйся • Получай награды</div>
+        <!-- AI ПРОГНОЗЫ -->
+        <div class="big-card card-predict" onclick="openPredict()">
+            <div class="card-content">
+                <div class="card-icon">🤖</div>
+                <div class="card-title">AI ПРОГНОЗЫ</div>
+                <div class="card-sub">Аналитика за 15 LC</div>
+            </div>
         </div>
-    </div>
 
-    <!-- VIP -->
-    <div class="big-card card-vip" onclick="openP('vipP')">
-        <div class="card-glow"></div>
-        <div class="card-content">
-            <div class="card-icon">💎</div>
-            <div class="card-title">VIP ДОСТУП</div>
-            <div class="card-sub">Эксклюзивные прогнозы</div>
+        <!-- БИТВА -->
+        <div class="big-card card-battle" onclick="openP('battleP')">
+            <div class="card-content">
+                <div class="card-icon">⚔️</div>
+                <div class="card-title">БИТВА ЛУДИКОВ</div>
+                <div class="card-sub">Сделай свой выбор</div>
+            </div>
         </div>
+
+        <!-- VIP -->
+        <div class="big-card card-vip" onclick="openP('vipP')">
+            <div class="card-content">
+                <div class="card-icon">💎</div>
+                <div class="card-title">VIP ДОСТУП</div>
+                <div class="card-sub">2 недели премиум прогнозов</div>
+            </div>
+        </div>
+
     </div>
 
 </div>
+
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
