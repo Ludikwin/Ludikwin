@@ -28,7 +28,7 @@ tg.setBackgroundColor("#050505");
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-:root {
+    :root {
     --bg: #050505;
     --neon: #bc13fe;
     --gold: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
@@ -345,6 +345,15 @@ body {
     padding:20px;
     z-index:1001;
     box-shadow:0 0 25px var(--neon);
+}
+    /* FIX: текст внутри всех кнопок */
+
+button,
+.action-btn,
+.nav-item,
+.nav-item span,
+.popup button{
+    color:#fff !important;
 }
 </style>
 </head>
