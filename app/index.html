@@ -249,20 +249,26 @@ body {
 }
 /* ===== FORCE TEXT COLOR FIX ===== */
 
-.menu-item,
-.menu-item *,
-.popup,
-.popup *,
-.league-btn,
-.league-btn *,
-.close-btn,
-.close-btn * {
-    color: #ffe57e !important;
+.action-btn{
+    background:linear-gradient(90deg,#bc13fe,#8a2be2);
+    border:none;
+    padding:12px;
+    border-radius:25px;
+    font-weight:700;
+    font-size:14px;
+    color:#fff;
+    cursor:pointer;
+    box-shadow:0 0 15px rgba(188,19,254,0.5);
+    transition:0.3s;
+}
+
+.action-btn:active{
+    transform:scale(0.96);
 }
     /* ===== BOTTOM NAVIGATION ===== */
 
 .bottom-nav{
-    position:fixed;      /* закрепляем внизу */
+    position:fixed;
     bottom:0;
     left:0;
     width:100%;
@@ -270,17 +276,44 @@ body {
     border-top:1px solid #222;
     display:flex;
     justify-content:space-around;
-    padding:12px 0;
-    z-index:999;         /* поверх всего */
+    padding:14px 0 18px;
+    z-index:999;
 }
 
 .nav-item{
     display:flex;
     flex-direction:column;
     align-items:center;
-    font-size:12px;
-    color:#ffe57e;
     cursor:pointer;
+    gap:6px;
+    flex:1;
+    transition:0.3s;
+}
+
+.nav-item span{
+    font-size:12px;
+    font-weight:600;
+    color:#777;
+    transition:0.3s;
+}
+
+.nav-item .icon{
+    font-size:28px;
+    transition:0.3s;
+}
+
+/* АКТИВНОЕ СОСТОЯНИЕ */
+.nav-item.active .icon{
+    transform:scale(1.2);
+    filter:drop-shadow(0 0 8px #bc13fe);
+}
+
+.nav-item.active span{
+    color:#ffe57e;
+}
+
+.nav-item.active{
+    text-shadow:0 0 10px rgba(188,19,254,0.6);
 }
 
 /* ===== POPUP SYSTEM FIX ===== */
@@ -505,7 +538,20 @@ body {
 </div>
 
 <script>
+    
+const navItems = document.querySelectorAll(".nav-item");
 
+navItems.forEach(item => {
+    item.addEventListener("click", function(){
+
+        // Убираем active у всех
+        navItems.forEach(i => i.classList.remove("active"));
+
+        // Добавляем active текущему
+        this.classList.add("active");
+
+    });
+});
 
 tg.expand();
 
@@ -746,20 +792,23 @@ initDaily();
     
 </script>
    <div class="bottom-nav">
-    <div class="nav-item" onclick="closeAll()">
-        🏠
+
+    <div class="nav-item active" onclick="goHome()">
+        <div class="icon">🏠</div>
         <span>Главная</span>
     </div>
 
     <div class="nav-item" onclick="openP('refP')">
-        🔗
+        <div class="icon">🔗</div>
         <span>Рефералы</span>
     </div>
 
     <div class="nav-item" onclick="openP('profileP')">
-        👤
+        <div class="icon">👤</div>
         <span>Профиль</span>
     </div>
+
+</div>
 </div>
 </body>
 </html>
