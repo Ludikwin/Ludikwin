@@ -253,17 +253,6 @@ body {
 }
 /* ===== FORCE TEXT COLOR FIX ===== */
 
-.action-btn{
-    background:linear-gradient(90deg,#bc13fe,#8a2be2);
-    border:none;
-    padding:12px;
-    border-radius:25px;
-    font-weight:700;
-    font-size:14px;
-    color:#fff;
-    cursor:pointer;
-    box-shadow:0 0 15px rgba(188,19,254,0.5);
-    transition:0.3s;
 }
 
 .action-btn:active{
@@ -384,6 +373,12 @@ button,
     transform:scale(0.96);
     box-shadow:
         0 2px 8px rgba(212,175,55,0.4);
+}
+    .action-btn,
+.action-btn:focus,
+.action-btn:active{
+    color:#000 !important;
+    outline:none !important;
 }
 </style>
 </head>
