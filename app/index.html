@@ -243,18 +243,21 @@ html {
 }
 
 .balance {
-    margin-top: 18px;
+    margin-top: 20px;  /* опускаем планету */
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
 
-    font-weight: 900;
-    font-size: 20px;
+    font-weight:900;
+    font-size:20px;
 
-    color: #ffe57e;
-    text-shadow: 0 0 10px #bc13fe;
+    color:#ffe57e;
+
+    text-shadow:
+        0 0 8px #bc13fe,
+        0 0 14px #bc13fe;
 }
 /* ===== FORCE TEXT COLOR FIX ===== */
 
@@ -405,10 +408,14 @@ button,
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 
-    margin-top:35px;
-    margin-bottom:5px;
+    margin-top:55px;   /* ← опустили ниже */
+    margin-bottom:8px;
 
-    filter: drop-shadow(0 0 8px #bc13fe);
+    /* МОЩНОЕ СВЕЧЕНИЕ ТЕКСТА */
+    filter:
+        drop-shadow(0 0 6px #bc13fe)
+        drop-shadow(0 0 12px #bc13fe)
+        drop-shadow(0 0 18px #bc13fe);
 }
 </style>
 </head>
