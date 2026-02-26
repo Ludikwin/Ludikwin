@@ -713,6 +713,75 @@ text-shadow:
     padding:12px;
     font-size:14px;
 }
+    /* ===== SCREEN FIT FIX ===== */
+
+body{
+    padding:0 14px 75px 14px;
+}
+
+/* уменьшаем отступ main */
+.main-card{
+    padding:14px;
+}
+
+/* daily компактнее */
+.daily-premium{
+    padding:12px 14px;
+    margin-bottom:8px;
+}
+
+.daily-title{
+    font-size:13px;
+}
+
+.daily-sub{
+    font-size:12px;
+}
+
+/* жб компактнее */
+.card-jb{
+    padding:14px;
+    margin-bottom:8px;
+}
+
+.card-jb h2{
+    font-size:16px;
+    margin-bottom:4px;
+}
+
+.card-jb p{
+    font-size:12px;
+    margin-bottom:6px;
+}
+
+.card-jb .action-btn{
+    padding:10px;
+    font-size:13px;
+}
+
+/* остальные карточки */
+.cards-container{
+    gap:10px;
+    margin-top:6px;
+}
+
+.big-card{
+    padding:14px;
+}
+
+/* уменьшаем иконки */
+.card-icon{
+    font-size:24px;
+    margin-bottom:6px;
+}
+
+.card-title{
+    font-size:16px;
+}
+
+.card-sub{
+    font-size:12px;
+}
 </style>
 </head>
 <body>
@@ -748,8 +817,7 @@ text-shadow:
 </div>
     </div>
 </div>
-    </div> <!-- daily-premium закрыт -->
-
+    
 <!-- ЖБ ДНЯ -->
 <div class="big-card card-jb" onclick="openP('jbP')">
     <div class="jb-badge">ЖБ ДНЯ</div>
@@ -766,8 +834,7 @@ text-shadow:
 </div>
 
 <div class="cards-container">
-    <div class="cards-container">
-
+    
     <!-- ПРОГНОЗЫ -->
     <div class="big-card card-predict" onclick="openPredict()">
         <div class="card-glow"></div>
