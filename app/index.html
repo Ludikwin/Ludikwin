@@ -87,19 +87,31 @@ radial-gradient(circle at 100% 0%, rgba(255,215,0,0.15), transparent 40%),
 
 .big-card{
     position:relative;
-    background: linear-gradient(145deg,#0f0f0f,#1a1a1a);
-    border:1px solid rgba(188,19,254,0.4);
+
+    background:
+        linear-gradient(145deg,#0e0e0e,#151515);
+
+    border:1px solid rgba(212,175,55,0.25);
+
     border-radius:28px;
     padding:28px;
+
     cursor:pointer;
     overflow:hidden;
+
     transition: all 0.3s ease;
-    box-shadow: 0 0 20px rgba(188,19,254,0.15);
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,0.8),
+        0 0 20px rgba(212,175,55,0.08);
 }
 
 .big-card:hover{
-    transform:translateY(-4px);
-    box-shadow: 0 0 30px rgba(188,19,254,0.35);
+    transform:translateY(-6px);
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,0.9),
+        0 0 30px rgba(212,175,55,0.25);
 }
 
 .big-card:active{
@@ -114,7 +126,7 @@ radial-gradient(circle at 100% 0%, rgba(255,215,0,0.15), transparent 40%),
     height:200%;
     background: radial-gradient(circle, rgba(255,215,0,0.08) 0%, transparent 60%);
     animation: pulse 4s infinite;
-}
+}*/
 
 @keyframes pulse{
     0%{opacity:0.3;}
