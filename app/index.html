@@ -408,15 +408,33 @@ button,
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 
-    margin-top:55px;   /* ← опустили ниже */
+    margin-top:65px;   /* ← опустили ниже */
     margin-bottom:8px;
-
+    animation: neonPulse 2.5s ease-in-out infinite;
     /* МОЩНОЕ СВЕЧЕНИЕ ТЕКСТА */
     filter:
         drop-shadow(0 0 6px #bc13fe)
         drop-shadow(0 0 12px #bc13fe)
         drop-shadow(0 0 18px #bc13fe);
 }
+    @keyframes neonPulse {
+    0% {
+        filter:
+            drop-shadow(0 0 6px #bc13fe)
+            drop-shadow(0 0 12px #bc13fe);
+    }
+    50% {
+        filter:
+            drop-shadow(0 0 10px #bc13fe)
+            drop-shadow(0 0 20px #bc13fe)
+            drop-shadow(0 0 30px #bc13fe);
+    }
+    100% {
+        filter:
+            drop-shadow(0 0 6px #bc13fe)
+            drop-shadow(0 0 12px #bc13fe);
+    }
+        
 </style>
 </head>
 <body>
