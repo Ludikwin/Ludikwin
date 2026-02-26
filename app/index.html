@@ -72,7 +72,6 @@ html {
     background: linear-gradient(145deg,#0f0f0f,#141414);
 
     border:2px solid rgba(212,175,55,0.6);
-box-shadow:0 0 15px rgba(212,175,55,0.2);
 
     border-radius:30px;
     padding:20px;
@@ -97,53 +96,44 @@ box-shadow:0 0 15px rgba(212,175,55,0.2);
 
 .big-card{
     position:relative;
-    opacity:0;
-    transform:translateY(40px) scale(0.98);
-    filter:blur(8px);
+    background:linear-gradient(145deg,#111,#0c0c0c);
+    border-radius:22px;
+    padding:22px;
+    border:1px solid rgba(255,255,255,0.05);
+    cursor:pointer;
+    transition: all 0.35s ease;
 
-    transition: all 0.4s ease;
+    opacity:0;
+    transform:
+        translateY(40px)
+        scale(0.98)
+        rotateX(var(--tiltX,0deg))
+        rotateY(var(--tiltY,0deg));
+    filter:blur(8px);
 
     animation:cardReveal 0.8s cubic-bezier(.17,.67,.32,1) forwards;
 }
 
-.big-card:nth-of-type(1){ animation-delay:0.1s; }
-.big-card:nth-of-type(2){ animation-delay:0.2s; }
-.big-card:nth-of-type(3){ animation-delay:0.3s; }
-
 .big-card:hover{
-    transform:translateY(-6px) scale(1.02);
-
     box-shadow:
-        0 0 12px rgba(188,19,254,0.4),
-        0 0 25px rgba(188,19,254,0.2),
-        0 15px 40px rgba(0,0,0,0.8);
+        0 0 25px rgba(188,19,254,0.4),
+        0 0 60px rgba(188,19,254,0.2),
+        0 20px 60px rgba(0,0,0,0.9);
 }
 
-@keyframes cardReveal{
-    to{
-        opacity:1;
-        transform:translateY(0) scale(1);
-        filter:blur(0);
-    }
-}
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,0.9),
-        0 0 30px rgba(212,175,55,0.25);
-}
-
-.big-card:active{
-    transform:scale(0.97);
+    opacity:0;
+    transform:translateY(40px) scale(0.98);
+    filter:blur(8px);
+    animation:cardReveal 0.8s cubic-bezier(.17,.67,.32,1) forwards;
 }
 
 .card-glow{
     position:absolute;
-    top:-50%;
-    left:-50%;
-    width:200%;
-    height:200%;
-    background: radial-gradient(circle, rgba(255,215,0,0.08) 0%, transparent 60%);
+    inset:0;
+    border-radius:inherit;
+    background: radial-gradient(circle at 50% 0%, rgba(255,215,0,0.15), transparent 70%);
     animation: pulse 4s infinite;
+    z-index:1;
 }
 
 @keyframes pulse{
@@ -152,10 +142,6 @@ box-shadow:0 0 15px rgba(212,175,55,0.2);
     100%{opacity:0.3;}
 }
 
-.card-content{
-    position:relative;
-    z-index:2;
-}
 
 .card-icon{
     font-size:32px;
@@ -177,12 +163,11 @@ box-shadow:0 0 15px rgba(212,175,55,0.2);
 
 /* VIP Accent */
 .card-vip{
-    border:1px solid rgba(212,175,55,0.5);
-    background: linear-gradient(145deg,#111,#0c0c0c);
+    border:1px solid rgba(212,175,55,0.6);
 
     box-shadow:
-        0 0 15px rgba(212,175,55,0.2),
-        inset 0 0 20px rgba(212,175,55,0.05);
+        0 0 20px rgba(212,175,55,0.2),
+        0 10px 40px rgba(0,0,0,0.8);
 }
 /* ===== PREMIUM DAILY ===== */
 
@@ -487,16 +472,17 @@ text-shadow:
       .card-vip::after{
     content:"";
     position:absolute;
-    inset:0;
+    inset:-1px;   /* ← ВАЖНО */
     border-radius:inherit;
-    padding:1px;
     background:linear-gradient(45deg,#ffe57e,#bc13fe,#ffe57e);
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-}  
+    z-index:0;
+    opacity:0.6;
+    filter:blur(4px);
+}
+    .card-content{
+    position:relative;
+    z-index:2;
+}
 </style>
 </head>
 <body>
@@ -958,9 +944,11 @@ initDaily();
         <div class="icon">👤</div>
         <span>Профиль</span>
     </div>
-
+</div> <!-- закрывает bottom-nav -->
+    
 <script>
 document.querySelectorAll('.big-card').forEach(card=>{
+
     card.addEventListener('mousemove', e=>{
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -972,15 +960,15 @@ document.querySelectorAll('.big-card').forEach(card=>{
         const rotateX = (y - centerY) / 20;
         const rotateY = (centerX - x) / 20;
 
-        card.style.transform =
-            `translateY(-6px) scale(1.02)
-             rotateX(${rotateX}deg)
-             rotateY(${rotateY}deg)`;
+        card.style.setProperty('--tiltX', rotateX + 'deg');
+        card.style.setProperty('--tiltY', rotateY + 'deg');
     });
 
     card.addEventListener('mouseleave', ()=>{
-        card.style.transform = '';
+        card.style.setProperty('--tiltX', '0deg');
+        card.style.setProperty('--tiltY', '0deg');
     });
+
 });
 </script>
 </body>
