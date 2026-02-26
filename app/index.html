@@ -164,14 +164,35 @@ html {
 /* VIP Accent */
 .card-vip{
     position:relative;
-    overflow:hidden; /* важно */
+    border-radius:22px;
+    padding:22px;
+    cursor:pointer;
+    overflow:hidden;
 
-    border:1px solid rgba(212,175,55,0.6);
+    background:
+        linear-gradient(145deg,#141414,#0c0c0c) padding-box,
+        linear-gradient(45deg,#ffe57e,#bc13fe,#ffe57e) border-box;
+
+    border:1px solid transparent;
 
     box-shadow:
-        0 0 25px rgba(212,175,55,0.25),
+        0 0 25px rgba(212,175,55,0.3),
         0 0 60px rgba(188,19,254,0.25),
         0 20px 60px rgba(0,0,0,0.9);
+
+    transition:all 0.35s ease;
+}
+    .card-vip::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    background: radial-gradient(
+        circle at 50% 0%,
+        rgba(255,215,0,0.15),
+        transparent 70%
+    );
+    pointer-events:none;
 }
 /* ===== PREMIUM DAILY ===== */
 
