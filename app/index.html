@@ -353,22 +353,37 @@ body {
     /* FIX: текст внутри всех кнопок */
 
 button,
-.action-btn,
-.nav-item,
-.nav-item span,
-.popup button{
-    color:#fff !important;
-}
-    button{
-    color:#fff;
-}
+.action-btn{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
 
-.popup{
-    color:#fff;
-}
+    padding:14px;
+    border:none;
+    border-radius:20px;
 
-.stat-row{
-    color:#fff;
+    font-weight:900;              /* жирнее */
+    font-size:15px;               /* чуть крупнее */
+    letter-spacing:0.5px;
+
+    color:#000;                   /* черный текст на золоте */
+
+    background:linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
+    
+    text-decoration:none;
+    cursor:pointer;
+
+    box-shadow:
+        0 4px 15px rgba(212,175,55,0.4),
+        0 0 10px rgba(255,215,0,0.3);
+
+    transition:0.2s ease;
+}
+    .action-btn:active{
+    transform:scale(0.96);
+    box-shadow:
+        0 2px 8px rgba(212,175,55,0.4);
 }
 </style>
 </head>
