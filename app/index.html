@@ -378,11 +378,31 @@ body {
 <!-- ПРОФИЛЬ -->
 <div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
-    <div class="stat-row"><span>ID:</span><span id="uID" class="gold-t">---</span></div>
+
     <div class="stat-row">
-    <span>Баланс:</span>
-    <span id="profileBalance" class="gold-t">0 LC</span>
-</div>
+        <span>ID:</span>
+        <span id="uID" class="gold-t">---</span>
+    </div>
+
+    <div class="stat-row">
+        <span>Баланс:</span>
+        <span id="profileBalance" class="gold-t">0 LC</span>
+    </div>
+
+    <div style="margin-top:20px; display:flex; flex-direction:column; gap:12px;">
+
+        <button class="action-btn" onclick="openP('statsP')">AI СТАТИСТИКА</button>
+
+        <button class="action-btn" onclick="openP('historyP')">ИСТОРИЯ ПРОГНОЗОВ</button>
+
+        <button class="action-btn" onclick="openP('bonusP')">БОНУСЫ</button>
+
+        <button class="action-btn" onclick="openP('chatP')">ЧАТ</button>
+
+        <button class="action-btn" onclick="openP('jbP')">ЖБ ДНЯ</button>
+
+    </div>
+
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
