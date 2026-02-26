@@ -163,11 +163,15 @@ html {
 
 /* VIP Accent */
 .card-vip{
+    position:relative;
+    overflow:hidden; /* важно */
+
     border:1px solid rgba(212,175,55,0.6);
 
     box-shadow:
-        0 0 20px rgba(212,175,55,0.2),
-        0 10px 40px rgba(0,0,0,0.8);
+        0 0 25px rgba(212,175,55,0.25),
+        0 0 60px rgba(188,19,254,0.25),
+        0 20px 60px rgba(0,0,0,0.9);
 }
 /* ===== PREMIUM DAILY ===== */
 
@@ -469,16 +473,7 @@ text-shadow:
         filter:blur(0);
     }
 }
-      .card-vip::after{
-    content:"";
-    position:absolute;
-    inset:-1px;   /* ← ВАЖНО */
-    border-radius:inherit;
-    background:linear-gradient(45deg,#ffe57e,#bc13fe,#ffe57e);
-    z-index:0;
-    opacity:0.6;
-    filter:blur(4px);
-}
+      
     .card-content{
     position:relative;
     z-index:2;
@@ -526,26 +521,27 @@ text-shadow:
     .card-vip::before{
     content:"";
     position:absolute;
-    inset:0;
-    border-radius:inherit;
+    top:0;
+    left:-150%;
+    width:60%;
+    height:100%;
+
     background:linear-gradient(
         120deg,
-        transparent 30%,
-        rgba(255,255,255,0.15) 50%,
-        transparent 70%
+        transparent,
+        rgba(255,255,255,0.12),
+        transparent
     );
-    transform:translateX(-100%);
-    animation:shine 3.5s infinite;
+
+    transform:skewX(-20deg);
+    animation:shine 5s infinite;
     pointer-events:none;
 }
 
 @keyframes shine{
-    0%{
-        transform:translateX(-100%);
-    }
-    100%{
-        transform:translateX(100%);
-    }
+    0%{ left:-150%; }
+    100%{ left:150%; }
+}
 }
 </style>
 </head>
