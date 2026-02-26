@@ -112,10 +112,11 @@ box-shadow:0 0 15px rgba(212,175,55,0.2);
 
 .big-card:hover{
     transform:translateY(-6px) scale(1.02);
+
     box-shadow:
-        0 0 20px var(--neon),
-        0 0 40px var(--neon),
-        0 10px 40px rgba(0,0,0,0.6);
+        0 0 12px rgba(188,19,254,0.4),
+        0 0 25px rgba(188,19,254,0.2),
+        0 15px 40px rgba(0,0,0,0.8);
 }
 
 @keyframes cardReveal{
@@ -176,8 +177,12 @@ box-shadow:0 0 15px rgba(212,175,55,0.2);
 
 /* VIP Accent */
 .card-vip{
-    border:1px solid rgba(212,175,55,0.6);
-    box-shadow:0 0 25px rgba(212,175,55,0.25);
+    border:1px solid rgba(212,175,55,0.5);
+    background: linear-gradient(145deg,#111,#0c0c0c);
+
+    box-shadow:
+        0 0 15px rgba(212,175,55,0.2),
+        inset 0 0 20px rgba(212,175,55,0.05);
 }
 /* ===== PREMIUM DAILY ===== */
 
@@ -479,7 +484,19 @@ text-shadow:
         filter:blur(0);
     }
 }
-        
+      .card-vip::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    padding:1px;
+    background:linear-gradient(45deg,#ffe57e,#bc13fe,#ffe57e);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}  
 </style>
 </head>
 <body>
