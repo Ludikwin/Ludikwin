@@ -453,23 +453,22 @@ text-shadow:
 
 /* ⬇ ВСТАВЛЯЕШЬ ЗДЕСЬ ⬇ */
 
-.card{
+.big-card{
     opacity:0;
-    transform:translateY(20px);
+    transform:translateY(25px);
     animation:cardFade 0.6s ease forwards;
 }
 
-.card:nth-of-type(1){ animation-delay:0.1s; }
-.card:nth-of-type(2){ animation-delay:0.2s; }
-.card:nth-of-type(3){ animation-delay:0.3s; }
-.card:nth-of-type(4){ animation-delay:0.4s; }
+.big-card:nth-of-type(1){ animation-delay:0.1s; }
+.big-card:nth-of-type(2){ animation-delay:0.2s; }
+.big-card:nth-of-type(3){ animation-delay:0.3s; }
 
 @keyframes cardFade{
     to{
         opacity:1;
         transform:translateY(0);
     }
-}       
+}
         
 </style>
 </head>
