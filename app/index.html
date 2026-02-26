@@ -415,7 +415,7 @@ radial-gradient(circle at 100% 0%, rgba(255,215,0,0.15), transparent 40%),
     outline:none !important;
     color:#fff4b0 !important;
 }
-    action-btn,
+ .action-btn,
 .action-btn:focus,
 .action-btn:active{
     outline:none !important;
@@ -427,36 +427,21 @@ radial-gradient(circle at 100% 0%, rgba(255,215,0,0.15), transparent 40%),
     font-weight:900;
     text-transform:uppercase;
 
-    background: linear-gradient(180deg,#ffe57e 0%,#d4af37 40%,#b8860b 100%);
+    background: linear-gradient(180deg,#ffe57e 0%,#d4af37 50%,#b8860b 100%);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 
-    margin-top:65px;   /* ← опустили ниже */
-    margin-bottom:8px;
-    animation: neonPulse 2.5s ease-in-out infinite;
-    /* МОЩНОЕ СВЕЧЕНИЕ ТЕКСТА */
-    filter:
-        drop-shadow(0 0 6px #bc13fe)
-        drop-shadow(0 0 12px #bc13fe)
-        drop-shadow(0 0 18px #bc13fe);
+    margin-top:65px;
+    margin-bottom:10px;
+
+    letter-spacing:2px;
+
+    text-shadow:
+        0 2px 6px rgba(0,0,0,0.8),
+        0 0 10px rgba(212,175,55,0.3);
+
 }
-    @keyframes neonPulse {
-    0% {
-        filter:
-            drop-shadow(0 0 6px #bc13fe)
-            drop-shadow(0 0 12px #bc13fe);
-    }
-    50% {
-        filter:
-            drop-shadow(0 0 10px #bc13fe)
-            drop-shadow(0 0 20px #bc13fe)
-            drop-shadow(0 0 30px #bc13fe);
-    }
-    100% {
-        filter:
-            drop-shadow(0 0 6px #bc13fe)
-            drop-shadow(0 0 12px #bc13fe);
-    }
+        
         
 </style>
 </head>
