@@ -834,42 +834,53 @@ body{
     </div>
    
 <div class="main-card">
-
     <div class="cards-container">
 
-        <!-- ПРОГНОЗ -->
-        <div class="big-card card-predict" onclick="openP('predictP')">
+        <!-- DAILY LUDIK -->
+        <div class="big-card card-daily">
             <div class="card-content">
-                <div class="card-icon">📊</div>
-                <div class="card-title">Прогноз</div>
-                <div class="card-desc">Аналитика и сигналы</div>
+                <div>
+                    <div class="card-title">DAILY LUDIK</div>
+                    <div class="card-desc">Забирай ежедневный бонус</div>
+                </div>
+                <button class="daily-btn">ЗАБРАНО</button>
             </div>
         </div>
 
         <!-- ЖБ ДНЯ -->
         <div class="big-card card-jb" onclick="openP('jbP')">
-            <div class="card-content">
+            <div class="card-content center">
                 <div class="card-icon">🔥</div>
-                <div class="card-title">ЖБ дня</div>
-                <div class="card-desc">Самый уверенный сигнал</div>
+                <div class="card-title">ЖБ ДНЯ</div>
+                <div class="card-desc">Самый уверенный прогноз сегодня</div>
+                <button class="open-btn">ОТКРЫТЬ</button>
             </div>
         </div>
 
-        <!-- DAILY LUDIK -->
-        <div class="big-card card-daily" onclick="openP('dailyP')">
-            <div class="card-content">
-                <div class="card-icon">🎁</div>
-                <div class="card-title">Daily Ludik</div>
-                <div class="card-desc">Бонус каждый день</div>
+        <!-- AI ПРОГНОЗЫ -->
+        <div class="big-card card-ai" onclick="openP('predictP')">
+            <div class="card-content center">
+                <div class="card-icon">🤖</div>
+                <div class="card-title">AI ПРОГНОЗЫ</div>
+                <div class="card-desc">Аналитика за 15 LC</div>
             </div>
         </div>
 
-        <!-- VIP -->
+        <!-- БИТВА ЛУДИКОВ -->
+        <div class="big-card card-battle">
+            <div class="card-content center">
+                <div class="card-icon">⚔️</div>
+                <div class="card-title">БИТВА ЛУДИКОВ</div>
+                <div class="card-desc">Сделай свой выбор</div>
+            </div>
+        </div>
+
+        <!-- VIP ДОСТУП -->
         <div class="big-card card-vip" onclick="openP('vipP')">
-            <div class="card-content">
+            <div class="card-content center">
                 <div class="card-icon">💎</div>
-                <div class="card-title">VIP</div>
-                <div class="card-desc">Премиум сигналы</div>
+                <div class="card-title">VIP ДОСТУП</div>
+                <div class="card-desc">2 недели премиум прогнозов</div>
             </div>
         </div>
 
@@ -885,10 +896,8 @@ body{
             </div>
         </div>
 
-    </div> <!-- cards-container -->
-
-</div> <!-- main-card -->
-
+    </div>
+</div>
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
