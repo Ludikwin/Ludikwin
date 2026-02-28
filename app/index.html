@@ -799,6 +799,31 @@ body{
     .daily-premium{
     margin:0;
 }
+    .stats-mini{
+    margin-top:6px;
+    padding:12px 14px;
+    border-radius:18px;
+    background:linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.08);
+    font-size:13px;
+    opacity:0.9;
+}
+
+.stats-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.stats-row:not(:last-child){
+    margin-bottom:6px;
+}
+
+.stats-row strong{
+    color:#FFD84D;
+    font-weight:600;
+}
 </style>
 </head>
 <body>
@@ -853,10 +878,15 @@ body{
                 <div class="card-title">VIP ДОСТУП</div>
                 <div class="card-sub">2 недели премиум прогнозов</div>
             </div>
-        </div>
-
+        <div class="stats-mini">
+    <div class="stats-row">
+        <span>📈 Сегодня в плюсе</span>
+        <strong>+342 LC</strong>
     </div>
-
+    <div class="stats-row">
+        <span>🎯 Проходимость недели</span>
+        <strong>78%</strong>
+    </div>
 </div>
 
 
