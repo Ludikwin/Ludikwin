@@ -837,37 +837,30 @@ body{
 
     <div class="cards-container">
 
-        <!-- DAILY -->
-        <div class="daily-premium" onclick="openP('dailyP')">
-            <div>
-                <div class="daily-title">DAILY LUDIK</div>
-                <div class="daily-sub">Забирай ежедневный бонус</div>
+        <!-- ПРОГНОЗ -->
+        <div class="big-card card-predict" onclick="openP('predictP')">
+            <div class="card-content">
+                <div class="card-icon">📊</div>
+                <div class="card-title">Прогноз</div>
+                <div class="card-desc">Аналитика и сигналы</div>
             </div>
-            <div class="daily-reward" id="dailyRewardText">+10 LC</div>
         </div>
 
         <!-- ЖБ ДНЯ -->
         <div class="big-card card-jb" onclick="openP('jbP')">
-            <h2>ЖБ ДНЯ</h2>
-            <p>Самый уверенный прогноз сегодня</p>
-            <button class="action-btn">ОТКРЫТЬ</button>
-        </div>
-
-        <!-- AI ПРОГНОЗЫ -->
-        <div class="big-card card-predict" onclick="openPredict()">
             <div class="card-content">
-                <div class="card-icon">🤖</div>
-                <div class="card-title">AI ПРОГНОЗЫ</div>
-                <div class="card-sub">Аналитика за 15 LC</div>
+                <div class="card-icon">🔥</div>
+                <div class="card-title">ЖБ дня</div>
+                <div class="card-desc">Самый уверенный сигнал</div>
             </div>
         </div>
 
-        <!-- БИТВА -->
-        <div class="big-card card-battle" onclick="openP('battleP')">
+        <!-- DAILY LUDIK -->
+        <div class="big-card card-daily" onclick="openP('dailyP')">
             <div class="card-content">
-                <div class="card-icon">⚔️</div>
-                <div class="card-title">БИТВА ЛУДИКОВ</div>
-                <div class="card-sub">Сделай свой выбор</div>
+                <div class="card-icon">🎁</div>
+                <div class="card-title">Daily Ludik</div>
+                <div class="card-desc">Бонус каждый день</div>
             </div>
         </div>
 
@@ -875,19 +868,26 @@ body{
         <div class="big-card card-vip" onclick="openP('vipP')">
             <div class="card-content">
                 <div class="card-icon">💎</div>
-                <div class="card-title">VIP ДОСТУП</div>
-                <div class="card-sub">2 недели премиум прогнозов</div>
+                <div class="card-title">VIP</div>
+                <div class="card-desc">Премиум сигналы</div>
             </div>
+        </div>
+
+        <!-- МИНИ СТАТИСТИКА -->
         <div class="stats-mini">
-    <div class="stats-row">
-        <span>📈 Сегодня в плюсе</span>
-        <strong>+342 LC</strong>
-    </div>
-    <div class="stats-row">
-        <span>🎯 Проходимость недели</span>
-        <strong>78%</strong>
-    </div>
-</div>
+            <div class="stats-row">
+                <span>📈 Сегодня в плюсе</span>
+                <strong>+342 LC</strong>
+            </div>
+            <div class="stats-row">
+                <span>🎯 Проходимость недели</span>
+                <strong>78%</strong>
+            </div>
+        </div>
+
+    </div> <!-- cards-container -->
+
+</div> <!-- main-card -->
 
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
