@@ -936,7 +936,21 @@ body{
 <div id="battleP" class="popup">
     <h2 style="color:#bc13fe">Битва Лудиков</h2>
     <p style="font-size:12px; margin:15px 0;">Сегодняшний матч: Победа К1 / Ничья / Победа К2</p>
-    <div id="battleBox"></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <div id="battleBox">
+
+    <button onclick="battle('safe')">
+        🟢 Осторожный (10 LC)
+    </button>
+
+    <button onclick="battle('mid')">
+        🟡 Средний (25 LC)
+    </button>
+
+    <button onclick="battle('high')">
+        🔴 Агрессивный (50 LC)
+    </button>
+
+</div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <!-- ЖБ ДНЯ -->
@@ -1326,6 +1340,71 @@ function canUseAI(){
     }
 
     return true;
+}
+    // ===== BATTLE SYSTEM =====
+
+function getWinChance(mode){
+    if(mode === "safe") return 0.65;
+    if(mode === "mid") return 0.50;
+    if(mode === "high") return 0.35;
+}
+
+function getBattleReward(mode){
+    if(mode === "safe") return 14;
+    if(mode === "mid") return 50;
+    if(mode === "high") return 110;
+}
+
+function getBattleCost(mode){
+    if(mode === "safe") return 10;
+    if(mode === "mid") return 25;
+    if(mode === "high") return 50;
+}
+
+function getStreak(){
+    return parseInt(localStorage.getItem("battle_streak") || 0);
+}
+
+function setStreak(val){
+    localStorage.setItem("battle_streak", val);
+}
+
+function battle(mode){
+
+    let cost = getBattleCost(mode);
+    let reward = getBattleReward(mode);
+    let chance = getWinChance(mode);
+
+    if(!spendLC(cost)) return;
+
+    const box = document.getElementById("battleBox");
+    box.innerHTML = "⚔️ Битва началась...";
+
+    setTimeout(()=>{
+
+        let win = Math.random() < chance;
+
+        if(win){
+            let newStreak = getStreak() + 1;
+            setStreak(newStreak);
+
+            addLC(reward);
+
+            box.innerHTML =
+                "🏆 ПОБЕДА! +" + reward + " LC" +
+                "<br>🔥 Серия: " + newStreak;
+
+        } else {
+
+            setStreak(0);
+
+            box.innerHTML =
+                "💀 Поражение -"+ cost +" LC" +
+                "<br>Серия сброшена";
+
+        }
+
+    },1500);
 }
 </script>
 </body>
