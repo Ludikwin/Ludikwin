@@ -1382,11 +1382,23 @@ function battle(mode){
 
     setTimeout(()=>{
 
-        let win = Math.random() < chance;
+        let loseStreak = parseInt(localStorage.getItem("lose_streak") || 0);
+
+        let boostedChance = chance;
+
+        // анти-луз система
+        if(loseStreak >= 3){
+            boostedChance += 0.20;
+        }
+
+        let win = Math.random() < boostedChance;
 
         if(win){
+
             let newStreak = getStreak() + 1;
             setStreak(newStreak);
+
+            localStorage.setItem("lose_streak", 0);
 
             addLC(reward);
 
@@ -1398,8 +1410,11 @@ function battle(mode){
 
             setStreak(0);
 
+            loseStreak++;
+            localStorage.setItem("lose_streak", loseStreak);
+
             box.innerHTML =
-                "💀 Поражение -"+ cost +" LC" +
+                "💀 Поражение -" + cost + " LC" +
                 "<br>Серия сброшена";
 
         }
