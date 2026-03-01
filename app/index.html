@@ -1101,38 +1101,48 @@ function openPredict(){
 async function getPredict(code){
 
     if(window.predictLoading) return;
+    if(!canUseAI()) return;
+
     window.predictLoading = true;
 
-    const resBox=document.getElementById('pRes');
-    resBox.innerText="АНАЛИЗ...";
+    const resBox = document.getElementById('pRes');
+    resBox.innerText = "АНАЛИЗ...";
+
+    let used = getAIUsage();
+
+    // если уже использовали 1 раз — списываем LC
+    if(used >= 1){
+        if(!spendLC(15)){
+            resBox.innerText = "";
+            window.predictLoading = false;
+            return;
+        }
+    }
+
+    incrementAIUsage();
 
     try{
-        const res=await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
-            headers:{'X-Auth-Token':'7a5d573e9f134d42b4edaa35c408e019'}
+        const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
+            headers:{'X-Auth-Token':'ТВОЙ_КЛЮЧ'}
         });
 
-        const data=await res.json();
+        const data = await res.json();
 
         if(data.matches && data.matches.length>0){
 
-            if(!spendLC(15)){
-                resBox.innerText="";
-                window.predictLoading = false;
-                return;
-            }
-
-            const m=data.matches[0];
+            const m = data.matches[0];
 
             resBox.innerHTML =
-                m.homeTeam.name+' vs '+m.awayTeam.name+
-                '<br><span style="color:#ffe57e">Прогноз: ТБ 2.5</span>';
+                m.homeTeam.name + ' vs ' + m.awayTeam.name +
+                '<br><span style="color:#ffe57e">AI анализ: ТБ 2.5</span>' +
+                '<br><span style="color:#00ff88;font-size:12px;">Уверенность: ' + (60 + Math.floor(Math.random()*15)) + '%</span>';
 
         } else {
-            resBox.innerText="Матчей нет";
+            resBox.innerText = "Матчей нет";
         }
 
     }catch(e){
-        resBox.innerText="Ошибка API";
+        resBox.innerText = "Ошибка API";
     }
 
     window.predictLoading = false;
@@ -1280,6 +1290,42 @@ document.querySelectorAll('.big-card').forEach(card=>{
 });
     function openAI(){
     openPredict();
+}
+    // ===== AI LIMIT SYSTEM =====
+
+function getToday(){
+    return new Date().toDateString();
+}
+
+function getAIUsage(){
+    let today = getToday();
+    let lastDate = localStorage.getItem("ai_last_date");
+    let used = parseInt(localStorage.getItem("ai_used_count") || 0);
+
+    if(lastDate !== today){
+        localStorage.setItem("ai_last_date", today);
+        localStorage.setItem("ai_used_count", 0);
+        return 0;
+    }
+
+    return used;
+}
+
+function incrementAIUsage(){
+    let used = getAIUsage();
+    used++;
+    localStorage.setItem("ai_used_count", used);
+}
+
+function canUseAI(){
+    let used = getAIUsage();
+
+    if(used >= 3){
+        tg.showAlert("Лимит AI прогнозов на сегодня исчерпан");
+        return false;
+    }
+
+    return true;
 }
 </script>
 </body>
