@@ -7,6 +7,37 @@
 <title>LUDIK AI</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
+        // ===== RP SYSTEM =====
+
+if (!localStorage.getItem("rp")) {
+    localStorage.setItem("rp", 0);
+}
+
+function getRP() {
+    return parseInt(localStorage.getItem("rp")) || 0;
+}
+
+function setRP(value) {
+    if (value < 0) value = 0;
+    localStorage.setItem("rp", value);
+}
+
+function addRP(amount) {
+    let newRP = getRP() + amount;
+    if (newRP < 0) newRP = 0;
+    setRP(newRP);
+    updateProfile();
+}
+        function getRank() {
+    let rp = getRP();
+
+    if (rp >= 1500) return "👑 Легенда";
+    if (rp >= 900) return "🧠 Аналитик";
+    if (rp >= 500) return "🔥 Машина";
+    if (rp >= 200) return "🎯 Охотник";
+
+    return "🐣 Новичок";
+}
 const tg = window.Telegram.WebApp;
 
 tg.ready();
@@ -1094,21 +1125,15 @@ body{
 </div>
 
 <!-- БИТВА ЛУДИКОВ -->
-<div id="battleP" class="popup">
-    <h2 style="color:#bc13fe">Битва Лудиков</h2>
-        <div id="battleBox">
+<div id="battleBox">
 
-    <button onclick="battle('safe')">
-        🟢 Осторожный (10 LC)
-    </button>
+    <button onclick="battle('safe')">🟢 Осторожный (10 LC)</button>
+    <button onclick="battle('mid')">🟡 Средний (25 LC)</button>
+    <button onclick="battle('high')">🔴 Агрессивный (50 LC)</button>
 
-    <button onclick="battle('mid')">
-        🟡 Средний (25 LC)
-    </button>
+    <div id="battleResult" style="margin-top:15px; text-align:center;"></div>
 
-    <button onclick="battle('high')">
-        🔴 Агрессивный (50 LC)
-    </button>
+</div>
 
 </div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
@@ -1150,6 +1175,15 @@ body{
         <span>Баланс:</span>
         <span id="dailyBalance" class="gold-t">100</span>
     </div>
+    <div class="stat-row">
+    <span>RP:</span>
+    <span id="profileRP" class="gold-t">0</span>
+</div>
+
+<div class="stat-row">
+    <span>Ранг:</span>
+    <span id="profileRank" class="gold-t">Новичок</span>
+</div>
     <button class="action-btn" id="claimBtn" onclick="claimDaily()">ЗАБРАТЬ</button>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
@@ -1227,20 +1261,26 @@ setLC(getLC());
 
 
 
-    function openP(id){
-    closeAll();
+   function openP(id){
+
+    // скрываем все попапы
+    document.querySelectorAll(".popup").forEach(p => {
+        p.style.display = "none";
+    });
+
+    // показываем overlay
+    document.getElementById("overlay").style.display = "block";
+
+    // показываем нужный попап
+    const popup = document.getElementById(id);
+    if(popup){
+        popup.style.display = "block";
+    }
 
     document.body.style.overflow = "hidden";
 
-    document.getElementById('overlay').style.display = 'block';
-
-    const popup = document.getElementById(id);
-    if(popup){
-        popup.style.display = 'block';
-    }
-
     if(id === "profileP"){
-        document.getElementById("profileBalance").innerText = getLC() + " LC";
+        updateProfile();
     }
 
     tg.expand();
@@ -1418,6 +1458,27 @@ function claimDaily(){
 }
 
 initDaily();
+    // ===== ОБНОВЛЕНИЕ ПРОФИЛЯ =====
+
+function updateProfile() {
+
+    // ID пользователя
+    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
+        document.getElementById("uID").innerText =
+            Telegram.WebApp.initDataUnsafe.user.id;
+    }
+
+    // Баланс LC
+let balance = getLC();
+document.getElementById("profileBalance").innerText = balance + " LC";
+
+    // RP
+    let rp = parseInt(localStorage.getItem("rp")) || 0;
+    document.getElementById("profileRP").innerText = rp;
+
+    // Ранг
+    document.getElementById("profileRank").innerText = getRank();
+}
     
 </script>
    <div class="bottom-nav">
@@ -1537,7 +1598,7 @@ function battle(mode){
 
     if(!spendLC(cost)) return;
 
-    const box = document.getElementById("battleBox");
+    const box = document.getElementById("battleResult");
     box.innerHTML = "⚔️ Битва началась...";
 
     setTimeout(()=>{
@@ -1561,6 +1622,8 @@ function battle(mode){
             localStorage.setItem("lose_streak", 0);
 
             addLC(reward);
+            let rpReward = Math.floor(reward / 2);
+addRP(rpReward);
 
             box.innerHTML =
                 "🏆 ПОБЕДА! +" + reward + " LC" +
@@ -1584,6 +1647,8 @@ function battle(mode){
     function buyLC(amount){
     tg.showAlert("Покупка будет доступна после подключения Telegram Stars");
 }
+    document.getElementById("profileRP").innerText = getRP();
+document.getElementById("profileRank").innerText = getRank();
 </script>
 </body>
 </html>
