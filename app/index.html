@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>LUDIK AI</title>
@@ -799,6 +800,29 @@ body{
     .daily-premium{
     margin:0;
 }
+    /* ===== PROFILE STYLE UPGRADE ===== */
+
+.profile-id{
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #9aa0a6;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.profile-balance{
+    font-family: 'Orbitron', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffe57e;
+    text-shadow: 0 0 12px rgba(255,229,126,0.5);
+}
+
+.profile-lc{
+    font-size: 14px;
+    color: #00ffae;
+    margin-left: 6px;
+}
 </style>
 </head>
 <body>
@@ -890,14 +914,14 @@ body{
     <button onclick="buyLC(380)">300 ⭐ = 380 LC</button>
 </div>
     <div class="stat-row">
-        <span>ID:</span>
-        <span id="uID" class="gold-t">---</span>
-    </div>
+    <span class="profile-id-label">ID</span>
+    <span id="uID" class="profile-id-value">---</span>
+</div>
 
-    <div class="stat-row">
-        <span>Баланс:</span>
-        <span id="profileBalance" class="gold-t">0 LC</span>
-    </div>
+<div class="stat-row">
+    <span class="profile-balance-label">Баланс</span>
+    <span id="profileBalance" class="profile-balance-value">0 LC</span>
+</div>
 
     <div style="margin-top:20px; display:flex; flex-direction:column; gap:12px;">
 
