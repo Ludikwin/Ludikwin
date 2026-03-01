@@ -1125,17 +1125,34 @@ body{
 </div>
 
 <!-- БИТВА ЛУДИКОВ -->
-<div id="battleBox">
+<div id="battleP" class="popup">
 
-    <button onclick="battle('safe')">🟢 Осторожный (10 LC)</button>
-    <button onclick="battle('mid')">🟡 Средний (25 LC)</button>
-    <button onclick="battle('high')">🔴 Агрессивный (50 LC)</button>
+    <h2 style="color:#bc13fe">БИТВА ЛУДИКОВ</h2>
 
-    <div id="battleResult" style="margin-top:15px; text-align:center;"></div>
+    <div id="battleBox">
 
-</div>
+        <button onclick="battle('safe')">
+            🟢 Осторожный (10 LC)
+        </button>
 
-</div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+        <button onclick="battle('mid')">
+            🟡 Средний (25 LC)
+        </button>
+
+        <button onclick="battle('high')">
+            🔴 Агрессивный (50 LC)
+        </button>
+
+        <div id="battleResult"
+             style="margin-top:15px; text-align:center;">
+        </div>
+
+    </div>
+
+    <button class="close-btn" onclick="closeAll()">
+        ЗАКРЫТЬ
+    </button>
+
 </div>
 
 <!-- ЖБ ДНЯ -->
@@ -1647,8 +1664,7 @@ addRP(rpReward);
     function buyLC(amount){
     tg.showAlert("Покупка будет доступна после подключения Telegram Stars");
 }
-    document.getElementById("profileRP").innerText = getRP();
-document.getElementById("profileRank").innerText = getRank();
+   
 </script>
 </body>
 </html>
