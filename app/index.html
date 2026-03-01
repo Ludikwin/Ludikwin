@@ -882,7 +882,13 @@ body{
 <!-- ПРОФИЛЬ -->
 <div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
+<div class="shop-section">
+    <h3>💎 Магазин LC</h3>
 
+    <button onclick="buyLC(50)">50 ⭐ = 50 LC</button>
+    <button onclick="buyLC(170)">150 ⭐ = 170 LC</button>
+    <button onclick="buyLC(380)">300 ⭐ = 380 LC</button>
+</div>
     <div class="stat-row">
         <span>ID:</span>
         <span id="uID" class="gold-t">---</span>
@@ -1419,6 +1425,9 @@ function battle(mode){
         }
 
     },1500);
+}
+    function buyLC(amount){
+    tg.showAlert("Покупка будет доступна после подключения Telegram Stars");
 }
 </script>
 </body>
