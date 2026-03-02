@@ -630,7 +630,6 @@ text-shadow:
     z-index:0;
 }
 
-<button onclick="openSeason()">🏆 Сезон</button>
 /* БИТВА */
 .card-battle{
     background:linear-gradient(145deg,#140c14,#100a12);
@@ -2015,7 +2014,7 @@ document.getElementById("winSound").play();
 
     },4000);
 }
-    // ===== REF SYSTEM =====
+   // ===== REF SYSTEM =====
 
 function initRefSystem(){
 
@@ -2023,24 +2022,18 @@ function initRefSystem(){
     if(!user) return;
 
     const myId = user.id;
-
-    // сохраняем ID
     localStorage.setItem("my_id", myId);
 
-    // генерируем ссылку
     document.getElementById("refLink").innerText =
         "https://t.me/LudikWin_bot?start=" + myId;
 
-    // проверяем старт-параметр
     const startParam = tg.initDataUnsafe?.start_param;
-
     if(startParam){
         processReferral(startParam);
     }
 }
 
-
-    function processReferral(referrerId){
+function processReferral(referrerId){
 
     const myId = localStorage.getItem("my_id");
 
@@ -2056,15 +2049,11 @@ function initRefSystem(){
         list.push(myId);
         localStorage.setItem(key, JSON.stringify(list));
 
-        // начисляем 10 LC пригласившему
         let inviterBalance = getLCById(referrerId);
         setLCById(referrerId, inviterBalance + 10);
     }
 }
-    // ✅ НАЧИСЛЯЕМ ПРИГЛАСИВШЕМУ
-    let inviterBalance = getLCById(referrerId);
-    setLCById(referrerId, inviterBalance + 10);
-}
+    
 
 function loadReferrals(){
 
@@ -2104,18 +2093,6 @@ function copyRef(){
     })
     .catch(() => {
         tg.showAlert("Ошибка копирования");
-    });
-}
-
-        // fallback для Telegram WebApp
-        const input = document.createElement("input");
-        input.value = text;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand("copy");
-        document.body.removeChild(input);
-
-        tg.showAlert("Ссылка скопирована!");
     });
 }
 </script>
@@ -2398,6 +2375,10 @@ function claimBonus(key, url){
 
     window.open(url, "_blank");
 }
+    function goHome(){
+    closeAll();
+}
+    
 </script>
 </body>
 </html>
