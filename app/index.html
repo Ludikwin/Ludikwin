@@ -39,7 +39,7 @@ function addRP(amount) {
     return "🐣 Новичок";
 }
 const tg = window.Telegram.WebApp;
-
+        
 tg.ready();
 
 // Если доступен новый fullscreen API
@@ -1374,9 +1374,19 @@ filter: drop-shadow(0 0 8px #ff007a);
 
 <!-- РЕФЕРАЛ -->
 <div id="refP" class="popup">
-    <h2>РЕФЕРАЛЫ</h2>
-    <p id="refLink" style="font-size:10px; color:#888; background:#111; padding:10px; border-radius:10px; word-break:break-all;"></p>
-    <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ</button>
+    <h2>👥 РЕФЕРАЛЫ</h2>
+
+    <p id="refLink"
+       style="font-size:10px;color:#888;background:#111;padding:10px;border-radius:10px;word-break:break-all;">
+    </p>
+
+    <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ ССЫЛКУ</button>
+
+    <div style="margin-top:20px;">
+        <p id="refCount" style="font-size:13px;color:#ffe57e;">Приглашено: 0</p>
+        <div id="refList" style="margin-top:10px;"></div>
+    </div>
+
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
@@ -1492,22 +1502,35 @@ if(user){
     document.getElementById('refLink').innerText =
         'https://t.me/LudikWin_bot?start='+user.id;
 }
-
+initRefSystem();
 // ===== LUDIK COIN CORE =====
 
 function getLC(){
-    let stored = localStorage.getItem("lc_balance");
+
+    const user = tg.initDataUnsafe?.user;
+    if(!user) return 100;
+
+    let key = "lc_user_" + user.id;
+
+    let stored = localStorage.getItem(key);
 
     if(stored === null){
-        localStorage.setItem("lc_balance", 100);
+        localStorage.setItem(key, 100);
         return 100;
     }
 
     return parseInt(stored);
 }
 
+   
 function setLC(amount){
-    localStorage.setItem("lc_balance", amount);
+
+    const user = tg.initDataUnsafe?.user;
+    if(!user) return;
+
+    let key = "lc_user_" + user.id;
+
+    localStorage.setItem(key, amount);
 
     document.getElementById("lcBalance").innerText = amount;
 
@@ -1516,6 +1539,13 @@ function setLC(amount){
 
     const profileBal = document.getElementById("profileBalance");
     if(profileBal) profileBal.innerText = amount + " LC";
+}
+    function getLCById(id){
+    return parseInt(localStorage.getItem("lc_user_" + id) || 100);
+}
+
+function setLCById(id, amount){
+    localStorage.setItem("lc_user_" + id, amount);
 }
 
 function addLC(amount){
@@ -1542,6 +1572,7 @@ setLC(getLC());
 
 
    function openP(id){
+       
 
     // скрываем все попапы
     document.querySelectorAll(".popup").forEach(p => {
@@ -1558,7 +1589,9 @@ setLC(getLC());
     }
 
     document.body.style.overflow = "hidden";
-
+if(id === "refP"){
+    loadReferrals();
+}
     if(id === "profileP"){
         updateProfile();
     }
@@ -1981,6 +2014,109 @@ document.getElementById("winSound").play();
 }, 2000);
 
     },4000);
+}
+    // ===== REF SYSTEM =====
+
+function initRefSystem(){
+
+    const user = tg.initDataUnsafe?.user;
+    if(!user) return;
+
+    const myId = user.id;
+
+    // сохраняем ID
+    localStorage.setItem("my_id", myId);
+
+    // генерируем ссылку
+    document.getElementById("refLink").innerText =
+        "https://t.me/LudikWin_bot?start=" + myId;
+
+    // проверяем старт-параметр
+    const startParam = tg.initDataUnsafe?.start_param;
+
+    if(startParam){
+        processReferral(startParam);
+    }
+}
+
+
+    function processReferral(referrerId){
+
+    const myId = localStorage.getItem("my_id");
+
+    if(referrerId == myId) return;
+    if(localStorage.getItem("referred_by")) return;
+
+    localStorage.setItem("referred_by", referrerId);
+
+    let key = "ref_list_" + referrerId;
+    let list = JSON.parse(localStorage.getItem(key) || "[]");
+
+    if(!list.includes(myId)){
+        list.push(myId);
+        localStorage.setItem(key, JSON.stringify(list));
+
+        // начисляем 10 LC пригласившему
+        let inviterBalance = getLCById(referrerId);
+        setLCById(referrerId, inviterBalance + 10);
+    }
+}
+    // ✅ НАЧИСЛЯЕМ ПРИГЛАСИВШЕМУ
+    let inviterBalance = getLCById(referrerId);
+    setLCById(referrerId, inviterBalance + 10);
+}
+
+function loadReferrals(){
+
+    const myId = localStorage.getItem("my_id");
+    let key = "ref_list_" + myId;
+
+    let list = JSON.parse(localStorage.getItem(key) || "[]");
+
+    document.getElementById("refCount").innerText =
+        "Приглашено: " + list.length;
+
+    const container = document.getElementById("refList");
+    container.innerHTML = "";
+
+    list.forEach(id=>{
+        container.innerHTML += `
+            <div style="
+                background:#111;
+                padding:8px;
+                border-radius:10px;
+                margin-bottom:6px;
+                font-size:12px;
+                opacity:0.8;">
+                ID: ${id}
+            </div>
+        `;
+    });
+}
+
+function copyRef(){
+
+    const text = document.getElementById("refLink").innerText;
+
+    navigator.clipboard.writeText(text)
+    .then(() => {
+        tg.showAlert("Ссылка скопирована!");
+    })
+    .catch(() => {
+        tg.showAlert("Ошибка копирования");
+    });
+}
+
+        // fallback для Telegram WebApp
+        const input = document.createElement("input");
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        document.body.removeChild(input);
+
+        tg.showAlert("Ссылка скопирована!");
+    });
 }
 </script>
    <div class="bottom-nav">
