@@ -1094,6 +1094,69 @@ body{
 .hp-enemy {
   background: linear-gradient(90deg,#ff4444,#cc0000);
 }
+    /* ===== WHEEL OF FORTUNE ===== */
+
+#wheelOverlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.85);
+    z-index:2000;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+.wheel-wrapper{
+    position:relative;
+    width:280px;
+    height:280px;
+}
+
+#wheel{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    border:8px solid #ffe57e;
+    box-shadow:
+        0 0 30px rgba(255,215,0,0.6),
+        0 0 60px rgba(188,19,254,0.4);
+    transition: transform 4s cubic-bezier(.17,.67,.32,1);
+}
+
+.wheel-center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:70px;
+    height:70px;
+    background:#111;
+    border:4px solid #ffe57e;
+    border-radius:50%;
+    z-index:5;
+}
+
+.wheel-pointer{
+    position:absolute;
+    top:-18px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:15px solid transparent;
+    border-right:15px solid transparent;
+    border-bottom:30px solid #ff007a;
+    z-index:10;
+}
+
+#wheelResult{
+    margin-top:25px;
+    font-size:16px;
+    font-weight:700;
+    color:#ffe57e;
+    text-align:center;
+}
 </style>
 </head>
 <body>
@@ -1156,6 +1219,26 @@ body{
 
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
+        <!-- WHEEL -->
+<div id="wheelOverlay">
+
+    <div class="wheel-wrapper">
+
+        <div class="wheel-pointer"></div>
+
+        <canvas id="wheel" width="280" height="280"></canvas>
+
+        <div class="wheel-center"></div>
+
+    </div>
+
+    <button style="margin-top:25px;" onclick="spinWheel()" id="spinBtn">
+        КРУТИТЬ
+    </button>
+
+    <div id="wheelResult"></div>
+
+</div>
 
 <!-- ПРОГНОЗЫ -->
 <div id="predictP" class="popup">
@@ -1691,6 +1774,98 @@ function checkSeasonRewards(){
     }
 }
     checkVIPStatus();
+    // ===== WHEEL SYSTEM =====
+
+const wheelPrizes = [
+    {text:"+10 LC", type:"lc", value:10},
+    {text:"+25 LC", type:"lc", value:25},
+    {text:"+50 LC", type:"lc", value:50},
+    {text:"VIP 1 день", type:"vip", value:1},
+    {text:"Бесплатный прогноз", type:"free_ai", value:1},
+    {text:"+100 LC", type:"lc", value:100}
+];
+
+let wheelSpinning = false;
+
+function drawWheel(){
+
+    const canvas = document.getElementById("wheel");
+    const ctx = canvas.getContext("2d");
+
+    const size = canvas.width;
+    const center = size/2;
+    const radius = size/2;
+
+    const arc = (2*Math.PI) / wheelPrizes.length;
+
+    for(let i=0;i<wheelPrizes.length;i++){
+
+        ctx.beginPath();
+        ctx.moveTo(center,center);
+        ctx.arc(center,center,radius,i*arc,(i+1)*arc);
+        ctx.fillStyle = i%2===0 ? "#bc13fe" : "#ff007a";
+        ctx.fill();
+        ctx.save();
+
+        ctx.translate(center,center);
+        ctx.rotate(i*arc + arc/2);
+        ctx.textAlign="right";
+        ctx.fillStyle="#fff";
+        ctx.font="bold 14px Inter";
+        ctx.fillText(wheelPrizes[i].text, radius-15,5);
+        ctx.restore();
+    }
+}
+
+function canSpinWheel(){
+    let last = localStorage.getItem("wheel_last_spin");
+    if(!last) return true;
+
+    return (Date.now() - parseInt(last)) > 24*60*60*1000;
+}
+
+function showWheelIfAvailable(){
+    if(canSpinWheel()){
+        document.getElementById("wheelOverlay").style.display="flex";
+        drawWheel();
+    }
+}
+
+function spinWheel(){
+
+    if(wheelSpinning) return;
+
+    wheelSpinning = true;
+
+    const wheel = document.getElementById("wheel");
+    const resultBox = document.getElementById("wheelResult");
+
+    const randomIndex = Math.floor(Math.random()*wheelPrizes.length);
+    const degreesPerSlice = 360 / wheelPrizes.length;
+    const finalDeg = 360*6 + (360 - randomIndex*degreesPerSlice - degreesPerSlice/2);
+
+    wheel.style.transform = `rotate(${finalDeg}deg)`;
+
+    setTimeout(()=>{
+
+        const prize = wheelPrizes[randomIndex];
+
+        if(prize.type==="lc"){
+            addLC(prize.value);
+        }
+
+        if(prize.type==="vip"){
+            activateVIP(prize.value);
+        }
+
+        resultBox.innerText = "ВЫ ВЫИГРАЛИ: " + prize.text;
+
+        localStorage.setItem("wheel_last_spin", Date.now());
+
+        wheelSpinning = false;
+
+    },4000);
+}
 </script>
    <div class="bottom-nav">
 
@@ -1947,6 +2122,7 @@ function battle(mode){
     tg.showAlert("Покупка будет доступна после подключения Telegram Stars");
 }
    checkSeasonReset();
+    showWheelIfAvailable();
 </script>
 </body>
 </html>
