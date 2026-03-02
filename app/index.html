@@ -2119,35 +2119,26 @@ function copyRef(){
 }
     // ===== AI LIMIT SYSTEM =====
 
-function getToday(){
-    return new Date().toDateString();
-}
-
 function getAIUsage(){
     let today = getToday();
-    let lastDate = localStorage.getItem("ai_last_date");
-    let used = parseInt(localStorage.getItem("ai_used_count") || 0);
-
-    if(lastDate !== today){
-        localStorage.setItem("ai_last_date", today);
-        localStorage.setItem("ai_used_count", 0);
-        return 0;
-    }
-
-    return used;
+    let usage = JSON.parse(localStorage.getItem("ai_usage") || "{}");
+    return usage[today] || 0;
 }
 
 function incrementAIUsage(){
-    let used = getAIUsage();
-    used++;
-    localStorage.setItem("ai_used_count", used);
+    let today = getToday();
+    let usage = JSON.parse(localStorage.getItem("ai_usage") || "{}");
+    usage[today] = (usage[today] || 0) + 1;
+    localStorage.setItem("ai_usage", JSON.stringify(usage));
 }
 
 function canUseAI(){
     let used = getAIUsage();
 
-    if(used >= 3){
-        tg.showAlert("Лимит AI прогнозов на сегодня исчерпан");
+    if(isVIP()) return true; // VIP без лимита
+
+    if(used >= 1){
+        tg.showAlert("Бесплатный прогноз уже использован сегодня");
         return false;
     }
 
