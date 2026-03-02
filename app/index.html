@@ -57,6 +57,97 @@ tg.setBackgroundColor("#050505");
 // if (tg.disableVerticalSwipes) {
 //     tg.disableVerticalSwipes();
 // }
+        // ===== SEASON SYSTEM =====
+
+function getSeasonStart(){
+    let saved = localStorage.getItem("season_start");
+
+    if(!saved){
+        let now = Date.now();
+        localStorage.setItem("season_start", now);
+        localStorage.setItem("season_rp", 0);
+        localStorage.removeItem("season_reward_300");
+localStorage.removeItem("season_reward_700");
+localStorage.removeItem("season_reward_1500");
+        return now;
+    }
+
+    return parseInt(saved);
+}
+
+function getSeasonRP(){
+    return parseInt(localStorage.getItem("season_rp") || 0);
+}
+
+function addSeasonRP(amount){
+    let newVal = getSeasonRP() + amount;
+    localStorage.setItem("season_rp", newVal);
+}
+
+function checkSeasonReset(){
+
+    let start = getSeasonStart();
+    let now = Date.now();
+
+    let daysPassed = (now - start) / (1000*60*60*24);
+
+    if(daysPassed >= 30){
+
+        let finalRP = getSeasonRP();
+
+        // награда за участие
+        if(finalRP >= 300){
+            addLC(100);
+            tg.showAlert("🏆 Сезон завершён! Вы получили 100 LC");
+        }
+
+        localStorage.setItem("season_start", now);
+        localStorage.setItem("season_rp", 0);
+    }
+}
+
+function getSeasonDaysLeft(){
+    let start = getSeasonStart();
+    let now = Date.now();
+    let daysPassed = Math.floor((now - start) / (1000*60*60*24));
+    return 30 - daysPassed;
+}
+        // ===== VIP SYSTEM =====
+
+function getVIPUntil(){
+    return parseInt(localStorage.getItem("vip_until") || 0);
+}
+
+function isVIP(){
+    return Date.now() < getVIPUntil();
+}
+
+function activateVIP(days){
+
+    let current = getVIPUntil();
+    let now = Date.now();
+
+    let baseTime = now;
+
+    // если VIP уже активен — продлеваем
+    if(current > now){
+        baseTime = current;
+    }
+
+    let newUntil = baseTime + (days * 24 * 60 * 60 * 1000);
+
+    localStorage.setItem("vip_until", newUntil);
+
+    tg.showAlert("👑 VIP активирован на " + days + " дней!");
+}
+
+function checkVIPStatus(){
+
+    if(!isVIP() && getVIPUntil() !== 0){
+        localStorage.removeItem("vip_until");
+        tg.showAlert("⏳ VIP закончился");
+    }
+}
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
@@ -539,7 +630,7 @@ text-shadow:
     z-index:0;
 }
 
-
+<button onclick="openSeason()">🏆 Сезон</button>
 /* БИТВА */
 .card-battle{
     background:linear-gradient(145deg,#140c14,#100a12);
@@ -1011,7 +1102,7 @@ body{
     <div id="lcBar" class="balance">
         🪙 <span id="lcBalance">100</span> LC
     </div>
-   
+   <div id="seasonBox" style="display:none; margin-top:20px;"></div>
 <div class="main-card">
 
     <div class="cards-container">
@@ -1514,7 +1605,92 @@ document.getElementById("profileBalance").innerText = balance + " LC";
     // Ранг
     document.getElementById("profileRank").innerText = getRank();
 }
-    
+    // ===== SEASON SCREEN =====
+
+function openSeason(){
+
+    checkSeasonReset();
+
+    const box = document.getElementById("seasonBox");
+    box.style.display = "block";
+
+    let seasonRP = getSeasonRP();
+    let daysLeft = getSeasonDaysLeft();
+
+    // уровни наград
+    let tier1 = 300;
+    let tier2 = 700;
+    let tier3 = 1500;
+
+    function progress(current, target){
+        let percent = Math.min(100, (current/target)*100);
+        return `
+        <div style="background:#222;border-radius:10px;margin:8px 0;">
+            <div style="width:${percent}%;background:#00ff99;padding:6px;border-radius:10px;">
+                ${Math.floor(percent)}%
+            </div>
+        </div>`;
+    }
+
+    box.innerHTML = `
+    <h2>🏆 СЕЗОН</h2>
+    <p>⏳ Осталось дней: <b>${daysLeft}</b></p>
+    <p>🔥 Твой сезонный RP: <b>${seasonRP}</b></p>
+
+    <hr>
+
+    <h3>🎯 Награды</h3>
+
+    <p>300 RP → +100 LC</p>
+    ${progress(seasonRP, tier1)}
+
+    <p>700 RP → +300 LC</p>
+    ${progress(seasonRP, tier2)}
+
+    <p>1500 RP → +1000 LC + 👑 VIP 7 дней</p>
+    ${progress(seasonRP, tier3)}
+
+    <br>
+    <button onclick="closeSeason()">Закрыть</button>
+    `;
+}
+
+function closeSeason(){
+    document.getElementById("seasonBox").style.display = "none";
+}
+    // ===== SEASON AUTO REWARDS =====
+
+function checkSeasonRewards(){
+
+    let seasonRP = getSeasonRP();
+
+    let reward300 = localStorage.getItem("season_reward_300");
+    let reward700 = localStorage.getItem("season_reward_700");
+    let reward1500 = localStorage.getItem("season_reward_1500");
+
+    // 🎁 300 RP
+    if(seasonRP >= 300 && !reward300){
+        addLC(100);
+        localStorage.setItem("season_reward_300", true);
+        tg.showAlert("🎉 Награда сезона: +100 LC");
+    }
+
+    // 🎁 700 RP
+    if(seasonRP >= 700 && !reward700){
+        addLC(300);
+        localStorage.setItem("season_reward_700", true);
+        tg.showAlert("🚀 Награда сезона: +300 LC");
+    }
+
+    // 👑 1500 RP
+    if(seasonRP >= 1500 && !reward1500){
+        addLC(1000);
+        localStorage.setItem("season_reward_1500", true);
+        activateVIP(7);
+        tg.showAlert("👑 СЕЗОН МАСТЕР! +1000 LC и VIP на 7 дней");
+    }
+}
+    checkVIPStatus();
 </script>
    <div class="bottom-nav">
 
@@ -1726,6 +1902,9 @@ function battle(mode){
                     localStorage.setItem("lose_streak", 0);
 
                     let finalReward = reward;
+                    if(isVIP()){
+    finalReward = Math.floor(finalReward * 1.3);
+}
 
                     // 💎 Идеальная победа
                     if(playerHP > 60){
@@ -1735,7 +1914,9 @@ function battle(mode){
 
                     addLC(finalReward);
                     addRP(Math.floor(finalReward/2));
-
+                    addSeasonRP(Math.floor(finalReward/2));
+                    checkSeasonRewards();
+                    
                     box.innerHTML += `
                     <br><br>🏆 ПОБЕДА!
                     <br>+${finalReward} LC
@@ -1765,7 +1946,7 @@ function battle(mode){
     function buyLC(amount){
     tg.showAlert("Покупка будет доступна после подключения Telegram Stars");
 }
-   
+   checkSeasonReset();
 </script>
 </body>
 </html>
