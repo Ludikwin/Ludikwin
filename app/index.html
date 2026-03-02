@@ -2115,33 +2115,7 @@ function copyRef(){
     </div>
 </div> <!-- закрывает bottom-nav -->
     
-<script>
-document.querySelectorAll('.big-card').forEach(card=>{
 
-    card.addEventListener('mousemove', e=>{
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width/2;
-        const centerY = rect.height/2;
-
-        const rotateX = ((y - centerY)/centerY)*5;
-        const rotateY = ((x - centerX)/centerX)*-5;
-
-        card.style.setProperty('--tiltX', rotateX + 'deg');
-        card.style.setProperty('--tiltY', rotateY + 'deg');
-    });
-
-    card.addEventListener('mouseleave', ()=>{
-        card.style.setProperty('--tiltX', '0deg');
-        card.style.setProperty('--tiltY', '0deg');
-    });
-
-});
-</script>
-
-});
     function openAI(){
     openPredict();
 }
@@ -2386,6 +2360,39 @@ function claimBonus(key, url){
     closeAll();
 }
 initDaily();                    
+</script>
+                    <script>
+
+// ===== HOME BUTTON =====
+function goHome(){
+    closeAll();
+}
+
+// ===== CARD 3D TILT =====
+document.querySelectorAll('.big-card').forEach(card=>{
+
+    card.addEventListener('mousemove', e=>{
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width/2;
+        const centerY = rect.height/2;
+
+        const rotateX = ((y - centerY)/centerY)*5;
+        const rotateY = ((x - centerX)/centerX)*-5;
+
+        card.style.setProperty('--tiltX', rotateX + 'deg');
+        card.style.setProperty('--tiltY', rotateY + 'deg');
+    });
+
+    card.addEventListener('mouseleave', ()=>{
+        card.style.setProperty('--tiltX', '0deg');
+        card.style.setProperty('--tiltY', '0deg');
+    });
+
+});
+
 </script>
 </body>
 </html>
