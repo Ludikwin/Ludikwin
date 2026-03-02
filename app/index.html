@@ -1617,7 +1617,17 @@ function battle(mode){
 
     const box = document.getElementById("battleResult");
 
-    box.innerHTML = "⚔️ Лудики выходят на арену...";
+    // начальные HP
+    let playerHP = 100;
+    let enemyHP = 100;
+
+    box.innerHTML = `
+    ⚔️ Лудики выходят на арену...
+    <br><br>
+    ❤️ Твой HP: <span id="pHP">100</span>
+    <br>
+    💀 Враг HP: <span id="eHP">100</span>
+    `;
 
     setTimeout(()=>{
 
@@ -1630,78 +1640,83 @@ function battle(mode){
 
         let finalWin = Math.random() < boostedChance;
 
-        // --- создаем 3 раунда ---
-        let rounds = [];
-        let playerWins = 0;
-        let enemyWins = 0;
+        let round = 1;
 
-        for(let i=0;i<3;i++){
-            let r = Math.random();
-            if(r < 0.5){
-                rounds.push("player");
-                playerWins++;
-            } else {
-                rounds.push("enemy");
-                enemyWins++;
-            }
+        function updateHP(){
+            document.getElementById("pHP").innerText = playerHP;
+            document.getElementById("eHP").innerText = enemyHP;
         }
 
-        // Если итог должен быть победа — корректируем последний раунд
-        if(finalWin && playerWins <= enemyWins){
-            rounds[2] = "player";
-        }
+        function doRound(){
 
-        if(!finalWin && enemyWins <= playerWins){
-            rounds[2] = "enemy";
-        }
-
-        let i = 0;
-
-        function showRound(){
-
-            if(i >= 3){
-                showFinal();
+            if(round > 3){
+                finishBattle();
                 return;
             }
 
-            if(rounds[i] === "player"){
-                box.innerHTML += "<br>💥 Раунд " + (i+1) + ": Ты наносишь удар!";
+            let damage = Math.floor(Math.random()*25) + 15;
+
+            if(Math.random() < 0.5){
+                enemyHP -= damage;
+                if(enemyHP < 0) enemyHP = 0;
+                box.innerHTML += `<br>💥 Раунд ${round}: Ты наносишь ${damage} урона!`;
             } else {
-                box.innerHTML += "<br>🩸 Раунд " + (i+1) + ": Противник атакует!";
+                playerHP -= damage;
+                if(playerHP < 0) playerHP = 0;
+                box.innerHTML += `<br>🩸 Раунд ${round}: Враг наносит ${damage} урона!`;
             }
 
-            i++;
-            setTimeout(showRound, 900);
+            updateHP();
+
+            round++;
+            setTimeout(doRound, 900);
         }
 
-        function showFinal(){
+        function finishBattle(){
 
+            // Подгоняем финал под математику
             if(finalWin){
-
-                let newStreak = getStreak() + 1;
-                setStreak(newStreak);
-                localStorage.setItem("lose_streak", 0);
-
-                addLC(reward);
-                addRP(Math.floor(reward/2));
-
-                box.innerHTML +=
-                    "<br><br>🏆 ПОБЕДА! +" + reward + " LC" +
-                    "<br>🔥 Серия: " + newStreak;
-
+                enemyHP = 0;
             } else {
-
-                setStreak(0);
-                loseStreak++;
-                localStorage.setItem("lose_streak", loseStreak);
-
-                box.innerHTML +=
-                    "<br><br>💀 ПОРАЖЕНИЕ -" + cost + " LC" +
-                    "<br>Серия сброшена";
+                playerHP = 0;
             }
+
+            updateHP();
+
+            setTimeout(()=>{
+
+                if(finalWin){
+
+                    let newStreak = getStreak() + 1;
+                    setStreak(newStreak);
+                    localStorage.setItem("lose_streak", 0);
+
+                    addLC(reward);
+                    addRP(Math.floor(reward/2));
+
+                    box.innerHTML += `
+                    <br><br>🏆 ФИНАЛЬНЫЙ УДАР!
+                    <br>+${reward} LC
+                    <br>🔥 Серия: ${newStreak}
+                    `;
+
+                } else {
+
+                    setStreak(0);
+                    loseStreak++;
+                    localStorage.setItem("lose_streak", loseStreak);
+
+                    box.innerHTML += `
+                    <br><br>💀 ТЫ ПОВЕРЖЕН
+                    <br>-${cost} LC
+                    <br>Серия сброшена
+                    `;
+                }
+
+            },600);
         }
 
-        showRound();
+        doRound();
 
     },800);
 }
