@@ -1877,6 +1877,7 @@ function checkSeasonRewards(){
     }
 }
     checkVIPStatus();
+    showWheelIfAvailable();
     // ===== WHEEL SYSTEM =====
 
 const wheelPrizes = [
@@ -2122,11 +2123,11 @@ document.querySelectorAll('.big-card').forEach(card=>{
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+        const centerX = rect.width/2;
+        const centerY = rect.height/2;
 
-        const rotateX = (y - centerY) / 20;
-        const rotateY = (centerX - x) / 20;
+        const rotateX = ((y - centerY)/centerY)*5;
+        const rotateY = ((x - centerX)/centerX)*-5;
 
         card.style.setProperty('--tiltX', rotateX + 'deg');
         card.style.setProperty('--tiltY', rotateY + 'deg');
@@ -2136,6 +2137,9 @@ document.querySelectorAll('.big-card').forEach(card=>{
         card.style.setProperty('--tiltX', '0deg');
         card.style.setProperty('--tiltY', '0deg');
     });
+
+});
+</script>
 
 });
     function openAI(){
@@ -2378,7 +2382,10 @@ function claimBonus(key, url){
     function goHome(){
     closeAll();
 }
-    
+    function goHome(){
+    closeAll();
+}
+initDaily();                    
 </script>
 </body>
 </html>
