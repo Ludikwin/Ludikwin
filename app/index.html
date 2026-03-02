@@ -1162,8 +1162,7 @@ filter: drop-shadow(0 0 8px #ff007a);
     color:#ffe57e;
     text-align:center;
 }
-    border-top:30px solid #ff007a;
-filter: drop-shadow(0 0 6px #ff007a);
+    
     @keyframes pulsePointer{
     0%{ transform:translateX(-50%) scale(1); }
     50%{ transform:translateX(-50%) scale(1.1); }
@@ -1243,6 +1242,7 @@ filter: drop-shadow(0 0 6px #ff007a);
         <div class="wheel-center"></div>
 <audio id="spinSound" src="spin.mp3"></audio>
 <audio id="winSound" src="win.mp3"></audio>
+        <audio id="tickSound" src="tick.mp3"></audio>
     </div>
 
     <button style="margin-top:25px;" onclick="spinWheel()" id="spinBtn">
@@ -1811,23 +1811,42 @@ function drawWheel(){
 
     const arc = (2*Math.PI) / wheelPrizes.length;
 
+    ctx.clearRect(0,0,size,size);
+
     for(let i=0;i<wheelPrizes.length;i++){
 
         ctx.beginPath();
         ctx.moveTo(center,center);
         ctx.arc(center,center,radius,i*arc,(i+1)*arc);
-        ctx.fillStyle = i%2===0 ? "#bc13fe" : "#ff007a";
-        ctx.fill();
-        ctx.save();
 
+        // градиент
+        const gradient = ctx.createLinearGradient(0,0,size,size);
+        gradient.addColorStop(0, i%2===0 ? "#bc13fe" : "#ff007a");
+        gradient.addColorStop(1, "#111");
+
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        ctx.save();
         ctx.translate(center,center);
         ctx.rotate(i*arc + arc/2);
+
         ctx.textAlign="right";
         ctx.fillStyle="#fff";
-        ctx.font="bold 14px Inter";
-        ctx.fillText(wheelPrizes[i].text, radius-15,5);
+        ctx.font="bold 14px Orbitron";
+        ctx.shadowColor="#000";
+        ctx.shadowBlur=8;
+
+        ctx.fillText(wheelPrizes[i].text, radius-20,5);
         ctx.restore();
     }
+
+    // золотая обводка
+    ctx.beginPath();
+    ctx.arc(center,center,radius-5,0,2*Math.PI);
+    ctx.strokeStyle="#ffd700";
+    ctx.lineWidth=4;
+    ctx.stroke();
 }
 
 function canSpinWheel(){
@@ -1866,9 +1885,12 @@ wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.32,1)";
     (270 - randomIndex * degreesPerSlice - degreesPerSlice / 2);
 
     wheel.style.transform = `rotate(${finalDeg}deg)`;
-
+let tickInterval = setInterval(()=>{
+    document.getElementById("tickSound").currentTime = 0;
+    document.getElementById("tickSound").play();
+}, 150);
     setTimeout(()=>{
-
+clearInterval(tickInterval);
         const prize = wheelPrizes[randomIndex];
 
         if(prize.type==="lc"){
@@ -1878,7 +1900,16 @@ wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.32,1)";
         if(prize.type==="vip"){
             activateVIP(prize.value);
         }
-        document.getElementById("spinSound").pause();
+        let spinAudio = document.getElementById("spinSound");
+let fade = setInterval(()=>{
+    if(spinAudio.volume > 0.05){
+        spinAudio.volume -= 0.05;
+    } else {
+        spinAudio.pause();
+        spinAudio.volume = 1;
+        clearInterval(fade);
+    }
+},100);
 document.getElementById("winSound").currentTime = 0;
 document.getElementById("winSound").play();
 
