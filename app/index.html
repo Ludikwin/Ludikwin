@@ -1611,55 +1611,99 @@ function battle(mode){
 
     let cost = getBattleCost(mode);
     let reward = getBattleReward(mode);
-    let chance = getWinChance(mode);
+    let baseChance = getWinChance(mode);
 
     if(!spendLC(cost)) return;
 
     const box = document.getElementById("battleResult");
-    box.innerHTML = "⚔️ Битва началась...";
+
+    box.innerHTML = "⚔️ Лудики выходят на арену...";
 
     setTimeout(()=>{
 
         let loseStreak = parseInt(localStorage.getItem("lose_streak") || 0);
+        let boostedChance = baseChance;
 
-        let boostedChance = chance;
-
-        // анти-луз система
         if(loseStreak >= 3){
             boostedChance += 0.20;
         }
 
-        let win = Math.random() < boostedChance;
+        let finalWin = Math.random() < boostedChance;
 
-        if(win){
+        // --- создаем 3 раунда ---
+        let rounds = [];
+        let playerWins = 0;
+        let enemyWins = 0;
 
-            let newStreak = getStreak() + 1;
-            setStreak(newStreak);
-
-            localStorage.setItem("lose_streak", 0);
-
-            addLC(reward);
-            let rpReward = Math.floor(reward / 2);
-addRP(rpReward);
-
-            box.innerHTML =
-                "🏆 ПОБЕДА! +" + reward + " LC" +
-                "<br>🔥 Серия: " + newStreak;
-
-        } else {
-
-            setStreak(0);
-
-            loseStreak++;
-            localStorage.setItem("lose_streak", loseStreak);
-
-            box.innerHTML =
-                "💀 Поражение -" + cost + " LC" +
-                "<br>Серия сброшена";
-
+        for(let i=0;i<3;i++){
+            let r = Math.random();
+            if(r < 0.5){
+                rounds.push("player");
+                playerWins++;
+            } else {
+                rounds.push("enemy");
+                enemyWins++;
+            }
         }
 
-    },1500);
+        // Если итог должен быть победа — корректируем последний раунд
+        if(finalWin && playerWins <= enemyWins){
+            rounds[2] = "player";
+        }
+
+        if(!finalWin && enemyWins <= playerWins){
+            rounds[2] = "enemy";
+        }
+
+        let i = 0;
+
+        function showRound(){
+
+            if(i >= 3){
+                showFinal();
+                return;
+            }
+
+            if(rounds[i] === "player"){
+                box.innerHTML += "<br>💥 Раунд " + (i+1) + ": Ты наносишь удар!";
+            } else {
+                box.innerHTML += "<br>🩸 Раунд " + (i+1) + ": Противник атакует!";
+            }
+
+            i++;
+            setTimeout(showRound, 900);
+        }
+
+        function showFinal(){
+
+            if(finalWin){
+
+                let newStreak = getStreak() + 1;
+                setStreak(newStreak);
+                localStorage.setItem("lose_streak", 0);
+
+                addLC(reward);
+                addRP(Math.floor(reward/2));
+
+                box.innerHTML +=
+                    "<br><br>🏆 ПОБЕДА! +" + reward + " LC" +
+                    "<br>🔥 Серия: " + newStreak;
+
+            } else {
+
+                setStreak(0);
+                loseStreak++;
+                localStorage.setItem("lose_streak", loseStreak);
+
+                box.innerHTML +=
+                    "<br><br>💀 ПОРАЖЕНИЕ -" + cost + " LC" +
+                    "<br>Серия сброшена";
+            }
+        }
+
+        showRound();
+
+    },800);
 }
     function buyLC(amount){
     tg.showAlert("Покупка будет доступна после подключения Telegram Stars");
