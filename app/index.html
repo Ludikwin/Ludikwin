@@ -1168,6 +1168,48 @@ filter: drop-shadow(0 0 8px #ff007a);
     50%{ transform:translateX(-50%) scale(1.1); }
     100%{ transform:translateX(-50%) scale(1); }
 }
+    /* ===== BONUS CARDS ===== */
+
+.bonus-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:linear-gradient(135deg,#111,#1a1a1a);
+    border:1px solid rgba(188,19,254,0.4);
+
+    padding:14px 18px;
+    border-radius:18px;
+
+    font-weight:700;
+    margin-bottom:12px;
+
+    cursor:pointer;
+    transition:0.25s ease;
+
+    box-shadow:
+        0 0 15px rgba(188,19,254,0.15),
+        0 8px 25px rgba(0,0,0,0.8);
+}
+
+.bonus-card span{
+    background:#ffd700;
+    color:#111;
+    padding:6px 10px;
+    border-radius:12px;
+    font-size:12px;
+}
+
+.bonus-card:hover{
+    transform:scale(1.04);
+    box-shadow:
+        0 0 25px rgba(188,19,254,0.5),
+        0 10px 40px rgba(0,0,0,0.9);
+}
+
+.bonus-card:active{
+    transform:scale(0.97);
+}
 </style>
 </head>
 <body>
@@ -1307,10 +1349,26 @@ filter: drop-shadow(0 0 8px #ff007a);
 
 <!-- БОНУСЫ -->
 <div id="bonusP" class="popup">
-    <h3>БОНУСЫ</h3>
-    <a href="https://1wqaxr.com/?p=h14y" class="bonus-link">💰 1WIN</a>
-    <a href="https://stake.com/ru?c=oeVgnFIa" class="bonus-link">🎲 STAKE</a>
-    <a href="https://t.me/+oEnEz7IOZ90wN2Ri" class="bonus-link">📢 КАНАЛ</a>
+    <h3 style="color:#bc13fe">🔥 ПАРТНЁРСКИЕ БОНУСЫ</h3>
+    <p style="font-size:12px;opacity:0.7;margin-bottom:15px;">
+        Получай +10 LC за переход (раз в 24 часа)
+    </p>
+
+    <div class="bonus-card" onclick="claimBonus('1win','https://1wqaxr.com/?p=h14y')">
+        💰 1WIN
+        <span>+10 LC</span>
+    </div>
+
+    <div class="bonus-card" onclick="claimBonus('stake','https://stake.com/ru?c=oeVgnFIa')">
+        🎲 STAKE
+        <span>+10 LC</span>
+    </div>
+
+    <div class="bonus-card" onclick="claimBonus('channel','https://t.me/+oEnEz7IOZ90wN2Ri')">
+        📢 TELEGRAM КАНАЛ
+        <span>+10 LC</span>
+    </div>
+
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
@@ -2181,6 +2239,29 @@ function battle(mode){
 }
    checkSeasonReset();
     showWheelIfAvailable();
+    // ===== BONUS SYSTEM =====
+
+function canClaimBonus(key){
+    let last = localStorage.getItem("bonus_" + key);
+    if(!last) return true;
+
+    return (Date.now() - parseInt(last)) > 24*60*60*1000;
+}
+
+function claimBonus(key, url){
+
+    if(!canClaimBonus(key)){
+        tg.showAlert("Бонус уже получен. Попробуйте завтра.");
+        return;
+    }
+
+    addLC(10);
+    localStorage.setItem("bonus_" + key, Date.now());
+
+    tg.showAlert("+10 LC начислено!");
+
+    window.open(url, "_blank");
+}
 </script>
 </body>
 </html>
