@@ -2399,46 +2399,178 @@ document.querySelectorAll('.big-card').forEach(card=>{
     });
 
 });
-// ===== BATTLE SYSTEM =====
+// ==========================
+// 🔥 БИТВА ЛУДИКОВ 2.0
+// ==========================
 
 function battle(mode){
 
     let cost = 0;
-    let winChance = 0;
+    let baseChance = 0;
     let reward = 0;
 
     if(mode === "safe"){
         cost = 10;
-        winChance = 0.75;
+        baseChance = 0.75;
         reward = 18;
     }
 
     if(mode === "mid"){
         cost = 25;
-        winChance = 0.55;
+        baseChance = 0.55;
         reward = 50;
     }
 
     if(mode === "high"){
         cost = 50;
-        winChance = 0.35;
+        baseChance = 0.35;
         reward = 120;
     }
 
     if(!spendLC(cost)) return;
 
-    const resultBox = document.getElementById("battleResult");
+    const box = document.getElementById("battleResult");
 
-    let win = Math.random() < winChance;
+    let playerHP = 100;
+    let enemyHP = 100;
 
-    if(win){
-        addLC(reward);
-        resultBox.innerHTML =
-            `<span style="color:#00ff88;">ПОБЕДА!</span><br>+${reward} LC`;
-    } else {
-        resultBox.innerHTML =
-            `<span style="color:#ff4444;">ПОРАЖЕНИЕ</span><br>-${cost} LC`;
+    let streak = parseInt(localStorage.getItem("win_streak") || 0);
+    let loseStreak = parseInt(localStorage.getItem("lose_streak") || 0);
+
+    let vipActive = localStorage.getItem("vip_active") === "true";
+
+    let winChance = baseChance;
+
+    // VIP бонус к шансу
+    if(vipActive){
+        winChance += 0.05;
     }
+
+    // Анти лузстрик
+    if(loseStreak >= 3){
+        winChance += 0.15;
+    }
+
+    // Серия бонус
+    if(streak >= 5){
+        winChance += 0.05;
+    }
+
+    box.innerHTML = `
+        ⚔️ Битва начинается!<br><br>
+
+        ❤️ Твой HP
+        <div style="background:#222;height:12px;border-radius:6px;">
+            <div id="pBar" style="background:#00ff88;height:12px;width:100%;border-radius:6px;"></div>
+        </div>
+
+        <br>
+
+        💀 Враг HP
+        <div style="background:#222;height:12px;border-radius:6px;">
+            <div id="eBar" style="background:#ff4444;height:12px;width:100%;border-radius:6px;"></div>
+        </div>
+
+        <br>
+        <div id="battleLog"></div>
+    `;
+
+    function updateBars(){
+        document.getElementById("pBar").style.width = playerHP + "%";
+        document.getElementById("eBar").style.width = enemyHP + "%";
+    }
+
+    let round = 1;
+
+    function doRound(){
+
+        if(round > 3){
+            finishBattle();
+            return;
+        }
+
+        let damage = Math.floor(Math.random()*20)+15;
+
+        let crit = false;
+
+        if(Math.random() < 0.2){
+            damage *= 2;
+            crit = true;
+        }
+
+        let playerHits = Math.random() < winChance;
+
+        const log = document.getElementById("battleLog");
+
+        if(playerHits){
+            enemyHP -= damage;
+            if(enemyHP < 0) enemyHP = 0;
+            log.innerHTML += `<br>💥 Раунд ${round}: Ты наносишь ${damage}${crit ? " ⚡ КРИТ!" : ""}`;
+        } else {
+            playerHP -= damage;
+            if(playerHP < 0) playerHP = 0;
+            log.innerHTML += `<br>🩸 Раунд ${round}: Враг наносит ${damage}${crit ? " ⚡ КРИТ!" : ""}`;
+        }
+
+        updateBars();
+
+        round++;
+        setTimeout(doRound, 900);
+    }
+
+    function finishBattle(){
+
+        let win = enemyHP <= playerHP;
+
+        setTimeout(()=>{
+
+            if(win){
+
+                streak++;
+                localStorage.setItem("win_streak", streak);
+                localStorage.setItem("lose_streak", 0);
+
+                let finalReward = reward;
+
+                // VIP бонус к награде
+                if(vipActive){
+                    finalReward = Math.floor(finalReward * 1.3);
+                    box.innerHTML += `<br><br>👑 VIP +30% награды`;
+                }
+
+                // Идеальная победа
+                if(playerHP > 60){
+                    finalReward *= 2;
+                    box.innerHTML += `<br>💎 ИДЕАЛЬНАЯ ПОБЕДА x2`;
+                }
+
+                addLC(finalReward);
+
+                box.innerHTML += `
+                    <br><br>
+                    🏆 ПОБЕДА!
+                    <br>+${finalReward} LC
+                    <br>🔥 Серия: ${streak}
+                `;
+
+            } else {
+
+                localStorage.setItem("win_streak", 0);
+                loseStreak++;
+                localStorage.setItem("lose_streak", loseStreak);
+
+                box.innerHTML += `
+                    <br><br>
+                    💀 ПОРАЖЕНИЕ
+                    <br>-${cost} LC
+                `;
+            }
+
+        },600);
+    }
+
+    updateBars();
+    setTimeout(doRound, 700);
 }
 </script>
 </body>
