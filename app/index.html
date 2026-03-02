@@ -984,7 +984,25 @@ body{
     color:#ffe57e;
     text-shadow:none;
 }
-    
+    .hp-bar {
+  width: 100%;
+  height: 16px;
+  background: #222;
+  border-radius: 10px;
+  margin: 6px 0;
+  overflow: hidden;
+}
+
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg,#00ff88,#00cc66);
+  transition: width 0.4s ease;
+}
+
+.hp-enemy {
+  background: linear-gradient(90deg,#ff4444,#cc0000);
+}
 </style>
 </head>
 <body>
@@ -1617,17 +1635,29 @@ function battle(mode){
 
     const box = document.getElementById("battleResult");
 
-    // начальные HP
+    let streak = getStreak();
+    let bossMode = streak >= 7;
+
     let playerHP = 100;
-    let enemyHP = 100;
+    let enemyHP = bossMode ? 140 : 100;
 
     box.innerHTML = `
-    ⚔️ Лудики выходят на арену...
+    ⚔️ ${bossMode ? "👑 БОСС выходит на арену!" : "Лудики выходят на арену..."}
     <br><br>
-    ❤️ Твой HP: <span id="pHP">100</span>
-    <br>
-    💀 Враг HP: <span id="eHP">100</span>
+
+    ❤️ Твой HP
+    <div class="hp-bar"><div id="pBar" class="hp-fill"></div></div>
+
+    💀 Враг HP
+    <div class="hp-bar"><div id="eBar" class="hp-fill hp-enemy"></div></div>
     `;
+
+    function updateBars(){
+        document.getElementById("pBar").style.width = playerHP + "%";
+        document.getElementById("eBar").style.width = (enemyHP > 100 ? (enemyHP/1.4) : enemyHP) + "%";
+    }
+
+    updateBars();
 
     setTimeout(()=>{
 
@@ -1638,14 +1668,13 @@ function battle(mode){
             boostedChance += 0.20;
         }
 
+        if(bossMode){
+            boostedChance -= 0.10;
+        }
+
         let finalWin = Math.random() < boostedChance;
 
         let round = 1;
-
-        function updateHP(){
-            document.getElementById("pHP").innerText = playerHP;
-            document.getElementById("eHP").innerText = enemyHP;
-        }
 
         function doRound(){
 
@@ -1654,19 +1683,25 @@ function battle(mode){
                 return;
             }
 
-            let damage = Math.floor(Math.random()*25) + 15;
+            let damage = Math.floor(Math.random()*20) + 15;
+
+            // ⚡ Крит если серия 5+
+            if(streak >= 5 && Math.random() < 0.25){
+                damage *= 2;
+                box.innerHTML += `<br>⚡ КРИТИЧЕСКИЙ УДАР!`;
+            }
 
             if(Math.random() < 0.5){
                 enemyHP -= damage;
                 if(enemyHP < 0) enemyHP = 0;
-                box.innerHTML += `<br>💥 Раунд ${round}: Ты наносишь ${damage} урона!`;
+                box.innerHTML += `<br>💥 Раунд ${round}: Ты наносишь ${damage}`;
             } else {
                 playerHP -= damage;
                 if(playerHP < 0) playerHP = 0;
-                box.innerHTML += `<br>🩸 Раунд ${round}: Враг наносит ${damage} урона!`;
+                box.innerHTML += `<br>🩸 Раунд ${round}: Враг наносит ${damage}`;
             }
 
-            updateHP();
+            updateBars();
 
             round++;
             setTimeout(doRound, 900);
@@ -1674,29 +1709,36 @@ function battle(mode){
 
         function finishBattle(){
 
-            // Подгоняем финал под математику
             if(finalWin){
                 enemyHP = 0;
             } else {
                 playerHP = 0;
             }
 
-            updateHP();
+            updateBars();
 
             setTimeout(()=>{
 
                 if(finalWin){
 
-                    let newStreak = getStreak() + 1;
+                    let newStreak = streak + 1;
                     setStreak(newStreak);
                     localStorage.setItem("lose_streak", 0);
 
-                    addLC(reward);
-                    addRP(Math.floor(reward/2));
+                    let finalReward = reward;
+
+                    // 💎 Идеальная победа
+                    if(playerHP > 60){
+                        finalReward *= 2;
+                        box.innerHTML += `<br>💎 ИДЕАЛЬНАЯ ПОБЕДА x2!`;
+                    }
+
+                    addLC(finalReward);
+                    addRP(Math.floor(finalReward/2));
 
                     box.innerHTML += `
-                    <br><br>🏆 ФИНАЛЬНЫЙ УДАР!
-                    <br>+${reward} LC
+                    <br><br>🏆 ПОБЕДА!
+                    <br>+${finalReward} LC
                     <br>🔥 Серия: ${newStreak}
                     `;
 
