@@ -1838,11 +1838,17 @@ function spinWheel(){
     wheelSpinning = true;
 
     const wheel = document.getElementById("wheel");
+    wheel.style.transition = "none";
+wheel.style.transform = "rotate(0deg)";
+void wheel.offsetWidth;
+wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.32,1)";
     const resultBox = document.getElementById("wheelResult");
 
     const randomIndex = Math.floor(Math.random()*wheelPrizes.length);
     const degreesPerSlice = 360 / wheelPrizes.length;
-    const finalDeg = 360*6 + (360 - randomIndex*degreesPerSlice - degreesPerSlice/2);
+    const finalDeg =
+    360 * 6 +
+    (270 - randomIndex * degreesPerSlice - degreesPerSlice / 2);
 
     wheel.style.transform = `rotate(${finalDeg}deg)`;
 
@@ -1863,6 +1869,9 @@ function spinWheel(){
         localStorage.setItem("wheel_last_spin", Date.now());
 
         wheelSpinning = false;
+        setTimeout(()=>{
+    document.getElementById("wheelOverlay").style.display = "none";
+}, 2000);
 
     },4000);
 }
