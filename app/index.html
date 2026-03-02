@@ -2399,7 +2399,47 @@ document.querySelectorAll('.big-card').forEach(card=>{
     });
 
 });
+// ===== BATTLE SYSTEM =====
 
+function battle(mode){
+
+    let cost = 0;
+    let winChance = 0;
+    let reward = 0;
+
+    if(mode === "safe"){
+        cost = 10;
+        winChance = 0.75;
+        reward = 18;
+    }
+
+    if(mode === "mid"){
+        cost = 25;
+        winChance = 0.55;
+        reward = 50;
+    }
+
+    if(mode === "high"){
+        cost = 50;
+        winChance = 0.35;
+        reward = 120;
+    }
+
+    if(!spendLC(cost)) return;
+
+    const resultBox = document.getElementById("battleResult");
+
+    let win = Math.random() < winChance;
+
+    if(win){
+        addLC(reward);
+        resultBox.innerHTML =
+            `<span style="color:#00ff88;">ПОБЕДА!</span><br>+${reward} LC`;
+    } else {
+        resultBox.innerHTML =
+            `<span style="color:#ff4444;">ПОРАЖЕНИЕ</span><br>-${cost} LC`;
+    }
+}
 </script>
 </body>
 </html>
