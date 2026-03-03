@@ -2121,20 +2121,7 @@ function copyRef(){
         <span>Профиль</span>
     </div>
 </div> <!-- закрывает bottom-nav -->
-    <script>
-
-    function openAI(){
-    openPredict();
-}
-            <div class="nav-item" onclick="openP('profileP')">
-        <div class="icon">👤</div>
-        <span>Профиль</span>
-    </div>
-
-</div> <!-- bottom-nav -->
-
-</body>
-</html>
+    
     // ===== AI LIMIT SYSTEM =====
 
 function getAIUsage(){
@@ -2571,6 +2558,23 @@ function battle(mode){
 
     updateBars();
     setTimeout(doRound, 700);
+}
+                        // ===== BONUS SYSTEM =====
+
+function claimBonus(key, url){
+
+    let last = localStorage.getItem("bonus_" + key);
+    let now = Date.now();
+
+    if(last && (now - parseInt(last)) < 86400000){
+        tg.showAlert("Бонус уже получен сегодня");
+        return;
+    }
+
+    addLC(10);
+    localStorage.setItem("bonus_" + key, now);
+
+    window.open(url, "_blank");
 }
 </script>
 </body>
