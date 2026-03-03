@@ -2561,6 +2561,32 @@ function battle(mode){
     updateBars();
     setTimeout(doRound, 700);
 }
+                        // ===== BONUS SYSTEM =====
+
+function claimBonus(name, url){
+
+    const today = getToday();
+
+    let bonusData = JSON.parse(localStorage.getItem("bonus_usage") || "{}");
+
+    // проверяем использовался ли бонус сегодня
+    if(bonusData[name] === today){
+        tg.showAlert("Бонус уже получен сегодня");
+        return;
+    }
+
+    // сохраняем дату
+    bonusData[name] = today;
+    localStorage.setItem("bonus_usage", JSON.stringify(bonusData));
+
+    // начисляем LC
+    addLC(10);
+
+    // открываем ссылку
+    window.open(url, "_blank");
+
+    tg.showAlert("Вы получили +10 LC");
+}
 </script>
 </body>
 </html>
