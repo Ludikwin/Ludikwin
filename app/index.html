@@ -1323,7 +1323,8 @@ filter: drop-shadow(0 0 8px #ff007a);
     <span class="profile-id-label">ID</span>
     <span id="uID" class="profile-id-value">---</span>
 </div>
-
+<button onclick="openBetHistory()">📜 История ставок</button>
+<div id="betHistoryBox"></div>
 <div class="stat-row">
     <span class="profile-balance-label">Баланс</span>
     <span id="profileBalance" class="profile-balance-value">0 LC</span>
@@ -1561,8 +1562,29 @@ function spendLC(amount){
 }
 
 setLC(getLC());
+    // ===== BET HISTORY SYSTEM =====
 
-// ===== POPUPS =====
+function getBetHistory(){
+    let data = localStorage.getItem("bet_history");
+    return data ? JSON.parse(data) : [];
+}
+
+function saveBetHistory(history){
+    localStorage.setItem("bet_history", JSON.stringify(history));
+}
+
+function addBetToHistory(bet){
+    let history = getBetHistory();
+    history.unshift(bet); // добавляем в начало
+    saveBetHistory(history);
+}
+
+function getTotalProfit(){
+    let history = getBetHistory();
+    return history.reduce((sum, bet) => sum + bet.profit, 0);
+}
+
+// ===============================
 
 // ===== POPUPS =====
 
@@ -2463,6 +2485,29 @@ function getMyBets(){
 function saveMyBets(bets){
     localStorage.setItem("my_bets", JSON.stringify(bets));
 }
+                        // ===== BET HISTORY SYSTEM =====
+
+function getBetHistory(){
+    let data = localStorage.getItem("bet_history");
+    return data ? JSON.parse(data) : [];
+}
+
+function saveBetHistory(history){
+    localStorage.setItem("bet_history", JSON.stringify(history));
+}
+
+function addBetToHistory(bet){
+    let history = getBetHistory();
+    history.unshift(bet);
+    saveBetHistory(history);
+}
+
+function getTotalProfit(){
+    let history = getBetHistory();
+    return history.reduce((sum, bet) => sum + bet.profit, 0);
+}
+
+// ===============================
 
 // Сделать ставку
 function placeBet(matchId, prediction){
@@ -2607,7 +2652,16 @@ function placeBet(matchId, type){
     });
 
     saveMyBets(bets);
-
+// добавляем в историю
+addBetToHistory({
+    id: Date.now(),
+    matchId: matchId,
+    type: type,
+    stake: amount,
+    result: "pending",
+    profit: -amount,
+    date: new Date().toLocaleString()
+});
     document.getElementById("pRes").innerHTML = "✅ Ставка принята";
 }
 
@@ -2642,20 +2696,66 @@ function settleBets(match){
 
     bets.forEach(b => {
 
-        if(b.matchId === match.id && b.status === "pending"){
+    if(b.matchId === match.id && b.status === "pending"){
 
-            if(b.type === match.result){
-                b.status = "win";
-                addLC(b.amount * b.coefficient);
-                addRP(10);
-                addSeasonRP(10);
-            } else {
-                b.status = "lose";
+        let history = getBetHistory();
+        let historyBet = history.find(h => h.id === b.id);
+
+        if(b.type === match.result){
+
+            b.status = "win";
+
+            let winAmount = b.amount * b.coefficient;
+
+            addLC(winAmount);
+            addRP(10);
+            addSeasonRP(10);
+
+            if(historyBet){
+                historyBet.result = "win";
+                historyBet.profit = winAmount - b.amount;
+            }
+
+        } else {
+
+            b.status = "lose";
+
+            if(historyBet){
+                historyBet.result = "lose";
+                historyBet.profit = -b.amount;
             }
         }
+
+        saveBetHistory(history);
+    }
+});
+    function openBetHistory(){
+
+    let box = document.getElementById("betHistoryBox");
+    let history = getBetHistory();
+
+    if(history.length === 0){
+        box.innerHTML = "Ставок пока нет.";
+        return;
+    }
+
+    let html = "<h3>📜 История ставок</h3>";
+
+    history.slice(0,20).forEach(bet=>{
+        html += `
+        <div style="border:1px solid #444; padding:8px; margin:5px 0;">
+            <b>${bet.date}</b><br>
+            Тип: ${bet.type}<br>
+            Ставка: ${bet.stake} LC<br>
+            Результат: ${bet.result}<br>
+            Профит: ${bet.profit} LC
+        </div>
+        `;
     });
 
-    saveMyBets(bets);
+    html += `<br><b>Общий профит: ${getTotalProfit()} LC</b>`;
+
+    box.innerHTML = html;
 }
 </script>
 </body>
