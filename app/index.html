@@ -2600,9 +2600,6 @@ function saveMatches(data){
 function generateTodayMatches(){
 
     let today = new Date().toDateString();
-    let savedDate = localStorage.getItem("matches_date");
-
-    if(savedDate === today) return;
 
     let leagues = ["АПЛ","Ла Лига","Серия А","Бундес","ЛЧ"];
     let matches = [];
@@ -2758,6 +2755,8 @@ function settleBets(match){
 
     box.innerHTML = html;
 }
+                        generateTodayMatches();
+setInterval(checkMatchStatus, 60000);
 </script>
 </body>
 </html>
