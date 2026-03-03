@@ -1759,9 +1759,17 @@ addLC(-15);
             </div>
 
             <div class="bet-row">
-                <button onclick="placeBet('${m.id}','home')">П1 1.8</button>
-                <button onclick="placeBet('${m.id}','draw')">X 3.2</button>
-                <button onclick="placeBet('${m.id}','away')">П2 2.4</button>
+                <button onclick="placeBet('${m.id}','home')">
+    П1 ${m.odds.home}
+</button>
+
+<button onclick="placeBet('${m.id}','draw')">
+    X ${m.odds.draw}
+</button>
+
+<button onclick="placeBet('${m.id}','away')">
+    П2 ${m.odds.away}
+</button>
             </div>
 
         </div>
@@ -2696,14 +2704,21 @@ function generateTodayMatches(){
 
     for(let i=0;i<20;i++){
         matches.push({
-            id: "m"+i,
-            league: leagues[i % leagues.length],
-            home: "Team "+(i+1),
-            away: "Team "+(i+21),
-            status: "open",
-            startTime: Date.now() + (i*600000), // каждые 10 минут
-            result: null
-        });
+    id: "m"+i,
+    league: leagues[i % leagues.length],
+    home: "Team "+(i+1),
+    away: "Team "+(i+21),
+
+    odds: {
+        home: (1.5 + Math.random()).toFixed(2),
+        draw: (2.5 + Math.random()).toFixed(2),
+        away: (1.5 + Math.random()).toFixed(2)
+    },
+
+    status: "open",
+    startTime: Date.now() + (i*600000),
+    result: null
+});
     }
 
     saveMatches(matches);
@@ -2722,6 +2737,35 @@ function saveMyBets(data){
 
 function placeBet(matchId, type){
 
+    let matches = getMatches();
+    let match = matches.find(m => m.id === matchId);
+
+    if(!match || match.status !== "open"){
+        tg.showAlert("Матч закрыт");
+        return;
+    }
+
+    let amount = 10;
+
+    if(!spendLC(amount)) return;
+
+    let bets = getMyBets();
+
+    let coefficient = parseFloat(match.odds[type]);
+
+    bets.push({
+        id: Date.now(),
+        matchId,
+        type,
+        amount,
+        coefficient,
+        status: "pending"
+    });
+
+    saveMyBets(bets);
+
+    document.getElementById("pRes").innerHTML = "✅ Ставка принята";
+}
     let amount = 10;
 
     if(!spendLC(amount)) return;
