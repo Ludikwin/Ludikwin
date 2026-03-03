@@ -2694,16 +2694,6 @@ function claimBonus(key, url){
 }
                         
 
-// ===== SELECT BEST BET =====//
-
-let bestMatch = matches.reduce((prev, current) => 
-    (prev.aiPrediction.confidence > current.aiPrediction.confidence) ? prev : current
-);
-
-bestMatch.aiPrediction.isBestBet = true;
-    saveMatches(matches);
-    localStorage.setItem("matches_date", today);
-}
 
 // ===== BETS =====
 
