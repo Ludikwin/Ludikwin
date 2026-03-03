@@ -1624,54 +1624,31 @@ function openPredict(){
 
 async function getPredict(code){
 
-    if(window.predictLoading) return;
-    if(!canUseAI()) return;
-
-    window.predictLoading = true;
-
     const resBox = document.getElementById('pRes');
-    resBox.innerText = "АНАЛИЗ...";
+    resBox.innerHTML = "";
 
-    let used = getAIUsage();
+    let matches = getMatches().filter(m => m.status === "open");
 
-    // если уже использовали 1 раз — списываем LC
-    if(used >= 1){
-        if(!spendLC(15)){
-            resBox.innerText = "";
-            window.predictLoading = false;
-            return;
-        }
+    if(matches.length === 0){
+        resBox.innerText = "Нет доступных матчей";
+        return;
     }
 
-    incrementAIUsage();
+    matches.forEach(m => {
 
-    try{
-        const res = await fetch(`https://api.football-data.org/v4/competitions/${code}/matches?status=SCHEDULED`,{
-            headers:{'X-Auth-Token':'ТВОЙ_КЛЮЧ'}
-        });
+        resBox.innerHTML += `
+            <div style="margin-bottom:12px; padding:10px; background:#111; border-radius:10px;">
+                <div>${m.league}</div>
+                <div>${m.home} vs ${m.away}</div>
 
-        const data = await res.json();
+                <button onclick="placeBet('${m.id}','home')">П1</button>
+                <button onclick="placeBet('${m.id}','draw')">Х</button>
+                <button onclick="placeBet('${m.id}','away')">П2</button>
+            </div>
+        `;
 
-        if(data.matches && data.matches.length>0){
-
-            const m = data.matches[0];
-
-            resBox.innerHTML =
-                m.homeTeam.name + ' vs ' + m.awayTeam.name +
-                '<br><span style="color:#ffe57e">AI анализ: ТБ 2.5</span>' +
-                '<br><span style="color:#00ff88;font-size:12px;">Уверенность: ' + (60 + Math.floor(Math.random()*15)) + '%</span>';
-
-        } else {
-            resBox.innerText = "Матчей нет";
-        }
-
-    }catch(e){
-        resBox.innerText = "Ошибка API";
-    }
-
-    window.predictLoading = false;
+    });
 }
-
 // ===== DAILY SYSTEM =====
 
 function initDaily(){
@@ -2176,7 +2153,9 @@ function claimBonus(key, url){
     closeAll();
 }
     
-initDaily();                    
+initDaily(); 
+        generateTodayMatches();
+setInterval(checkMatchStatus, 60000);
 </script>
                     <script>
 
@@ -2381,7 +2360,157 @@ function battle(mode){
     setTimeout(doRound, 700);
 }
                         // ===== BONUS SYSTEM =====
+// ==========================
+// 🏆 MATCH SYSTEM CORE
+// ==========================
 
+// Получить список матчей
+function getMatches(){
+    return JSON.parse(localStorage.getItem("matches") || "[]");
+}
+
+// Сохранить матчи
+function saveMatches(list){
+    localStorage.setItem("matches", JSON.stringify(list));
+}
+
+// Создать матчи на день (пока вручную)
+function generateTodayMatches(){
+
+    if(localStorage.getItem("matches_generated_today") === new Date().toDateString()){
+        return;
+    }
+
+    const today = new Date().toDateString();
+
+    const matches = [
+        {
+            id: "match1",
+            league: "АПЛ",
+            home: "Арсенал",
+            away: "Челси",
+            startTime: Date.now() + 5*60*1000, // через 5 минут
+            status: "open",
+            result: null
+        },
+        {
+            id: "match2",
+            league: "Ла Лига",
+            home: "Реал",
+            away: "Барселона",
+            startTime: Date.now() + 10*60*1000,
+            status: "open",
+            result: null
+        }
+    ];
+
+    saveMatches(matches);
+    localStorage.setItem("matches_generated_today", today);
+}
+
+// Проверка закрытия матчей (через 15 минут)
+function checkMatchStatus(){
+
+    let matches = getMatches();
+    let changed = false;
+
+    matches.forEach(m => {
+
+        if(m.status === "open"){
+
+            if(Date.now() > m.startTime + 15*60*1000){
+
+                m.status = "closed";
+
+                // временный рандомный результат
+                const results = ["home","away","draw"];
+                m.result = results[Math.floor(Math.random()*3)];
+
+                settleBets(m);
+
+                changed = true;
+            }
+        }
+
+    });
+
+    if(changed){
+        saveMatches(matches);
+    }
+}
+
+// ==========================
+// 💰 BET SYSTEM
+// ==========================
+
+// Получить ставки пользователя
+function getMyBets(){
+    return JSON.parse(localStorage.getItem("my_bets") || "[]");
+}
+
+// Сохранить ставки
+function saveMyBets(bets){
+    localStorage.setItem("my_bets", JSON.stringify(bets));
+}
+
+// Сделать ставку
+function placeBet(matchId, prediction){
+
+    let matches = getMatches();
+    let match = matches.find(m => m.id === matchId);
+
+    if(!match || match.status !== "open"){
+        tg.showAlert("Матч уже закрыт");
+        return;
+    }
+
+    if(!spendLC(20)) return;
+
+    let bets = getMyBets();
+
+    bets.push({
+        matchId: matchId,
+        prediction: prediction,
+        status: "pending"
+    });
+
+    saveMyBets(bets);
+
+    tg.showAlert("Ставка принята!");
+}
+
+// Расчёт ставок
+function settleBets(match){
+
+    let bets = getMyBets();
+    let changed = false;
+
+    bets.forEach(b => {
+
+        if(b.matchId === match.id && b.status === "pending"){
+
+            if(b.prediction === match.result){
+                b.status = "win";
+                addLC(40);
+                addRP(20);
+                addSeasonRP(20);
+            }else{
+                b.status = "lose";
+                addRP(5);
+                addSeasonRP(5);
+            }
+
+            changed = true;
+        }
+
+    });
+
+    if(changed){
+        saveMyBets(bets);
+        updateProfile();
+        checkSeasonRewards();
+    }
+}
 function claimBonus(key, url){
 
     let last = localStorage.getItem("bonus_" + key);
