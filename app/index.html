@@ -1377,7 +1377,7 @@ filter: drop-shadow(0 0 8px #ff007a);
     <span class="profile-id-label">ID</span>
     <span id="uID" class="profile-id-value">---</span>
 </div>
-<button onclick="openBetHistory()">📜 История ставок</button>
+<button onclick="alert('клик')">📜 История ставок</button>
     <div id="betHistoryBox" style="display:none; margin-top:10px;"></div>
 <div class="stat-row">
     <span class="profile-balance-label">Баланс</span>
@@ -2692,60 +2692,9 @@ function claimBonus(key, url){
 
     window.open(url, "_blank");
 }
-                        // ==========================
-// 🎯 BET SYSTEM CORE
-// ==========================
+                        
 
-// ===== MATCHES =====
-
-function getMatches(){
-    return JSON.parse(localStorage.getItem("matches") || "[]");
-}
-
-function saveMatches(data){
-    localStorage.setItem("matches", JSON.stringify(data));
-}
-
-// создаём 20 матчей в день
-function generateTodayMatches(){
-
-    let today = new Date().toDateString();
-
-    let leagues = ["АПЛ","Ла Лига","Серия А","Бундес","ЛЧ"];
-    let matches = [];
-
-    for(let i=0;i<20;i++){
-      matches.push({
-    id: "m"+i,
-    league: leagues[i % leagues.length],
-    home: "Team "+(i+1),
-    away: "Team "+(i+21),
-
-    odds: {
-        home: (1.5 + Math.random()).toFixed(2),
-        draw: (2.5 + Math.random()).toFixed(2),
-        away: (1.5 + Math.random()).toFixed(2),
-        over25: (1.6 + Math.random()).toFixed(2),
-        under25: (1.6 + Math.random()).toFixed(2),
-        cornersOver85: (1.7 + Math.random()).toFixed(2),
-        cardsOver35: (1.7 + Math.random()).toFixed(2)
-    },
-
-    aiPrediction: {
-        mainMarket: ["home","draw","away"][Math.floor(Math.random()*3)],
-        additionalMarkets: ["over25","cornersOver85"],
-        confidence: Math.floor(65 + Math.random()*25), // 65–90%
-        isBestBet: false,
-        isVip: false,
-        createdAt: Date.now()
-    },
-
-    status: "open",
-    startTime: Date.now() + (i*600000),
-    result: null
-});
-    }
-// ===== SELECT BEST BET =====
+// ===== SELECT BEST BET =====//
 
 let bestMatch = matches.reduce((prev, current) => 
     (prev.aiPrediction.confidence > current.aiPrediction.confidence) ? prev : current
@@ -2776,7 +2725,7 @@ function placeBet(matchId, type){
         return;
     }
 
-    }
+    
     let amount = 10;
 
     if(!spendLC(amount)) return;
@@ -2876,45 +2825,8 @@ function settleBets(match){
     }
 });
     }
-   function openBetHistory(){
-
-    let box = document.getElementById("betHistoryBox");
-
-    // 🔥 ЕСЛИ УЖЕ ОТКРЫТО — ЗАКРЫВАЕМ
-    if(box.style.display === "block"){
-        box.style.display = "none";
-        box.innerHTML = "";
-        return;
-    }
-
-    let history = getBetHistory();
-
-    if(history.length === 0){
-        box.innerHTML = "Ставок пока нет.";
-        box.style.display = "block";
-        return;
-    }
-
-    let html = "<h3>📜 История ставок</h3>";
-
-    history.slice(0,20).forEach(bet=>{
-        html += `
-        <div style="border:1px solid #444; padding:8px; margin:5px 0;">
-            <b>${bet.date}</b><br>
-            Тип: ${bet.type}<br>
-            Ставка: ${bet.stake} LC<br>
-            Результат: ${bet.result}<br>
-            Профит: ${bet.profit} LC
-        </div>
-        `;
-    });
-
-    html += `<br><b>Общий профит: ${getTotalProfit()} LC</b>`;
-
-    box.innerHTML = html;
-    box.style.display = "block";
-}
-                        // ==========================
+   
+                        
 // 📜 BET HISTORY VIEW
 // ==========================
 
