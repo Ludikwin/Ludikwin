@@ -2104,24 +2104,9 @@ function copyRef(){
     });
 }
 
-   <div class="bottom-nav">
-
-    <div class="nav-item active" onclick="goHome()">
-        <div class="icon">🏠</div>
-        <span>Главная</span>
-    </div>
-
-    <div class="nav-item" onclick="openP('refP')">
-        <div class="icon">🔗</div>
-        <span>Рефералы</span>
-    </div>
-
-    <div class="nav-item" onclick="openP('profileP')">
-        <div class="icon">👤</div>
-        <span>Профиль</span>
-    </div>
-</div> <!-- закрывает bottom-nav -->
- 
+   function getToday(){
+    return new Date().toDateString();
+}
     // ===== AI LIMIT SYSTEM =====
 
 function getAIUsage(){
@@ -2356,7 +2341,24 @@ function claimBonus(key, url){
 initDaily();                    
 </script>
                     <script>
+                        
+ <div class="bottom-nav">
 
+    <div class="nav-item active" onclick="goHome()">
+        <div class="icon">🏠</div>
+        <span>Главная</span>
+    </div>
+
+    <div class="nav-item" onclick="openP('refP')">
+        <div class="icon">🔗</div>
+        <span>Рефералы</span>
+    </div>
+
+    <div class="nav-item" onclick="openP('profileP')">
+        <div class="icon">👤</div>
+        <span>Профиль</span>
+    </div>
+</div> <!-- закрывает bottom-nav -->
 // ===== HOME BUTTON =====
 function goHome(){
     closeAll();
