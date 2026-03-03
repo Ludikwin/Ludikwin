@@ -2277,16 +2277,7 @@ function canUseAI(){
     
    checkSeasonReset();
     showWheelIfAvailable();
-    // ===== BONUS SYSTEM =====
-function canClaimBonus(key){
-
-    let lastClaim = localStorage.getItem("bonus_" + key);
-    if(!lastClaim) return true;
-
-    let diff = Date.now() - parseInt(lastClaim);
-
-    return diff > 24*60*60*1000; // 24 часа
-}
+   
 
 function claimBonus(key, url){
 
@@ -2307,8 +2298,7 @@ function claimBonus(key, url){
 }
     
 initDaily(); 
-        generateTodayMatches();
-setInterval(checkMatchStatus, 60000);
+        
 </script>
                     <script>
 
@@ -2542,10 +2532,24 @@ function generateTodayMatches(){
             league: "АПЛ",
             home: "Арсенал",
             away: "Челси",
-            startTime: Date.now() + 5*60*1000, // через 5 минут
+            startTime: Date.now() + 5*60*1000,
             status: "open",
-            result: null
+            result: null,
+
+            odds:{
+                home:1.8,
+                draw:3.2,
+                away:2.4
+            },
+
+            aiPrediction:{
+                mainMarket:"П1",
+                confidence:78,
+                additionalMarkets:["ТБ 2.5","ЖК > 3.5","Угловые > 8.5"],
+                isBestBet:true
+            }
         },
+
         {
             id: "match2",
             league: "Ла Лига",
@@ -2553,7 +2557,20 @@ function generateTodayMatches(){
             away: "Барселона",
             startTime: Date.now() + 10*60*1000,
             status: "open",
-            result: null
+            result: null,
+
+            odds:{
+                home:2.1,
+                draw:3.4,
+                away:2.0
+            },
+
+            aiPrediction:{
+                mainMarket:"П2",
+                confidence:72,
+                additionalMarkets:["ТМ 3.5","ЖК > 4.5"],
+                isBestBet:false
+            }
         }
     ];
 
@@ -2561,31 +2578,6 @@ function generateTodayMatches(){
     localStorage.setItem("matches_generated_today", today);
 }
 
-// Проверка закрытия матчей (через 15 минут)
-function checkMatchStatus(){
-
-    let matches = getMatches();
-    let changed = false;
-
-    matches.forEach(m => {
-
-        if(m.status === "open"){
-
-            if(Date.now() > m.startTime + 15*60*1000){
-
-                m.status = "closed";
-
-                // временный рандомный результат
-                const results = ["home","away","draw"];
-                m.result = results[Math.floor(Math.random()*3)];
-
-                settleBets(m);
-
-                changed = true;
-            }
-        }
-
-    });
 
     if(changed){
         saveMatches(matches);
@@ -2596,15 +2588,8 @@ function checkMatchStatus(){
 // 💰 BET SYSTEM
 // ==========================
 
-// Получить ставки пользователя
-function getMyBets(){
-    return JSON.parse(localStorage.getItem("my_bets") || "[]");
-}
 
-// Сохранить ставки
-function saveMyBets(bets){
-    localStorage.setItem("my_bets", JSON.stringify(bets));
-}
+
                         // ===== BET HISTORY SYSTEM =====
 
 function getBetHistory(){
@@ -2629,64 +2614,7 @@ function getTotalProfit(){
 
 // ===============================
 
-// Сделать ставку
-function placeBet(matchId, prediction){
 
-    let matches = getMatches();
-    let match = matches.find(m => m.id === matchId);
-
-    if(!match || match.status !== "open"){
-        tg.showAlert("Матч уже закрыт");
-        return;
-    }
-
-    if(!spendLC(20)) return;
-
-    let bets = getMyBets();
-
-    bets.push({
-        matchId: matchId,
-        prediction: prediction,
-        status: "pending"
-    });
-
-    saveMyBets(bets);
-
-    tg.showAlert("Ставка принята!");
-}
-
-// Расчёт ставок
-function settleBets(match){
-
-    let bets = getMyBets();
-    let changed = false;
-
-    bets.forEach(b => {
-
-        if(b.matchId === match.id && b.status === "pending"){
-
-            if(b.prediction === match.result){
-                b.status = "win";
-                addLC(40);
-                addRP(20);
-                addSeasonRP(20);
-            }else{
-                b.status = "lose";
-                addRP(5);
-                addSeasonRP(5);
-            }
-
-            changed = true;
-        }
-
-    });
-
-    if(changed){
-        saveMyBets(bets);
-        updateProfile();
-        checkSeasonRewards();
-    }
-}
 function claimBonus(key, url){
 
     let last = localStorage.getItem("bonus_" + key);
@@ -2870,6 +2798,8 @@ function openBetHistory(){
 }
                         generateTodayMatches();
 setInterval(checkMatchStatus, 60000);
+                        localStorage.removeItem("matches");
+localStorage.removeItem("matches_generated_today");
 </script>
 </body>
 </html>
