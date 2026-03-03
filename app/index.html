@@ -2103,10 +2103,38 @@ function copyRef(){
         tg.showAlert("Ошибка копирования");
     });
 }
+</script>
+   <div class="bottom-nav">
 
-   function getToday(){
-    return new Date().toDateString();
+    <div class="nav-item active" onclick="goHome()">
+        <div class="icon">🏠</div>
+        <span>Главная</span>
+    </div>
+
+    <div class="nav-item" onclick="openP('refP')">
+        <div class="icon">🔗</div>
+        <span>Рефералы</span>
+    </div>
+
+    <div class="nav-item" onclick="openP('profileP')">
+        <div class="icon">👤</div>
+        <span>Профиль</span>
+    </div>
+</div> <!-- закрывает bottom-nav -->
+    <script>
+
+    function openAI(){
+    openPredict();
 }
+            <div class="nav-item" onclick="openP('profileP')">
+        <div class="icon">👤</div>
+        <span>Профиль</span>
+    </div>
+
+</div> <!-- bottom-nav -->
+
+</body>
+</html>
     // ===== AI LIMIT SYSTEM =====
 
 function getAIUsage(){
@@ -2341,24 +2369,7 @@ function claimBonus(key, url){
 initDaily();                    
 </script>
                     <script>
-                        
- <div class="bottom-nav">
 
-    <div class="nav-item active" onclick="goHome()">
-        <div class="icon">🏠</div>
-        <span>Главная</span>
-    </div>
-
-    <div class="nav-item" onclick="openP('refP')">
-        <div class="icon">🔗</div>
-        <span>Рефералы</span>
-    </div>
-
-    <div class="nav-item" onclick="openP('profileP')">
-        <div class="icon">👤</div>
-        <span>Профиль</span>
-    </div>
-</div> <!-- закрывает bottom-nav -->
 // ===== HOME BUTTON =====
 function goHome(){
     closeAll();
@@ -2561,52 +2572,6 @@ function battle(mode){
     updateBars();
     setTimeout(doRound, 700);
 }
-                        // ===== BONUS SYSTEM =====
-
-function claimBonus(name, url){
-
-    const today = getToday();
-
-    let bonusData = JSON.parse(localStorage.getItem("bonus_usage") || "{}");
-
-    // проверяем использовался ли бонус сегодня
-    if(bonusData[name] === today){
-        tg.showAlert("Бонус уже получен сегодня");
-        return;
-    }
-
-    // сохраняем дату
-    bonusData[name] = today;
-    localStorage.setItem("bonus_usage", JSON.stringify(bonusData));
-
-    // начисляем LC
-    addLC(10);
-
-    // открываем ссылку
-    window.open(url, "_blank");
-
-    tg.showAlert("Вы получили +10 LC");
-}
-                        <!-- BOTTOM NAVIGATION -->
-<div class="bottom-nav">
-
-    <div class="nav-item active" onclick="closeAll()">
-        <div class="icon">🏠</div>
-        <span>Главная</span>
-    </div>
-
-    <div class="nav-item" onclick="openP('refP')">
-        <div class="icon">👥</div>
-        <span>Реферал</span>
-    </div>
-
-    <div class="nav-item" onclick="openP('profileP')">
-        <div class="icon">👤</div>
-        <span>Профиль</span>
-    </div>
-
-</div>
 </script>
-       
 </body>
 </html>
