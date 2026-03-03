@@ -1623,7 +1623,14 @@ function openPredict(){
 }
 
 async function getPredict(code){
+// ====== AI COST ======
+if(getLC() < 15){
+    tg.showAlert("Недостаточно LC для AI прогноза");
+    return;
+}
 
+addLC(-15);
+// =====================
     const resBox = document.getElementById('pRes');
     resBox.innerHTML = "";
 
@@ -1641,9 +1648,9 @@ async function getPredict(code){
                 <div>${m.league}</div>
                 <div>${m.home} vs ${m.away}</div>
 
-                <button onclick="placeBet('${m.id}','home')">П1</button>
-                <button onclick="placeBet('${m.id}','draw')">Х</button>
-                <button onclick="placeBet('${m.id}','away')">П2</button>
+                <button onclick="placeBet('${m.id}','home')">П1 (2.0)</button>
+                <button onclick="placeBet('${m.id}','draw')">Х (3.0)</button>
+                <button onclick="placeBet('${m.id}','away')">П2 (2.5)</button>
             </div>
         `;
 
@@ -2117,23 +2124,27 @@ function incrementAIUsage(){
 }
 
 function canUseAI(){
-    let used = getAIUsage();
-
-    if(isVIP()) return true; // VIP без лимита
-
-    function canUseAI(){
     if(isVIP()) return true;
-    return true;
+
+    let used = getAIUsage();
+    return used < 5; // обычным 5 AI в день
 }
 
-    return true;
-}
+    
    
     
    checkSeasonReset();
     showWheelIfAvailable();
     // ===== BONUS SYSTEM =====
+function canClaimBonus(key){
 
+    let lastClaim = localStorage.getItem("bonus_" + key);
+    if(!lastClaim) return true;
+
+    let diff = Date.now() - parseInt(lastClaim);
+
+    return diff > 24*60*60*1000; // 24 часа
+}
 
 function claimBonus(key, url){
 
@@ -2525,6 +2536,126 @@ function claimBonus(key, url){
     localStorage.setItem("bonus_" + key, now);
 
     window.open(url, "_blank");
+}
+                        // ==========================
+// 🎯 BET SYSTEM CORE
+// ==========================
+
+// ===== MATCHES =====
+
+function getMatches(){
+    return JSON.parse(localStorage.getItem("matches") || "[]");
+}
+
+function saveMatches(data){
+    localStorage.setItem("matches", JSON.stringify(data));
+}
+
+// создаём 20 матчей в день
+function generateTodayMatches(){
+
+    let today = new Date().toDateString();
+    let savedDate = localStorage.getItem("matches_date");
+
+    if(savedDate === today) return;
+
+    let leagues = ["АПЛ","Ла Лига","Серия А","Бундес","ЛЧ"];
+    let matches = [];
+
+    for(let i=0;i<20;i++){
+        matches.push({
+            id: "m"+i,
+            league: leagues[i % leagues.length],
+            home: "Team "+(i+1),
+            away: "Team "+(i+21),
+            status: "open",
+            startTime: Date.now() + (i*600000), // каждые 10 минут
+            result: null
+        });
+    }
+
+    saveMatches(matches);
+    localStorage.setItem("matches_date", today);
+}
+
+// ===== BETS =====
+
+function getMyBets(){
+    return JSON.parse(localStorage.getItem("my_bets") || "[]");
+}
+
+function saveMyBets(data){
+    localStorage.setItem("my_bets", JSON.stringify(data));
+}
+
+function placeBet(matchId, type){
+
+    let amount = 10;
+
+    if(!spendLC(amount)) return;
+
+    let bets = getMyBets();
+    let coefficient = 2.0;
+
+    bets.push({
+        id: Date.now(),
+        matchId,
+        type,
+        amount,
+        coefficient,
+        status: "pending"
+    });
+
+    saveMyBets(bets);
+
+    document.getElementById("pRes").innerHTML = "✅ Ставка принята";
+}
+
+// ===== RESULT SYSTEM =====
+
+function checkMatchStatus(){
+
+    let matches = getMatches();
+    let updated = false;
+
+    matches.forEach(match => {
+
+        if(match.status === "open" && Date.now() > match.startTime + (15*60000)){
+
+            match.status = "finished";
+
+            let results = ["home","draw","away"];
+            match.result = results[Math.floor(Math.random()*3)];
+
+            settleBets(match);
+
+            updated = true;
+        }
+    });
+
+    if(updated) saveMatches(matches);
+}
+
+function settleBets(match){
+
+    let bets = getMyBets();
+
+    bets.forEach(b => {
+
+        if(b.matchId === match.id && b.status === "pending"){
+
+            if(b.type === match.result){
+                b.status = "win";
+                addLC(b.amount * b.coefficient);
+                addRP(10);
+                addSeasonRP(10);
+            } else {
+                b.status = "lose";
+            }
+        }
+    });
+
+    saveMyBets(bets);
 }
 </script>
 </body>
