@@ -1378,6 +1378,7 @@ filter: drop-shadow(0 0 8px #ff007a);
     <span id="uID" class="profile-id-value">---</span>
 </div>
 <button onclick="openBetHistory()">📜 История ставок</button>
+    <div id="betHistoryBox" style="display:none; margin-top:10px;"></div>
 <div id="betHistoryBox"></div>
 <div class="stat-row">
     <span class="profile-balance-label">Баланс</span>
@@ -2816,13 +2817,22 @@ function settleBets(match){
     }
 });
     }
-    function openBetHistory(){
+   function openBetHistory(){
 
     let box = document.getElementById("betHistoryBox");
+
+    // 🔥 ЕСЛИ УЖЕ ОТКРЫТО — ЗАКРЫВАЕМ
+    if(box.style.display === "block"){
+        box.style.display = "none";
+        box.innerHTML = "";
+        return;
+    }
+
     let history = getBetHistory();
 
     if(history.length === 0){
         box.innerHTML = "Ставок пока нет.";
+        box.style.display = "block";
         return;
     }
 
@@ -2843,6 +2853,7 @@ function settleBets(match){
     html += `<br><b>Общий профит: ${getTotalProfit()} LC</b>`;
 
     box.innerHTML = html;
+    box.style.display = "block";
 }
                         generateTodayMatches();
 setInterval(checkMatchStatus, 60000);
