@@ -1743,6 +1743,19 @@ addLC(-15);
 
     resBox.innerHTML += `
         <div class="match-card">
+        <div style="margin-top:8px; padding:8px; background:#111; border-radius:8px;">
+
+<b>🤖 AI прогноз:</b><br>
+
+Основной рынок: <b>${m.aiPrediction.mainMarket.toUpperCase()}</b><br>
+Уверенность: <b>${m.aiPrediction.confidence}%</b><br>
+
+Дополнительно:<br>
+${m.aiPrediction.additionalMarkets.map(mk => "• "+mk).join("<br>")}
+
+${m.aiPrediction.isBestBet ? "<div style='color:gold; margin-top:6px;'>🔥 ЖБ ПРОГНОЗ ДНЯ</div>" : ""}
+
+</div>
 
             <div class="match-league">
                 ⚽ ${m.league}
@@ -2703,7 +2716,7 @@ function generateTodayMatches(){
     let matches = [];
 
     for(let i=0;i<20;i++){
-        matches.push({
+      matches.push({
     id: "m"+i,
     league: leagues[i % leagues.length],
     home: "Team "+(i+1),
@@ -2712,7 +2725,20 @@ function generateTodayMatches(){
     odds: {
         home: (1.5 + Math.random()).toFixed(2),
         draw: (2.5 + Math.random()).toFixed(2),
-        away: (1.5 + Math.random()).toFixed(2)
+        away: (1.5 + Math.random()).toFixed(2),
+        over25: (1.6 + Math.random()).toFixed(2),
+        under25: (1.6 + Math.random()).toFixed(2),
+        cornersOver85: (1.7 + Math.random()).toFixed(2),
+        cardsOver35: (1.7 + Math.random()).toFixed(2)
+    },
+
+    aiPrediction: {
+        mainMarket: ["home","draw","away"][Math.floor(Math.random()*3)],
+        additionalMarkets: ["over25","cornersOver85"],
+        confidence: Math.floor(65 + Math.random()*25), // 65–90%
+        isBestBet: false,
+        isVip: false,
+        createdAt: Date.now()
     },
 
     status: "open",
@@ -2720,7 +2746,13 @@ function generateTodayMatches(){
     result: null
 });
     }
+// ===== SELECT BEST BET =====
 
+let bestMatch = matches.reduce((prev, current) => 
+    (prev.aiPrediction.confidence > current.aiPrediction.confidence) ? prev : current
+);
+
+bestMatch.aiPrediction.isBestBet = true;
     saveMatches(matches);
     localStorage.setItem("matches_date", today);
 }
