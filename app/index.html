@@ -1351,7 +1351,7 @@ filter: drop-shadow(0 0 8px #ff007a);
         Получай +10 LC за переход (раз в 24 часа)
     </p>
 
-    <div class="bonus-card" onclick="claimBonus('1win','https://1wrlst.com/?p=h14y')">
+    <div class="bonus-card" onclick="claimBonus('1win','https://1wqaxr.com/?p=h14y')">
         💰 1WIN
         <span>+10 LC</span>
     </div>
@@ -2121,7 +2121,20 @@ function copyRef(){
         <span>Профиль</span>
     </div>
 </div> <!-- закрывает bottom-nav -->
-    
+    <script>
+
+    function openAI(){
+    openPredict();
+}
+            <div class="nav-item" onclick="openP('profileP')">
+        <div class="icon">👤</div>
+        <span>Профиль</span>
+    </div>
+
+</div> <!-- bottom-nav -->
+
+</body>
+</html>
     // ===== AI LIMIT SYSTEM =====
 
 function getAIUsage(){
@@ -2206,8 +2219,7 @@ function battle(mode){
 
     function updateBars(){
         document.getElementById("pBar").style.width = playerHP + "%";
-        document.getElementById("eBar").style.width =
-            (enemyHP > 100 ? (enemyHP/1.4) : enemyHP) + "%";
+        document.getElementById("eBar").style.width = (enemyHP > 100 ? (enemyHP/1.4) : enemyHP) + "%";
     }
 
     updateBars();
@@ -2225,32 +2237,106 @@ function battle(mode){
             boostedChance -= 0.10;
         }
 
-        let win = Math.random() < boostedChance;
+        let finalWin = Math.random() < boostedChance;
 
-        if(win){
+        let round = 1;
 
-            enemyHP = 0;
+        function doRound(){
+
+            if(round > 3){
+                finishBattle();
+                return;
+            }
+
+            let damage = Math.floor(Math.random()*20) + 15;
+
+            // ⚡ Крит если серия 5+
+            if(streak >= 5 && Math.random() < 0.25){
+                damage *= 2;
+                box.innerHTML += `<br>⚡ КРИТИЧЕСКИЙ УДАР!`;
+            }
+
+            if(Math.random() < 0.5){
+                enemyHP -= damage;
+                if(enemyHP < 0) enemyHP = 0;
+                box.innerHTML += `<br>💥 Раунд ${round}: Ты наносишь ${damage}`;
+            } else {
+                playerHP -= damage;
+                if(playerHP < 0) playerHP = 0;
+                box.innerHTML += `<br>🩸 Раунд ${round}: Враг наносит ${damage}`;
+            }
+
             updateBars();
 
-            addLC(reward);
-            setStreak(streak + 1);
-            localStorage.setItem("lose_streak", 0);
-
-            box.innerHTML += `<br><br>🏆 ПОБЕДА! +${reward} LC`;
-
-        } else {
-
-            playerHP = 0;
-            updateBars();
-
-            setStreak(0);
-            localStorage.setItem("lose_streak", loseStreak + 1);
-
-            box.innerHTML += `<br><br>💀 ПОРАЖЕНИЕ`;
+            round++;
+            setTimeout(doRound, 900);
         }
 
-    },1500);
+        function finishBattle(){
+
+            if(finalWin){
+                enemyHP = 0;
+            } else {
+                playerHP = 0;
+            }
+
+            updateBars();
+
+            setTimeout(()=>{
+
+                if(finalWin){
+
+                    let newStreak = streak + 1;
+                    setStreak(newStreak);
+                    localStorage.setItem("lose_streak", 0);
+
+                    let finalReward = reward;
+                    if(isVIP()){
+    finalReward = Math.floor(finalReward * 1.3);
 }
+
+                    // 💎 Идеальная победа
+                    if(playerHP > 60){
+                        finalReward *= 2;
+                        box.innerHTML += `<br>💎 ИДЕАЛЬНАЯ ПОБЕДА x2!`;
+                    }
+
+                    addLC(finalReward);
+                    addRP(Math.floor(finalReward/2));
+                    addSeasonRP(Math.floor(finalReward/2));
+                    checkSeasonRewards();
+                    
+                    box.innerHTML += `
+                    <br><br>🏆 ПОБЕДА!
+                    <br>+${finalReward} LC
+                    <br>🔥 Серия: ${newStreak}
+                    `;
+
+                } else {
+
+                    setStreak(0);
+                    loseStreak++;
+                    localStorage.setItem("lose_streak", loseStreak);
+
+                    box.innerHTML += `
+                    <br><br>💀 ТЫ ПОВЕРЖЕН
+                    <br>-${cost} LC
+                    <br>Серия сброшена
+                    `;
+                }
+
+            },600);
+        }
+
+        doRound();
+
+    },800);
+}
+    function buyLC(amount){
+    tg.showAlert("Покупка будет доступна после подключения Telegram Stars");
+}
+   checkSeasonReset();
+    showWheelIfAvailable();
     // ===== BONUS SYSTEM =====
 
 function canClaimBonus(key){
