@@ -1657,6 +1657,8 @@ async function getPredict(code){
 };
 
 let selectedLeague = leagueNames[code];
+    console.log("CODE:", code);
+console.log("SELECTED:", selectedLeague);
 // ====== AI COST ======
 if(getLC() < 15){
     tg.showAlert("Недостаточно LC для AI прогноза");
@@ -1669,7 +1671,7 @@ addLC(-15);
     resBox.innerHTML = "";
 
     let matches = getMatches()
-    .filter(m => m.status === "open" && m.league === code)
+    .filter(m => m.status === "open" && m.league === selectedLeague)
     .slice(0, 2);
 
     if(matches.length === 0){
