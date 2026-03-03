@@ -39,7 +39,8 @@ function addRP(amount) {
     return "🐣 Новичок";
 }
 const tg = window.Telegram.WebApp;
-        tg.ready();
+        
+tg.ready();
 
 // Если доступен новый fullscreen API
 if (tg.requestFullscreen) {
@@ -1545,28 +1546,6 @@ function setLCById(id, amount){
 }
 
 function addLC(amount){
-    function claimBonus(key, url){
-
-    let last = localStorage.getItem("bonus_" + key);
-    let now = Date.now();
-
-    // если бонус уже брали сегодня
-    if(last && (now - parseInt(last)) < 24*60*60*1000){
-        tg.showAlert("Бонус уже получен сегодня");
-        return;
-    }
-
-    // начисляем награду
-    addLC(10);
-
-    // сохраняем время
-    localStorage.setItem("bonus_" + key, now);
-
-    // открываем ссылку
-    window.open(url, "_blank");
-
-    tg.showAlert("+10 LC начислено");
-}
     let current = getLC();
     setLC(current + amount);
 }
@@ -2147,9 +2126,13 @@ function copyRef(){
     function openAI(){
     openPredict();
 }
-            
+            <div class="nav-item" onclick="openP('profileP')">
+        <div class="icon">👤</div>
+        <span>Профиль</span>
+    </div>
+
 </div> <!-- bottom-nav -->
-</script>
+
 </body>
 </html>
     // ===== AI LIMIT SYSTEM =====
