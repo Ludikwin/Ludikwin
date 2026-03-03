@@ -1379,7 +1379,6 @@ filter: drop-shadow(0 0 8px #ff007a);
 </div>
 <button onclick="openBetHistory()">📜 История ставок</button>
     <div id="betHistoryBox" style="display:none; margin-top:10px;"></div>
-<div id="betHistoryBox"></div>
 <div class="stat-row">
     <span class="profile-balance-label">Баланс</span>
     <span id="profileBalance" class="profile-balance-value">0 LC</span>
@@ -2913,6 +2912,48 @@ function settleBets(match){
     html += `<br><b>Общий профит: ${getTotalProfit()} LC</b>`;
 
     box.innerHTML = html;
+    box.style.display = "block";
+}
+                        // ==========================
+// 📜 BET HISTORY VIEW
+// ==========================
+
+function openBetHistory(){
+
+    const box = document.getElementById("betHistoryBox");
+
+    if(box.style.display === "block"){
+        box.style.display = "none";
+        return;
+    }
+
+    let bets = getMyBets();
+
+    if(bets.length === 0){
+        box.innerHTML = "<div style='font-size:12px;opacity:0.7;'>Ставок пока нет</div>";
+        box.style.display = "block";
+        return;
+    }
+
+    box.innerHTML = "";
+
+    bets.forEach(b => {
+
+        box.innerHTML += `
+            <div style="
+                background:#111;
+                padding:8px;
+                border-radius:10px;
+                margin-bottom:6px;
+                font-size:12px;
+                opacity:0.85;">
+                Матч: ${b.matchId}<br>
+                Прогноз: ${b.prediction}<br>
+                Статус: ${b.status}
+            </div>
+        `;
+    });
+
     box.style.display = "block";
 }
                         generateTodayMatches();
