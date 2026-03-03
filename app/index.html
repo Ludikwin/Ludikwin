@@ -1645,6 +1645,18 @@ function openPredict(){
 }
 
 async function getPredict(code){
+    const leagueNames = {
+    "PL":"АПЛ",
+    "PD":"Ла Лига",
+    "BL1":"Бундес",
+    "SA":"Серия А",
+    "CL":"ЛЧ",
+    "RPL":"РПЛ",
+    "MLS":"MLS",
+    "EL":"ЛЕ"
+};
+
+let selectedLeague = leagueNames[code];
 // ====== AI COST ======
 if(getLC() < 15){
     tg.showAlert("Недостаточно LC для AI прогноза");
@@ -1656,7 +1668,9 @@ addLC(-15);
     const resBox = document.getElementById('pRes');
     resBox.innerHTML = "";
 
-    let matches = getMatches().filter(m => m.status === "open");
+    let matches = getMatches()
+    .filter(m => m.status === "open" && m.league === code)
+    .slice(0, 2);
 
     if(matches.length === 0){
         resBox.innerText = "Нет доступных матчей";
