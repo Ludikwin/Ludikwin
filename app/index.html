@@ -2777,27 +2777,7 @@ function placeBet(matchId, type){
         return;
     }
 
-    let amount = 10;
-
-    if(!spendLC(amount)) return;
-
-    let bets = getMyBets();
-
-    let coefficient = parseFloat(match.odds[type]);
-
-    bets.push({
-        id: Date.now(),
-        matchId,
-        type,
-        amount,
-        coefficient,
-        status: "pending"
-    });
-
-    saveMyBets(bets);
-
-    document.getElementById("pRes").innerHTML = "✅ Ставка принята";
-}
+    }
     let amount = 10;
 
     if(!spendLC(amount)) return;
