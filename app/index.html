@@ -1759,9 +1759,9 @@ addLC(-15);
             </div>
 
             <div class="bet-row">
-                <button onclick="placeBet('${m.id}','home')">П1</button>
-                <button onclick="placeBet('${m.id}','draw')">X</button>
-                <button onclick="placeBet('${m.id}','away')">П2</button>
+                <button onclick="placeBet('${m.id}','home')">П1 1.8</button>
+                <button onclick="placeBet('${m.id}','draw')">X 3.2</button>
+                <button onclick="placeBet('${m.id}','away')">П2 2.4</button>
             </div>
 
         </div>
@@ -2728,6 +2728,10 @@ function placeBet(matchId, type){
 
     let bets = getMyBets();
     let coefficient = 2.0;
+
+if(type === "home") coefficient = 1.8;
+if(type === "draw") coefficient = 3.2;
+if(type === "away") coefficient = 2.4;
 
     bets.push({
         id: Date.now(),
