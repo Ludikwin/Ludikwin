@@ -2725,7 +2725,6 @@ function placeBet(matchId, type){
         return;
     }
 
-    
     let amount = 10;
 
     if(!spendLC(amount)) return;
@@ -2733,9 +2732,9 @@ function placeBet(matchId, type){
     let bets = getMyBets();
     let coefficient = 2.0;
 
-if(type === "home") coefficient = 1.8;
-if(type === "draw") coefficient = 3.2;
-if(type === "away") coefficient = 2.4;
+    if(type === "home") coefficient = 1.8;
+    if(type === "draw") coefficient = 3.2;
+    if(type === "away") coefficient = 2.4;
 
     bets.push({
         id: Date.now(),
@@ -2747,16 +2746,17 @@ if(type === "away") coefficient = 2.4;
     });
 
     saveMyBets(bets);
-// добавляем в историю
-addBetToHistory({
-    id: Date.now(),
-    matchId: matchId,
-    type: type,
-    stake: amount,
-    result: "pending",
-    profit: -amount,
-    date: new Date().toLocaleString()
-});
+
+    addBetToHistory({
+        id: Date.now(),
+        matchId: matchId,
+        type: type,
+        stake: amount,
+        result: "pending",
+        profit: -amount,
+        date: new Date().toLocaleString()
+    });
+
     document.getElementById("pRes").innerHTML = "✅ Ставка принята";
 }
 
