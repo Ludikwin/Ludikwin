@@ -2123,7 +2123,9 @@ function copyRef(){
 </div> <!-- закрывает bottom-nav -->
     <script>
     // ===== AI LIMIT SYSTEM =====
-
+function getToday(){
+    return new Date().toDateString();
+}
 function getAIUsage(){
     let today = getToday();
     let usage = JSON.parse(localStorage.getItem("ai_usage") || "{}");
@@ -2142,16 +2144,15 @@ function canUseAI(){
 
     if(isVIP()) return true; // VIP без лимита
 
-    if(used >= 1){
-        tg.showAlert("Бесплатный прогноз уже использован сегодня");
-        return false;
-    }
+    function canUseAI(){
+    if(isVIP()) return true;
+    return true;
+}
 
     return true;
 }
    
-    tg.showAlert("Покупка будет доступна после подключения Telegram Stars");
-}
+    
    checkSeasonReset();
     showWheelIfAvailable();
     // ===== BONUS SYSTEM =====
