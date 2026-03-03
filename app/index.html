@@ -1207,6 +1207,60 @@ filter: drop-shadow(0 0 8px #ff007a);
 .bonus-card:active{
     transform:scale(0.97);
 }
+    .match-card{
+    background: linear-gradient(145deg,#1a1a1a,#111);
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:16px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.match-league{
+    font-size:12px;
+    opacity:0.7;
+    margin-bottom:8px;
+}
+
+.match-teams{
+    text-align:center;
+    font-weight:bold;
+    font-size:16px;
+}
+
+.vs{
+    font-size:12px;
+    opacity:0.6;
+    margin:4px 0;
+}
+
+.match-time{
+    text-align:center;
+    font-size:13px;
+    margin:8px 0;
+    opacity:0.8;
+}
+
+.bet-row{
+    display:flex;
+    gap:8px;
+}
+
+.bet-row button{
+    flex:1;
+    padding:8px;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    background:linear-gradient(135deg,#bc13fe,#ff007a);
+    color:white;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.bet-row button:active{
+    transform:scale(0.95);
+}
 </style>
 </head>
 <body>
@@ -1681,18 +1735,37 @@ addLC(-15);
 
     matches.forEach(m => {
 
-        resBox.innerHTML += `
-            <div style="margin-bottom:12px; padding:10px; background:#111; border-radius:10px;">
-                <div>${m.league}</div>
-                <div>${m.home} vs ${m.away}</div>
-
-                <button onclick="placeBet('${m.id}','home')">П1 (2.0)</button>
-                <button onclick="placeBet('${m.id}','draw')">Х (3.0)</button>
-                <button onclick="placeBet('${m.id}','away')">П2 (2.5)</button>
-            </div>
-        `;
-
+    let time = new Date(m.startTime).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
     });
+
+    resBox.innerHTML += `
+        <div class="match-card">
+
+            <div class="match-league">
+                ⚽ ${m.league}
+            </div>
+
+            <div class="match-teams">
+                <div class="team">${m.home}</div>
+                <div class="vs">VS</div>
+                <div class="team">${m.away}</div>
+            </div>
+
+            <div class="match-time">
+                🕒 ${time}
+            </div>
+
+            <div class="bet-row">
+                <button onclick="placeBet('${m.id}','home')">П1</button>
+                <button onclick="placeBet('${m.id}','draw')">X</button>
+                <button onclick="placeBet('${m.id}','away')">П2</button>
+            </div>
+
+        </div>
+    `;
+});
 }
 // ===== DAILY SYSTEM =====
 
