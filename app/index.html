@@ -1493,7 +1493,7 @@ filter: drop-shadow(0 0 8px #ff007a);
 <!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
     <h2 style="color:#bc13fe">🔥 ЖБ ДНЯ</h2>
-
+<div id="jbContent"></div>
     <div id="jbContent" style="margin:15px 0;"></div>
 
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
@@ -1687,7 +1687,102 @@ function openPredict(){
         box.appendChild(btn);
     });
 }
+// ==========================
+// 🔥 ЖБ ДНЯ (20 LC / 1 раз в день)
+// ==========================
 
+function openJB(){
+
+    let matches = getMatches();
+    let topMatch = matches.find(m => m.isTop === true);
+
+    if(!topMatch){
+        alert("Сегодня нет ЖБ прогноза");
+        return;
+    }
+
+    let today = new Date().toDateString();
+
+    // ключ для хранения покупки
+    let unlockKey = "jb_unlock_" + topMatch.id;
+
+    let unlockedDate = localStorage.getItem(unlockKey);
+
+    // если уже покупали сегодня этот ЖБ
+    if(unlockedDate === today){
+        showJBContent(topMatch);
+        openP("jbP");
+        return;
+    }
+
+    // проверка баланса
+    let balance = parseInt(localStorage.getItem("balance")) || 0;
+
+    if(balance < 20){
+        alert("Недостаточно LC. Нужно 20 LC.");
+        return;
+    }
+
+    // списываем 20 LC
+    balance -= 20;
+    localStorage.setItem("balance", balance);
+
+    document.getElementById("profileBalance").innerText = balance + " LC";
+
+    // сохраняем дату покупки
+    localStorage.setItem(unlockKey, today);
+
+    showJBContent(topMatch);
+    openP("jbP");
+}
+    // ==========================
+// 🔥 ЖБ ДНЯ (20 LC / 1 раз в день)
+// ==========================
+
+function openJB(){
+
+    let matches = getMatches();
+    let topMatch = matches.find(m => m.isTop === true);
+
+    if(!topMatch){
+        alert("Сегодня нет ЖБ прогноза");
+        return;
+    }
+
+    let today = new Date().toDateString();
+
+    // ключ для хранения покупки
+    let unlockKey = "jb_unlock_" + topMatch.id;
+
+    let unlockedDate = localStorage.getItem(unlockKey);
+
+    // если уже покупали сегодня этот ЖБ
+    if(unlockedDate === today){
+        showJBContent(topMatch);
+        openP("jbP");
+        return;
+    }
+
+    // проверка баланса
+    let balance = parseInt(localStorage.getItem("balance")) || 0;
+
+    if(balance < 20){
+        alert("Недостаточно LC. Нужно 20 LC.");
+        return;
+    }
+
+    // списываем 20 LC
+    balance -= 20;
+    localStorage.setItem("balance", balance);
+
+    document.getElementById("profileBalance").innerText = balance + " LC";
+
+    // сохраняем дату покупки
+    localStorage.setItem(unlockKey, today);
+
+    showJBContent(topMatch);
+    openP("jbP");
+}
 async function getPredict(code){
     const leagueNames = {
     "PL":"АПЛ",
