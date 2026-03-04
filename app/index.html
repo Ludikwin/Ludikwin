@@ -7,9 +7,6 @@
 <title>LUDIK AI</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        window.onerror = function(message, source, lineno, colno, error){
-    alert("JS ERROR:\n" + message + "\nLine: " + lineno);
-};
         // ===== RP SYSTEM =====
 
 if (!localStorage.getItem("rp")) {
@@ -41,24 +38,20 @@ function addRP(amount) {
 
     return "🐣 Новичок";
 }
-const tg = window.Telegram ? window.Telegram.WebApp : null;
+const tg = window.Telegram.WebApp;
+        
+tg.ready();
 
-if(tg){
-
-    tg.ready();
-
-    if (tg.requestFullscreen) {
-        tg.requestFullscreen();
-    } else {
-        tg.expand();
-    }
-
-    tg.setHeaderColor("#050505");
-    tg.setBackgroundColor("#050505");
-
+// Если доступен новый fullscreen API
+if (tg.requestFullscreen) {
+    tg.requestFullscreen();
 } else {
-    console.log("Telegram WebApp не найден");
+    tg.expand();
 }
+
+// Цвета должны совпадать с фоном
+tg.setHeaderColor("#050505");
+tg.setBackgroundColor("#050505");
 
 // Отключаем свайп вниз
 // if (tg.disableVerticalSwipes) {
@@ -105,11 +98,7 @@ function checkSeasonReset(){
         // награда за участие
         if(finalRP >= 300){
             addLC(100);
-            if(tg){
-    tg.showAlert("🏆 Сезон завершён! Вы получили 100 LC");
-} else {
-    alert("🏆 Сезон завершён! Вы получили 100 LC");
-}
+            tg.showAlert("🏆 Сезон завершён! Вы получили 100 LC");
         }
 
         localStorage.setItem("season_start", now);
@@ -149,22 +138,14 @@ function activateVIP(days){
 
     localStorage.setItem("vip_until", newUntil);
 
-   if(tg){
     tg.showAlert("👑 VIP активирован на " + days + " дней!");
-} else {
-    alert("👑 VIP активирован на " + days + " дней!");
-}
 }
 
 function checkVIPStatus(){
 
     if(!isVIP() && getVIPUntil() !== 0){
         localStorage.removeItem("vip_until");
-        if(tg){
-    tg.showAlert("⏳ VIP закончился");
-} else {
-    alert("⏳ VIP закончился");
-}
+        tg.showAlert("⏳ VIP закончился");
     }
 }
 </script>
@@ -1280,105 +1261,6 @@ filter: drop-shadow(0 0 8px #ff007a);
 .bet-row button:active{
     transform:scale(0.95);
 }
-      .profile-wrapper{
-    padding:20px;
-}
-
-.profile-card{
-    background: linear-gradient(145deg,#1a1a1a,#242424);
-    border-radius:20px;
-    padding:20px;
-    box-shadow:0 0 25px rgba(0,0,0,0.5);
-    margin-bottom:25px;
-}
-
-.profile-top{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:20px;
-}
-
-.profile-label{
-    font-size:12px;
-    opacity:0.6;
-    margin-bottom:5px;
-}
-
-.profile-id{
-    font-size:18px;
-    font-weight:bold;
-}
-
-.profile-balance{
-    font-size:22px;
-    font-weight:bold;
-    color:#00ffcc;
-}
-
-.profile-status-block{
-    padding-top:10px;
-    border-top:1px solid rgba(255,255,255,0.1);
-}
-
-.profile-status{
-    font-size:16px;
-    font-weight:bold;
-    margin-top:5px;
-}
-
-.profile-buttons{
-    display:flex;
-    flex-direction:column;
-    gap:15px;
-}
-
-.main-premium-btn{
-    padding:15px;
-    border:none;
-    border-radius:16px;
-    background:linear-gradient(90deg,#6a00ff,#a200ff);
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-}
-
-.shop-wrapper{
-    padding:20px;
-}
-
-.shop-title{
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:25px;
-}
-
-.shop-card{
-    background:#1c1c1c;
-    border-radius:18px;
-    padding:18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
-}
-
-.shop-item-title{
-    font-weight:bold;
-}
-
-.shop-item-desc{
-    font-size:12px;
-    opacity:0.6;
-}
-
-.shop-buy-btn{
-    padding:10px 16px;
-    border:none;
-    border-radius:12px;
-    background:#00c896;
-    color:white;
-    font-weight:bold;
-}
 </style>
 </head>
 <body>
@@ -1484,97 +1366,45 @@ filter: drop-shadow(0 0 8px #ff007a);
 <!-- ПРОФИЛЬ -->
 <div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
-<!-- МАГАЗИН -->
-<div id="shopP" class="popup">
-    <h2>🛒 МАГАЗИН LC</h2>
+<div class="shop-section">
+    <h3>💎 Магазин LC</h3>
 
-    <div class="shop-wrapper">
-
-        <div class="shop-card">
-            <div>
-                <div class="shop-item-title">50 ⭐</div>
-                <div class="shop-item-desc">Получить 50 LC</div>
-            </div>
-            <button class="shop-buy-btn" onclick="buyLC(50)">
-                Купить
-            </button>
-        </div>
-
-        <div class="shop-card">
-            <div>
-                <div class="shop-item-title">150 ⭐</div>
-                <div class="shop-item-desc">Получить 170 LC</div>
-            </div>
-            <button class="shop-buy-btn" onclick="buyLC(170)">
-                Купить
-            </button>
-        </div>
-
-        <div class="shop-card">
-            <div>
-                <div class="shop-item-title">300 ⭐</div>
-                <div class="shop-item-desc">Получить 380 LC</div>
-            </div>
-            <button class="shop-buy-btn" onclick="buyLC(380)">
-                Купить
-            </button>
-        </div>
-
-    </div>
-
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+    <button onclick="buyLC(50)">50 ⭐ = 50 LC</button>
+    <button onclick="buyLC(170)">150 ⭐ = 170 LC</button>
+    <button onclick="buyLC(380)">300 ⭐ = 380 LC</button>
 </div>
-<div class="profile-wrapper">
-
-    <div class="profile-card">
-        <div class="profile-top">
-            <div>
-                <div class="profile-label">USER ID</div>
-                <div id="uID" class="profile-id-value">---</div>
-            </div>
-
-            <div>
-                <div class="profile-label">BALANCE</div>
-                <div id="profileBalance" class="profile-balance-value">0 LC</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="profile-actions">
-
-        <button class="action-btn" onclick="openP('shopP')">
-            🛒 МАГАЗИН
-        </button>
-
-        <button class="action-btn" onclick="openBetHistory()">
-            📜 ИСТОРИЯ СТАВОК
-        </button>
-
-        <button class="action-btn" onclick="openP('statsP')">
-            🤖 AI СТАТИСТИКА
-        </button>
-
-        <button class="action-btn" onclick="openP('historyP')">
-            📊 ИСТОРИЯ ПРОГНОЗОВ
-        </button>
-
-        <button class="action-btn" onclick="openP('bonusP')">
-            🎁 БОНУСЫ
-        </button>
-
-        <button class="action-btn" onclick="openP('chatP')">
-            💬 ЧАТ
-        </button>
-
-        <button onclick="addLC(10000)" class="dev-btn">
-            +10 000 LC (DEV)
-        </button>
-
-    </div>
-
+    <div class="stat-row">
+    <span class="profile-id-label">ID</span>
+    <span id="uID" class="profile-id-value">---</span>
+</div>
+<button onclick="openBetHistory()">📜 История ставок</button>
     <div id="betHistoryBox" style="display:none; margin-top:10px;"></div>
-
+<div class="stat-row">
+    <span class="profile-balance-label">Баланс</span>
+    <span id="profileBalance" class="profile-balance-value">0 LC</span>
 </div>
+<button onclick="addLC(10000)" style="
+    margin-top:10px;
+    padding:8px 14px;
+    background:#111;
+    color:#00ff88;
+    border:1px solid #00ff88;
+    border-radius:8px;
+    cursor:pointer;
+">
+    +10 000 LC (DEV)
+</button>
+    <div style="margin-top:20px; display:flex; flex-direction:column; gap:12px;">
+
+        <button class="action-btn" onclick="openP('statsP')">AI СТАТИСТИКА</button>
+
+        <button class="action-btn" onclick="openP('historyP')">ИСТОРИЯ ПРОГНОЗОВ</button>
+
+        <button class="action-btn" onclick="openP('bonusP')">БОНУСЫ</button>
+
+        <button class="action-btn" onclick="openP('chatP')">ЧАТ</button>
+
+            </div>
 
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
@@ -1787,15 +1617,6 @@ function addLC(amount){
     setLC(current + amount);
 }
 
-function buyLC(amount){
-    addLC(amount);
-    if(tg){
-        tg.showAlert("Начислено " + amount + " LC");
-    } else {
-        alert("Начислено " + amount + " LC");
-    }
-}
-
 function spendLC(amount){
     let current = getLC();
     if(current < amount){
@@ -1873,6 +1694,22 @@ function openPredict(){
 
 
 function openJB(){
+
+    if(!spendLC(20)){
+        alert("Недостаточно LC");
+        return;
+    }
+
+    let matches = getMatches();
+    let topMatch = matches.find(m => m.isTop);
+
+    if(!topMatch){
+        alert("ЖБ прогноз не найден");
+        return;
+    }
+
+    showJBContent(topMatch);
+}function openJB(){
 
     let matches = getMatches();
     let topMatch = matches.find(m => m.isTop === true);
@@ -2469,9 +2306,11 @@ function canUseAI(){
 
     
    
- generateTodayMatches();
+    if(!localStorage.getItem("matches")){
+    generateTodayMatches();
+}
    checkSeasonReset();
-    
+    showWheelIfAvailable();
    initDaily();
 
 
@@ -3265,17 +3104,6 @@ setInterval(checkMatchStatus, 60000);
         </div>
     `;
 }
-                      
 </script>
-        <div id="overlay" style="
-    display:none;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.7);
-    z-index:999;
-"></div>
 </body>
 </html>
