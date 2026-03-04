@@ -1365,50 +1365,102 @@ filter: drop-shadow(0 0 8px #ff007a);
 
 <!-- ПРОФИЛЬ -->
 <div id="profileP" class="popup">
-    <h2>ПРОФИЛЬ</h2>
-<div class="shop-section">
-    <h3>💎 Магазин LC</h3>
 
-    <button onclick="buyLC(50)">50 ⭐ = 50 LC</button>
-    <button onclick="buyLC(170)">150 ⭐ = 170 LC</button>
-    <button onclick="buyLC(380)">300 ⭐ = 380 LC</button>
-</div>
-    <div class="stat-row">
-    <span class="profile-id-label">ID</span>
-    <span id="uID" class="profile-id-value">---</span>
-</div>
-<button onclick="openBetHistory()">📜 История ставок</button>
-    <div id="betHistoryBox" style="display:none; margin-top:10px;"></div>
-<div class="stat-row">
-    <span class="profile-balance-label">Баланс</span>
-    <span id="profileBalance" class="profile-balance-value">0 LC</span>
-</div>
-<button onclick="addLC(10000)" style="
-    margin-top:10px;
-    padding:8px 14px;
-    background:#111;
-    color:#00ff88;
-    border:1px solid #00ff88;
-    border-radius:8px;
-    cursor:pointer;
-">
-    +10 000 LC (DEV)
-</button>
-    <div style="margin-top:20px; display:flex; flex-direction:column; gap:12px;">
+    <h2 style="text-align:center;color:#bc13fe;">👤 ПРОФИЛЬ</h2>
 
-        <button class="action-btn" onclick="openP('statsP')">AI СТАТИСТИКА</button>
+    <!-- TOP CARD -->
+    <div style="
+        background:linear-gradient(135deg,#111,#1a1a1a);
+        padding:16px;
+        border-radius:16px;
+        margin-bottom:15px;
+        border:1px solid #222;
+    ">
 
-        <button class="action-btn" onclick="openP('historyP')">ИСТОРИЯ ПРОГНОЗОВ</button>
-
-        <button class="action-btn" onclick="openP('bonusP')">БОНУСЫ</button>
-
-        <button class="action-btn" onclick="openP('chatP')">ЧАТ</button>
-
+        <div style="display:flex;justify-content:space-between;">
+            <div>
+                <div style="font-size:12px;opacity:0.6;">ID</div>
+                <div id="uID" style="font-weight:bold;font-size:14px;">---</div>
             </div>
 
-    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
-</div>
+            <div style="text-align:right;">
+                <div style="font-size:12px;opacity:0.6;">Баланс</div>
+                <div id="profileBalance" style="font-weight:bold;font-size:16px;color:#00ff88;">0 LC</div>
+            </div>
+        </div>
 
+        <div style="margin-top:10px;display:flex;justify-content:space-between;">
+            <div>
+                <div style="font-size:12px;opacity:0.6;">RP</div>
+                <div id="profileRP" style="font-weight:bold;">0</div>
+            </div>
+
+            <div style="text-align:right;">
+                <div style="font-size:12px;opacity:0.6;">Ранг</div>
+                <div id="profileRank" style="font-weight:bold;color:#ffd700;">Новичок</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <button class="action-btn" onclick="openP('historyP')">
+            📊 История прогнозов
+        </button>
+
+        <button class="action-btn" onclick="openBetHistory()">
+            📜 История ставок
+        </button>
+
+        <button class="action-btn" onclick="openP('dailyP')">
+            🎁 Daily бонус
+        </button>
+
+        <button class="action-btn" onclick="openP('chatP')">
+            💬 Чат
+        </button>
+
+        <button class="action-btn" onclick="openP('refP')">
+            🔗 Рефералы
+        </button>
+
+        <button class="action-btn" onclick="openP('shopP')">
+            💎 Магазин
+        </button>
+
+    </div>
+
+    <div id="betHistoryBox" style="display:none;margin-top:12px;"></div>
+
+    <button class="close-btn" onclick="closeAll()" style="margin-top:15px;">
+        ЗАКРЫТЬ
+    </button>
+
+</div>
+<div id="shopP" class="popup">
+    <h2 style="color:#bc13fe;text-align:center;">💎 МАГАЗИН LC</h2>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:15px;">
+
+        <button class="action-btn" onclick="addLC(50)">
+            50 ⭐ = 50 LC
+        </button>
+
+        <button class="action-btn" onclick="addLC(170)">
+            150 ⭐ = 170 LC
+        </button>
+
+        <button class="action-btn" onclick="addLC(380)">
+            300 ⭐ = 380 LC
+        </button>
+
+    </div>
+
+    <button class="close-btn" onclick="closeAll()" style="margin-top:15px;">
+        ЗАКРЫТЬ
+    </button>
+</div>
 <!-- БОНУСЫ -->
 <div id="bonusP" class="popup">
     <h3 style="color:#bc13fe">🔥 ПАРТНЁРСКИЕ БОНУСЫ</h3>
