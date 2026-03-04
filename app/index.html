@@ -1287,7 +1287,7 @@ filter: drop-shadow(0 0 8px #ff007a);
         <div class="big-card card-jb" onclick="openJB()">
             <h2>ЖБ ДНЯ</h2>
             <p>Самый уверенный прогноз сегодня</p>
-            <button class="action-btn">ОТКРЫТЬ</button>
+            <button class="action-btn">ОТКРЫТЬ — 20 LC</button>
         </div>
 
         <!-- AI ПРОГНОЗЫ -->
@@ -1692,8 +1692,24 @@ function openPredict(){
 // 🔥 ЖБ ДНЯ (20 LC / 1 раз в день)
 // ==========================
 
+
 function openJB(){
 
+    if(!spendLC(20)){
+        alert("Недостаточно LC");
+        return;
+    }
+
+    let matches = getMatches();
+    let topMatch = matches.find(m => m.isTop);
+
+    if(!topMatch){
+        alert("ЖБ прогноз не найден");
+        return;
+    }
+
+    showJBContent(topMatch);
+}
     let matches = getMatches();
     let topMatch = matches.find(m => m.isTop === true);
 
@@ -3083,10 +3099,7 @@ setInterval(checkMatchStatus, 60000);
                 Уверенность: ${match.aiPrediction.confidence}%
             </div>
 
-            <div style="margin-top:10px;color:#ffe57e;">
-                💰 Цена просмотра: 20 LC
-            </div>
-
+            
         </div>
     `;
 }
