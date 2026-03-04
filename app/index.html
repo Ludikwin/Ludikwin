@@ -2493,52 +2493,280 @@ function generateTodayMatches(){
     const today = new Date().toDateString();
 
     const matches = [
-        {
-            id: "match1",
-            league: "АПЛ",
-            home: "Арсенал",
-            away: "Челси",
-            startTime: Date.now() + 5*60*1000,
-            status: "open",
-            result: null,
 
-            odds:{
-                home:1.8,
-                draw:3.2,
-                away:2.4
-            },
+/* ========= АПЛ ========= */
+{
+id:"pl1",
+league:"АПЛ",
+home:"Арсенал",
+away:"Челси",
+startTime:Date.now()+5*60*1000,
+status:"open",
+result:null,
+odds:{home:1.8,draw:3.2,away:2.4},
+aiPrediction:{
+mainMarket:"П1",
+confidence:78,
+additionalMarkets:["ТБ 2.5","ЖК > 3.5","Угловые > 8.5"],
+isBestBet:true
+}
+},
+{
+id:"pl2",
+league:"АПЛ",
+home:"Манчестер Сити",
+away:"Ливерпуль",
+startTime:Date.now()+15*60*1000,
+status:"open",
+result:null,
+odds:{home:2.0,draw:3.5,away:2.2},
+aiPrediction:{
+mainMarket:"ТБ 2.5",
+confidence:74,
+additionalMarkets:["ЖК > 4.5","Угловые > 9.5"],
+isBestBet:false
+}
+},
 
-            aiPrediction:{
-                mainMarket:"П1",
-                confidence:78,
-                additionalMarkets:["ТБ 2.5","ЖК > 3.5","Угловые > 8.5"],
-                isBestBet:true
-            }
-        },
+/* ========= ЛА ЛИГА ========= */
+{
+id:"pd1",
+league:"Ла Лига",
+home:"Реал",
+away:"Барселона",
+startTime:Date.now()+10*60*1000,
+status:"open",
+result:null,
+odds:{home:2.1,draw:3.4,away:2.0},
+aiPrediction:{
+mainMarket:"П2",
+confidence:72,
+additionalMarkets:["ТМ 3.5","ЖК > 4.5"],
+isBestBet:false
+}
+},
+{
+id:"pd2",
+league:"Ла Лига",
+home:"Атлетико",
+away:"Севилья",
+startTime:Date.now()+20*60*1000,
+status:"open",
+result:null,
+odds:{home:1.9,draw:3.1,away:3.0},
+aiPrediction:{
+mainMarket:"П1",
+confidence:69,
+additionalMarkets:["ТМ 2.5"],
+isBestBet:false
+}
+},
 
-        {
-            id: "match2",
-            league: "Ла Лига",
-            home: "Реал",
-            away: "Барселона",
-            startTime: Date.now() + 10*60*1000,
-            status: "open",
-            result: null,
+/* ========= БУНДЕС ========= */
+{
+id:"bl1",
+league:"Бундес",
+home:"Бавария",
+away:"Боруссия Д",
+startTime:Date.now()+25*60*1000,
+status:"open",
+result:null,
+odds:{home:1.7,draw:3.8,away:3.5},
+aiPrediction:{
+mainMarket:"П1",
+confidence:81,
+additionalMarkets:["ТБ 3.5"],
+isBestBet:false
+}
+},
+{
+id:"bl2",
+league:"Бундес",
+home:"Лейпциг",
+away:"Айнтрахт",
+startTime:Date.now()+30*60*1000,
+status:"open",
+result:null,
+odds:{home:2.0,draw:3.2,away:2.8},
+aiPrediction:{
+mainMarket:"ТБ 2.5",
+confidence:66,
+additionalMarkets:["ЖК > 3.5"],
+isBestBet:false
+}
+},
 
-            odds:{
-                home:2.1,
-                draw:3.4,
-                away:2.0
-            },
+/* ========= СЕРИЯ А ========= */
+{
+id:"sa1",
+league:"Серия А",
+home:"Интер",
+away:"Милан",
+startTime:Date.now()+35*60*1000,
+status:"open",
+result:null,
+odds:{home:2.2,draw:3.1,away:2.1},
+aiPrediction:{
+mainMarket:"П1",
+confidence:68,
+additionalMarkets:["ТМ 2.5"],
+isBestBet:false
+}
+},
+{
+id:"sa2",
+league:"Серия А",
+home:"Ювентус",
+away:"Рома",
+startTime:Date.now()+40*60*1000,
+status:"open",
+result:null,
+odds:{home:1.9,draw:3.0,away:3.2},
+aiPrediction:{
+mainMarket:"П1",
+confidence:73,
+additionalMarkets:["ЖК > 4.5"],
+isBestBet:false
+}
+},
 
-            aiPrediction:{
-                mainMarket:"П2",
-                confidence:72,
-                additionalMarkets:["ТМ 3.5","ЖК > 4.5"],
-                isBestBet:false
-            }
-        }
-    ];
+/* ========= ЛЧ ========= */
+{
+id:"cl1",
+league:"ЛЧ",
+home:"ПСЖ",
+away:"Манчестер Юн",
+startTime:Date.now()+45*60*1000,
+status:"open",
+result:null,
+odds:{home:1.8,draw:3.4,away:2.6},
+aiPrediction:{
+mainMarket:"П1",
+confidence:75,
+additionalMarkets:["ТБ 2.5"],
+isBestBet:false
+}
+},
+{
+id:"cl2",
+league:"ЛЧ",
+home:"Бенфика",
+away:"Порту",
+startTime:Date.now()+50*60*1000,
+status:"open",
+result:null,
+odds:{home:2.3,draw:3.0,away:2.4},
+aiPrediction:{
+mainMarket:"ТМ 2.5",
+confidence:67,
+additionalMarkets:["ЖК > 5.5"],
+isBestBet:false
+}
+},
+
+/* ========= РПЛ ========= */
+{
+id:"rpl1",
+league:"РПЛ",
+home:"Зенит",
+away:"Спартак",
+startTime:Date.now()+55*60*1000,
+status:"open",
+result:null,
+odds:{home:1.6,draw:3.5,away:4.0},
+aiPrediction:{
+mainMarket:"П1",
+confidence:82,
+additionalMarkets:["ТБ 2.5"],
+isBestBet:false
+}
+},
+{
+id:"rpl2",
+league:"РПЛ",
+home:"ЦСКА",
+away:"Локомотив",
+startTime:Date.now()+60*60*1000,
+status:"open",
+result:null,
+odds:{home:2.1,draw:3.1,away:2.7},
+aiPrediction:{
+mainMarket:"П1",
+confidence:70,
+additionalMarkets:["ЖК > 3.5"],
+isBestBet:false
+}
+},
+
+/* ========= MLS ========= */
+{
+id:"mls1",
+league:"MLS",
+home:"LA Galaxy",
+away:"Inter Miami",
+startTime:Date.now()+65*60*1000,
+status:"open",
+result:null,
+odds:{home:2.0,draw:3.3,away:2.2},
+aiPrediction:{
+mainMarket:"ТБ 2.5",
+confidence:64,
+additionalMarkets:["Угловые > 9.5"],
+isBestBet:false
+}
+},
+{
+id:"mls2",
+league:"MLS",
+home:"NYC",
+away:"Seattle",
+startTime:Date.now()+70*60*1000,
+status:"open",
+result:null,
+odds:{home:2.4,draw:3.2,away:2.3},
+aiPrediction:{
+mainMarket:"П2",
+confidence:71,
+additionalMarkets:["ЖК > 3.5"],
+isBestBet:false
+}
+},
+
+/* ========= ЛЕ ========= */
+{
+id:"el1",
+league:"ЛЕ",
+home:"Рома",
+away:"Марсель",
+startTime:Date.now()+75*60*1000,
+status:"open",
+result:null,
+odds:{home:2.2,draw:3.1,away:2.5},
+aiPrediction:{
+mainMarket:"П1",
+confidence:69,
+additionalMarkets:["ТМ 2.5"],
+isBestBet:false
+}
+},
+{
+id:"el2",
+league:"ЛЕ",
+home:"Аякс",
+away:"Спортинг",
+startTime:Date.now()+80*60*1000,
+status:"open",
+result:null,
+odds:{home:2.1,draw:3.3,away:2.6},
+aiPrediction:{
+mainMarket:"ТБ 2.5",
+confidence:74,
+additionalMarkets:["Угловые > 8.5"],
+isBestBet:false
+}
+}
+
+];
 
     saveMatches(matches);
     localStorage.setItem("matches_generated_today", today);
