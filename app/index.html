@@ -1703,6 +1703,29 @@ function openJB(){
     }
 
     let today = new Date().toDateString();
+    let unlockKey = "jb_unlocked_date";
+    let unlockedDate = localStorage.getItem(unlockKey);
+
+    // если уже куплен сегодня
+    if(unlockedDate === today){
+        showJBContent(topMatch);
+        openP("jbP");
+        return;
+    }
+
+    // СПИСАНИЕ 20 LC
+    if(!spendLC(20)){
+        return;
+    }
+
+    // сохраняем дату покупки
+    localStorage.setItem(unlockKey, today);
+
+    showJBContent(topMatch);
+    openP("jbP");
+}
+
+    let today = new Date().toDateString();
     let unlockKey = "jb_unlock_" + topMatch.id;
     let unlockedDate = localStorage.getItem(unlockKey);
 
