@@ -2485,12 +2485,11 @@ function saveMatches(list){
 // Создать матчи на день (пока вручную)
 function generateTodayMatches(){
 
-    localStorage.removeItem("matches_generated_today");
-        return;
-        console.log("Матчи созданы:", matches);
-    }
-
     const today = new Date().toDateString();
+
+    if(localStorage.getItem("matches_generated_today") === today){
+        return;
+    }
 
     const matches = [
 
