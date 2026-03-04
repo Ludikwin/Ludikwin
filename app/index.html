@@ -2288,17 +2288,19 @@ function canUseAI(){
 
     
    
-    
+    if(!localStorage.getItem("matches")){
+    generateTodayMatches();
+}
    checkSeasonReset();
     showWheelIfAvailable();
-   
+   initDaily();
 
 
     function goHome(){
     closeAll();
 }
     
-initDaily(); 
+
         
 </script>
                     <script>
