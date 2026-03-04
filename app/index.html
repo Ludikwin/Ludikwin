@@ -119,27 +119,20 @@ function getVIPUntil(){
 }
 
 function isVIP(){
-    const until = parseInt(localStorage.getItem("vip_until_" + userId) || "0");
-    return Date.now() < until;
-    function updateVIPUI(){
-    const vipBadge = document.getElementById("vipBadge");
-    if(!vipBadge) return;
-
-    if(isVIP()){
-        vipBadge.innerText = "VIP АКТИВЕН";
-        vipBadge.style.background = "gold";
-    }else{
-        vipBadge.innerText = "ОБЫЧНЫЙ";
-        vipBadge.style.background = "gray";
-    }
-}
+    return Date.now() < getVIPUntil();
 }
 
 function activateVIP(days){
-    const until = Date.now() + days*24*60*60*1000;
-    localStorage.setItem("vip_until_" + userId, until);
-    updateVIPUI();
-}
+
+    let current = getVIPUntil();
+    let now = Date.now();
+
+    let baseTime = now;
+
+    // если VIP уже активен — продлеваем
+    if(current > now){
+        baseTime = current;
+    }
 
     let newUntil = baseTime + (days * 24 * 60 * 60 * 1000);
 
@@ -1366,9 +1359,7 @@ filter: drop-shadow(0 0 8px #ff007a);
     <h2 style="color:#bc13fe">VIP ПАКЕТ</h2>
     <p style="font-size:12px; margin:15px 0;">Доступ к VIP прогнозам на 2 недели.</p>
     <div class="stat-row"><span>Цена:</span><span class="gold-t">15.00 USDT</span></div>
-    <button class="action-btn" onclick="activateVIP(14)">
-ОПЛАТИТЬ (DEV)
-</button>
+    <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">ОПЛАТИТЬ</a>
     <button class="close-btn" onclick="closeAll()">ОТМЕНА</button>
 </div>
 
@@ -1749,13 +1740,7 @@ function openJB(){
 }
 
    
-    async function getPredict(code){
-
-    if(!canUseAI()){
-        tg.showAlert("Лимит AI прогнозов 5/5. Купите VIP.");
-        return;
-    }
-
+async function getPredict(code){
     const leagueNames = {
     "PL":"АПЛ",
     "PD":"Ла Лига",
@@ -1777,7 +1762,6 @@ if(getLC() < 15){
 }
 
 addLC(-15);
-        incrementAIUsage();
 // =====================
     const resBox = document.getElementById('pRes');
     resBox.innerHTML = "";
@@ -2052,7 +2036,6 @@ function checkSeasonRewards(){
 
 document.addEventListener("DOMContentLoaded", () => {
     showWheelIfAvailable();
-    updateVIPUI();
 });
     // ===== WHEEL SYSTEM =====
 
@@ -2298,30 +2281,13 @@ function copyRef(){
 </div> <!-- закрывает bottom-nav -->
     <script>
     // ===== AI LIMIT SYSTEM =====
-// ===== AI LIMIT SYSTEM =====
-
 function getToday(){
     return new Date().toDateString();
 }
-
-function canUseAI(){
-    if(isVIP()) return true;
-
+function getAIUsage(){
     let today = getToday();
     let usage = JSON.parse(localStorage.getItem("ai_usage") || "{}");
-
-    return (usage[today] || 0) < 5;
-}
-
-function incrementAIUsage(){
-    if(isVIP()) return;
-
-    let today = getToday();
-    let usage = JSON.parse(localStorage.getItem("ai_usage") || "{}");
-
-    usage[today] = (usage[today] || 0) + 1;
-
-    localStorage.setItem("ai_usage", JSON.stringify(usage));
+    return usage[today] || 0;
 }
 
 function incrementAIUsage(){
@@ -2334,27 +2300,8 @@ function incrementAIUsage(){
 function canUseAI(){
     if(isVIP()) return true;
 
-    const today = new Date().toDateString();
-    const saved = JSON.parse(localStorage.getItem("ai_usage_" + userId) || "{}");
-
-    if(saved.date !== today){
-        return true;
-    }
-    function incrementAIUsage(){
-    if(isVIP()) return;
-
-    const today = new Date().toDateString();
-    let saved = JSON.parse(localStorage.getItem("ai_usage_" + userId) || "{}");
-
-    if(saved.date !== today){
-        saved = { date: today, count: 0 };
-    }
-
-    saved.count++;
-    localStorage.setItem("ai_usage_" + userId, JSON.stringify(saved));
-}
-
-    return saved.count < 5;
+    let used = getAIUsage();
+    return used < 5; // обычным 5 AI в день
 }
 
     
