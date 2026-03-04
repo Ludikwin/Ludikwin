@@ -2971,15 +2971,20 @@ function claimBonus(key, url){
     let last = localStorage.getItem("bonus_" + key);
     let now = Date.now();
 
+    // ✅ Ссылку открываем ВСЕГДА
+    window.open(url, "_blank");
+
+    // Если бонус уже получен и не прошло 24ч — просто показываем сообщение
     if(last && (now - parseInt(last)) < 86400000){
         tg.showAlert("Бонус уже получен сегодня");
         return;
     }
 
+    // ✅ Начисляем только если прошло 24 часа
     addLC(10);
     localStorage.setItem("bonus_" + key, now);
 
-    window.open(url, "_blank");
+    tg.showAlert("+10 LC начислено 🔥");
 }
                         
 
