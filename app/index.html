@@ -3060,6 +3060,49 @@ function openBetHistory(){
 }
                         
 setInterval(checkMatchStatus, 60000);
+                        function showJBContent(match){
+
+    const box = document.getElementById("jbContent");
+
+    box.innerHTML = `
+        <div style="background:#111;padding:12px;border-radius:12px;">
+
+            <div style="opacity:0.7;font-size:12px;">
+                ${match.league}
+            </div>
+
+            <div style="font-size:16px;font-weight:bold;margin:6px 0;">
+                ${match.home} vs ${match.away}
+            </div>
+
+            <div style="margin:8px 0;">
+                🤖 Прогноз: <b>${match.aiPrediction.mainMarket}</b>
+            </div>
+
+            <div style="font-size:12px;opacity:0.8;">
+                Уверенность: ${match.aiPrediction.confidence}%
+            </div>
+
+            <button 
+                style="
+                    margin-top:12px;
+                    width:100%;
+                    padding:10px;
+                    border:none;
+                    border-radius:10px;
+                    background:linear-gradient(135deg,#bc13fe,#ff007a);
+                    color:white;
+                    font-weight:bold;
+                    cursor:pointer;
+                "
+                onclick="placeTopBet('${match.id}')"
+            >
+                🔥 Поставить 20 LC
+            </button>
+
+        </div>
+    `;
+}
            function placeTopBet(matchId){
 
     let amount = 20;
