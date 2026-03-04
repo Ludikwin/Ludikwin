@@ -2763,22 +2763,44 @@ isBestBet:false
 ];
 // ===== ВЫБОР ЖБ ПО МАКСИМАЛЬНОЙ УВЕРЕННОСТИ =====
 
+// ===== УМНЫЙ ВЫБОР ЖБ =====
+
 let bestMatch = null;
-let maxConfidence = 0;
+let maxScore = 0;
 
 matches.forEach(m => {
 
-    m.isTop = false; // сброс на всякий случай
+    m.isTop = false;
 
-    if(m.aiPrediction && m.aiPrediction.confidence > maxConfidence){
-        maxConfidence = m.aiPrediction.confidence;
-        bestMatch = m;
+    if(!m.aiPrediction) return;
+
+    let confidence = m.aiPrediction.confidence;
+    let main = m.aiPrediction.mainMarket;
+
+    let coefficient = 1.8;
+
+    if(main === "П1") coefficient = m.odds.home;
+    if(main === "П2") coefficient = m.odds.away;
+    if(main === "X")  coefficient = m.odds.draw;
+
+    if(
+        confidence >= 75 &&
+        coefficient >= 1.6 &&
+        coefficient <= 2.2
+    ){
+        let score = confidence * coefficient;
+
+        if(score > maxScore){
+            maxScore = score;
+            bestMatch = m;
+        }
     }
 
 });
 
 if(bestMatch){
     bestMatch.isTop = true;
+}
 }
     saveMatches(matches);
     
