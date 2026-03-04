@@ -1366,45 +1366,58 @@ filter: drop-shadow(0 0 8px #ff007a);
 <!-- ПРОФИЛЬ -->
 <div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
-<div class="shop-section">
-    <h3>💎 Магазин LC</h3>
 
-    <button onclick="buyLC(50)">50 ⭐ = 50 LC</button>
-    <button onclick="buyLC(170)">150 ⭐ = 170 LC</button>
-    <button onclick="buyLC(380)">300 ⭐ = 380 LC</button>
-</div>
-    <div class="stat-row">
-    <span class="profile-id-label">ID</span>
-    <span id="uID" class="profile-id-value">---</span>
-</div>
-<button onclick="openBetHistory()">📜 История ставок</button>
-    <div id="betHistoryBox" style="display:none; margin-top:10px;"></div>
-<div class="stat-row">
-    <span class="profile-balance-label">Баланс</span>
-    <span id="profileBalance" class="profile-balance-value">0 LC</span>
-</div>
-<button onclick="addLC(10000)" style="
-    margin-top:10px;
-    padding:8px 14px;
-    background:#111;
-    color:#00ff88;
-    border:1px solid #00ff88;
-    border-radius:8px;
-    cursor:pointer;
-">
-    +10 000 LC (DEV)
-</button>
-    <div style="margin-top:20px; display:flex; flex-direction:column; gap:12px;">
+<div class="profile-wrapper">
 
-        <button class="action-btn" onclick="openP('statsP')">AI СТАТИСТИКА</button>
-
-        <button class="action-btn" onclick="openP('historyP')">ИСТОРИЯ ПРОГНОЗОВ</button>
-
-        <button class="action-btn" onclick="openP('bonusP')">БОНУСЫ</button>
-
-        <button class="action-btn" onclick="openP('chatP')">ЧАТ</button>
-
+    <div class="profile-card">
+        <div class="profile-top">
+            <div>
+                <div class="profile-label">USER ID</div>
+                <div id="uID" class="profile-id-value">---</div>
             </div>
+
+            <div>
+                <div class="profile-label">BALANCE</div>
+                <div id="profileBalance" class="profile-balance-value">0 LC</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-actions">
+
+        <button class="action-btn" onclick="openP('shopP')">
+            🛒 МАГАЗИН
+        </button>
+
+        <button class="action-btn" onclick="openBetHistory()">
+            📜 ИСТОРИЯ СТАВОК
+        </button>
+
+        <button class="action-btn" onclick="openP('statsP')">
+            🤖 AI СТАТИСТИКА
+        </button>
+
+        <button class="action-btn" onclick="openP('historyP')">
+            📊 ИСТОРИЯ ПРОГНОЗОВ
+        </button>
+
+        <button class="action-btn" onclick="openP('bonusP')">
+            🎁 БОНУСЫ
+        </button>
+
+        <button class="action-btn" onclick="openP('chatP')">
+            💬 ЧАТ
+        </button>
+
+        <button onclick="addLC(10000)" class="dev-btn">
+            +10 000 LC (DEV)
+        </button>
+
+    </div>
+
+    <div id="betHistoryBox" style="display:none; margin-top:10px;"></div>
+
+</div>
 
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
@@ -3103,6 +3116,105 @@ setInterval(checkMatchStatus, 60000);
             
         </div>
     `;
+}
+                        .profile-wrapper{
+    padding:20px;
+}
+
+.profile-card{
+    background: linear-gradient(145deg,#1a1a1a,#242424);
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 0 25px rgba(0,0,0,0.5);
+    margin-bottom:25px;
+}
+
+.profile-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.profile-label{
+    font-size:12px;
+    opacity:0.6;
+    margin-bottom:5px;
+}
+
+.profile-id{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.profile-balance{
+    font-size:22px;
+    font-weight:bold;
+    color:#00ffcc;
+}
+
+.profile-status-block{
+    padding-top:10px;
+    border-top:1px solid rgba(255,255,255,0.1);
+}
+
+.profile-status{
+    font-size:16px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.profile-buttons{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.main-premium-btn{
+    padding:15px;
+    border:none;
+    border-radius:16px;
+    background:linear-gradient(90deg,#6a00ff,#a200ff);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.shop-wrapper{
+    padding:20px;
+}
+
+.shop-title{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:25px;
+}
+
+.shop-card{
+    background:#1c1c1c;
+    border-radius:18px;
+    padding:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.shop-item-title{
+    font-weight:bold;
+}
+
+.shop-item-desc{
+    font-size:12px;
+    opacity:0.6;
+}
+
+.shop-buy-btn{
+    padding:10px 16px;
+    border:none;
+    border-radius:12px;
+    background:#00c896;
+    color:white;
+    font-weight:bold;
 }
 </script>
 </body>
