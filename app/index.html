@@ -1740,7 +1740,7 @@ addLC(-15);
 Дополнительно:<br>
 ${m.aiPrediction.additionalMarkets.map(mk => "• "+mk).join("<br>")}
 
-${m.aiPrediction.isBestBet ? "<div style='color:gold; margin-top:6px;'>🔥 ЖБ ПРОГНОЗ ДНЯ</div>" : ""}
+${m.isTop ? "<div style='color:gold; margin-top:6px;'>🔥 ЖБ ПРОГНОЗ ДНЯ</div>" : ""}
 
 </div>
 
@@ -2484,8 +2484,8 @@ function saveMatches(list){
 
 // Создать матчи на день (пока вручную)
 function generateTodayMatches(){
-
-   
+// 🔥 ОЧИСТКА СТАРЫХ МАТЧЕЙ
+    localStorage.removeItem("matches");   
     const matches = [
 
 /* ========= АПЛ ========= */
@@ -2927,9 +2927,32 @@ function settleBets(match){
         let historyBet = history.find(h => h.id === b.id);
 
         if(
-   (b.type === match.result) ||
-   (b.isTop && match.result === "home") // пока считаем что ЖБ это победа хозяев
-){
+   let winCondition = false;
+
+if(b.type === match.result){
+    winCondition = true;
+}
+
+if(b.isTop){
+
+    // получаем матч
+    let fullMatch = getMatches().find(m => m.id === match.id);
+
+    if(fullMatch && fullMatch.aiPrediction){
+
+        let main = fullMatch.aiPrediction.mainMarket;
+
+        if(
+            (main === "П1" && match.result === "home") ||
+            (main === "П2" && match.result === "away") ||
+            (main === "X" && match.result === "draw")
+        ){
+            winCondition = true;
+        }
+    }
+}
+
+if(winCondition){
 
             b.status = "win";
 
