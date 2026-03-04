@@ -3083,49 +3083,8 @@ setInterval(checkMatchStatus, 60000);
                 Уверенность: ${match.aiPrediction.confidence}%
             </div>
 
-            <button 
-                style="
-                    margin-top:12px;
-                    width:100%;
-                    padding:10px;
-                    border:none;
-                    border-radius:10px;
-                    background:linear-gradient(135deg,#bc13fe,#ff007a);
-                    color:white;
-                    font-weight:bold;
-                    cursor:pointer;
-                "
-                onclick="placeTopBet('${match.id}')"
-            >
-                🔥 Поставить 20 LC
-            </button>
-
-        </div>
-    `;
-}
-           function placeTopBet(matchId){
-
-    let amount = 20;
-
-    if(!spendLC(amount)) return;
-
-    let bets = getMyBets();
-
-    bets.push({
-        id: Date.now(),
-        matchId,
-        type: "top",
-        amount,
-        coefficient: 1.7,
-        status: "pending",
-        isTop: true
-    });
-
-    saveMyBets(bets);
-
-    alert("🔥 ЖБ ставка принята!");
-}     
-                       
+        
+                                 
 </script>
 </body>
 </html>
