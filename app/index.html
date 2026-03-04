@@ -2761,11 +2761,29 @@ isBestBet:false
 }
 
 ];
+// ===== ВЫБОР ЖБ ПО МАКСИМАЛЬНОЙ УВЕРЕННОСТИ =====
 
+let bestMatch = null;
+let maxConfidence = 0;
+
+matches.forEach(m => {
+
+    m.isTop = false; // сброс на всякий случай
+
+    if(m.aiPrediction && m.aiPrediction.confidence > maxConfidence){
+        maxConfidence = m.aiPrediction.confidence;
+        bestMatch = m;
+    }
+
+});
+
+if(bestMatch){
+    bestMatch.isTop = true;
+}
     saveMatches(matches);
     
 }
-    
+    document.getElementById("aiBox").innerHTML = html;
 
 
 // ==========================
@@ -2908,7 +2926,10 @@ function settleBets(match){
         let history = getBetHistory();
         let historyBet = history.find(h => h.id === b.id);
 
-        if(b.type === match.result){
+        if(
+   (b.type === match.result) ||
+   (b.isTop && match.result === "home") // пока считаем что ЖБ это победа хозяев
+){
 
             b.status = "win";
 
@@ -2982,7 +3003,28 @@ function openBetHistory(){
 }
                         generateTodayMatches();
 setInterval(checkMatchStatus, 60000);
-                       
+           function placeTopBet(matchId){
+
+    let amount = 20;
+
+    if(!spendLC(amount)) return;
+
+    let bets = getMyBets();
+
+    bets.push({
+        id: Date.now(),
+        matchId,
+        type: "top",
+        amount,
+        coefficient: 1.7,
+        status: "pending",
+        isTop: true
+    });
+
+    saveMyBets(bets);
+
+    alert("🔥 ЖБ ставка принята!");
+}            
 </script>
 </body>
 </html>
