@@ -2836,9 +2836,6 @@ let bestMatch = matches.reduce((best, current) => {
 
 bestMatch.isTop = true;
 
-if(bestMatch){
-    bestMatch.isTop = true;
-}
 
     saveMatches(matches);
     
@@ -2991,10 +2988,6 @@ if(b.type === match.result){
     winCondition = true;
 }
 
-if(b.type === match.result){
-    winCondition = true;
-}
-
 if(b.isTop){
 
     // получаем матч
@@ -3042,6 +3035,7 @@ if(winCondition){
         saveBetHistory(history);
     }
 });
+    saveMyBets(bets);
     }
    
                         
@@ -3086,7 +3080,7 @@ function openBetHistory(){
 
     box.style.display = "block";
 }
-                        generateTodayMatches();
+                        
 setInterval(checkMatchStatus, 60000);
            function placeTopBet(matchId){
 
