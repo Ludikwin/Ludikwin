@@ -1465,7 +1465,46 @@ filter: drop-shadow(0 0 8px #ff007a);
 <!-- ПРОФИЛЬ -->
 <div id="profileP" class="popup">
     <h2>ПРОФИЛЬ</h2>
+<!-- МАГАЗИН -->
+<div id="shopP" class="popup">
+    <h2>🛒 МАГАЗИН LC</h2>
 
+    <div class="shop-wrapper">
+
+        <div class="shop-card">
+            <div>
+                <div class="shop-item-title">50 ⭐</div>
+                <div class="shop-item-desc">Получить 50 LC</div>
+            </div>
+            <button class="shop-buy-btn" onclick="buyLC(50)">
+                Купить
+            </button>
+        </div>
+
+        <div class="shop-card">
+            <div>
+                <div class="shop-item-title">150 ⭐</div>
+                <div class="shop-item-desc">Получить 170 LC</div>
+            </div>
+            <button class="shop-buy-btn" onclick="buyLC(170)">
+                Купить
+            </button>
+        </div>
+
+        <div class="shop-card">
+            <div>
+                <div class="shop-item-title">300 ⭐</div>
+                <div class="shop-item-desc">Получить 380 LC</div>
+            </div>
+            <button class="shop-buy-btn" onclick="buyLC(380)">
+                Купить
+            </button>
+        </div>
+
+    </div>
+
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
+</div>
 <div class="profile-wrapper">
 
     <div class="profile-card">
@@ -1725,6 +1764,10 @@ function setLCById(id, amount){
 }
 
 function addLC(amount){
+    function buyLC(amount){
+    addLC(amount);
+    tg.showAlert("Начислено " + amount + " LC");
+}
     let current = getLC();
     setLC(current + amount);
 }
@@ -2406,7 +2449,7 @@ function canUseAI(){
     generateTodayMatches();
 }
    checkSeasonReset();
-    showWheelIfAvailable();
+    
    initDaily();
 
 
