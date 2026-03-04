@@ -1702,16 +1702,6 @@ function openJB(){
         return;
     }
 
-    function openJB(){
-
-    let matches = getMatches();
-    let topMatch = matches.find(m => m.isTop === true);
-
-    if(!topMatch){
-        tg.showAlert("Сегодня нет ЖБ прогноза");
-        return;
-    }
-
     let today = new Date().toDateString();
     let unlockKey = "jb_unlocked_date";
     let unlockedDate = localStorage.getItem(unlockKey);
