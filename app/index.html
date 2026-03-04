@@ -7,6 +7,9 @@
 <title>LUDIK AI</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
+        window.onerror = function(message, source, lineno, colno, error){
+    alert("JS ERROR:\n" + message + "\nLine: " + lineno);
+};
         // ===== RP SYSTEM =====
 
 if (!localStorage.getItem("rp")) {
@@ -38,20 +41,24 @@ function addRP(amount) {
 
     return "🐣 Новичок";
 }
-const tg = window.Telegram.WebApp;
-        
-tg.ready();
+const tg = window.Telegram ? window.Telegram.WebApp : null;
 
-// Если доступен новый fullscreen API
-if (tg.requestFullscreen) {
-    tg.requestFullscreen();
+if(tg){
+
+    tg.ready();
+
+    if (tg.requestFullscreen) {
+        tg.requestFullscreen();
+    } else {
+        tg.expand();
+    }
+
+    tg.setHeaderColor("#050505");
+    tg.setBackgroundColor("#050505");
+
 } else {
-    tg.expand();
+    console.log("Telegram WebApp не найден");
 }
-
-// Цвета должны совпадать с фоном
-tg.setHeaderColor("#050505");
-tg.setBackgroundColor("#050505");
 
 // Отключаем свайп вниз
 // if (tg.disableVerticalSwipes) {
@@ -98,7 +105,11 @@ function checkSeasonReset(){
         // награда за участие
         if(finalRP >= 300){
             addLC(100);
-            tg.showAlert("🏆 Сезон завершён! Вы получили 100 LC");
+            if(tg){
+    tg.showAlert("🏆 Сезон завершён! Вы получили 100 LC");
+} else {
+    alert("🏆 Сезон завершён! Вы получили 100 LC");
+}
         }
 
         localStorage.setItem("season_start", now);
@@ -138,14 +149,22 @@ function activateVIP(days){
 
     localStorage.setItem("vip_until", newUntil);
 
+   if(tg){
     tg.showAlert("👑 VIP активирован на " + days + " дней!");
+} else {
+    alert("👑 VIP активирован на " + days + " дней!");
+}
 }
 
 function checkVIPStatus(){
 
     if(!isVIP() && getVIPUntil() !== 0){
         localStorage.removeItem("vip_until");
-        tg.showAlert("⏳ VIP закончился");
+        if(tg){
+    tg.showAlert("⏳ VIP закончился");
+} else {
+    alert("⏳ VIP закончился");
+}
     }
 }
 </script>
