@@ -2487,6 +2487,7 @@ function generateTodayMatches(){
 
     if(localStorage.getItem("matches_generated_today") === new Date().toDateString()){
         return;
+        console.log("Матчи созданы:", matches);
     }
 
     const today = new Date().toDateString();
@@ -2759,7 +2760,9 @@ function openBetHistory(){
 }
                         generateTodayMatches();
 setInterval(checkMatchStatus, 60000);
-                        
+                localStorage.removeItem("matches");
+localStorage.removeItem("matches_generated_today");
+generateTodayMatches();        
 </script>
 </body>
 </html>
