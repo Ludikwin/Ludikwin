@@ -1626,29 +1626,7 @@ function spendLC(amount){
 }
 
 setLC(getLC());
-    // ===== BET HISTORY SYSTEM =====
-
-function getBetHistory(){
-    let data = localStorage.getItem("bet_history");
-    return data ? JSON.parse(data) : [];
-}
-
-function saveBetHistory(history){
-    localStorage.setItem("bet_history", JSON.stringify(history));
-}
-
-function addBetToHistory(bet){
-    let history = getBetHistory();
-    history.unshift(bet); // добавляем в начало
-    saveBetHistory(history);
-}
-
-function getTotalProfit(){
-    let history = getBetHistory();
-    return history.reduce((sum, bet) => sum + bet.profit, 0);
-}
-
-// ===============================
+  
 
 // ===== POPUPS =====
 
@@ -2279,20 +2257,7 @@ function canUseAI(){
     showWheelIfAvailable();
    
 
-function claimBonus(key, url){
 
-    if(!canClaimBonus(key)){
-        tg.showAlert("Бонус уже получен. Попробуйте завтра.");
-        return;
-    }
-
-    addLC(10);
-    localStorage.setItem("bonus_" + key, Date.now());
-
-    tg.showAlert("+10 LC начислено!");
-
-    window.open(url, "_blank");
-}
     function goHome(){
     closeAll();
 }
@@ -2784,7 +2749,7 @@ function openBetHistory(){
                 font-size:12px;
                 opacity:0.85;">
                 Матч: ${b.matchId}<br>
-                Прогноз: ${b.prediction}<br>
+                Прогноз: ${b.type}<br>
                 Статус: ${b.status}
             </div>
         `;
