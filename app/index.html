@@ -3087,59 +3087,7 @@ setInterval(checkMatchStatus, 60000);
 
     alert("🔥 ЖБ ставка принята!");
 }     
-                        // ===== JB DAY SYSTEM =====
-
-function openJB(){
-
-    openP("jbP");
-
-    let matches = getMatches();
-
-    let bestMatch = matches.find(m => m.isTop === true);
-
-    const box = document.getElementById("jbContent");
-
-    if(!bestMatch){
-        box.innerHTML = "Сегодня нет ЖБ прогноза";
-        return;
-    }
-
-    let time = new Date(bestMatch.startTime).toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-
-    box.innerHTML = `
-        <div class="match-card">
-
-            <div class="match-league">
-                ⚽ ${bestMatch.league}
-            </div>
-
-            <div class="match-teams">
-                <div>${bestMatch.home}</div>
-                <div class="vs">VS</div>
-                <div>${bestMatch.away}</div>
-            </div>
-
-            <div class="match-time">
-                🕒 ${time}
-            </div>
-
-            <div style="
-                margin-top:10px;
-                padding:10px;
-                background:#111;
-                border-radius:10px;
-            ">
-                <b>🤖 AI прогноз:</b><br>
-                ${bestMatch.aiPrediction.mainMarket}<br>
-                Уверенность: ${bestMatch.aiPrediction.confidence}%
-            </div>
-
-        </div>
-    `;
-}
+                       
 </script>
 </body>
 </html>
