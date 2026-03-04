@@ -2926,8 +2926,11 @@ function settleBets(match){
         let history = getBetHistory();
         let historyBet = history.find(h => h.id === b.id);
 
-        if(
-   let winCondition = false;
+        let winCondition = false;
+
+if(b.type === match.result){
+    winCondition = true;
+}
 
 if(b.type === match.result){
     winCondition = true;
