@@ -2881,13 +2881,64 @@ let bestMatch = matches.reduce((best, current) => {
         : best;
 });
 
-bestMatch.isTop = true;
+bestMatch.aiPrediction.isBestBet = true;
 
 
     saveMatches(matches);
     
 }
-    
+    // ==========================
+// АВТО-ПЕРЕСОЗДАНИЕ МАТЧЕЙ
+// ==========================
+
+function ensureActiveMatches(){
+
+    let matches = getMatches();
+    let updated = false;
+
+    matches.forEach(match => {
+
+        // если матч прошёл 90 минут — закрываем
+        if(match.status === "open" && Date.now() > match.startTime + (90*60*1000)){
+            match.status = "finished";
+            updated = true;
+        }
+
+    });
+
+    const leagues = ["АПЛ","Ла Лига","Бундес","Серия А","ЛЧ","РПЛ","MLS","ЛЕ"];
+
+    leagues.forEach(league => {
+
+        let openMatches = matches.filter(m =>
+            m.league === league && m.status === "open"
+        );
+
+        // если в лиге нет активных матчей — создаём новый
+        if(openMatches.length === 0){
+
+            let template = matches.find(m => m.league === league);
+
+            if(template){
+
+                let newMatch = JSON.parse(JSON.stringify(template));
+
+                newMatch.id = league + "_" + Date.now();
+                newMatch.startTime = Date.now() + (10*60*1000);
+                newMatch.status = "open";
+                newMatch.result = null;
+
+                matches.push(newMatch);
+                updated = true;
+            }
+        }
+
+    });
+
+    if(updated){
+        saveMatches(matches);
+    }
+}
 
 // ==========================
 // 💰 BET SYSTEM
@@ -2963,25 +3014,26 @@ function placeBet(matchId, type){
     if(!spendLC(amount)) return;
 
     let bets = getMyBets();
-    let coefficient = 2.0;
+    let coefficient = match.odds[type];
 
     if(type === "home") coefficient = 1.8;
     if(type === "draw") coefficient = 3.2;
     if(type === "away") coefficient = 2.4;
 
     bets.push({
-        id: Date.now(),
-        matchId,
-        type,
-        amount,
-        coefficient,
-        status: "pending"
-    });
+    id: Date.now(),
+    matchId,
+    type,
+    amount,
+    coefficient,
+    status: "pending",
+    isTop: match.isTop === true
+});
 
     saveMyBets(bets);
 
     addBetToHistory({
-        id: Date.now(),
+    id: bets[bets.length - 1].id,
         matchId: matchId,
         type: type,
         stake: amount,
@@ -3156,6 +3208,11 @@ setInterval(checkMatchStatus, 60000);
         </div>
     `;
 }
+                        setInterval(function(){
+    ensureActiveMatches();
+}, 5000);
+
+</script>
 </script>
 </body>
 </html>
