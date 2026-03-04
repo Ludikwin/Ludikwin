@@ -1284,7 +1284,7 @@ filter: drop-shadow(0 0 8px #ff007a);
         </div>
 
         <!-- ЖБ ДНЯ -->
-        <div class="big-card card-jb" onclick="openP('jbP')">
+        <div class="big-card card-jb" onclick="openJB()">
             <h2>ЖБ ДНЯ</h2>
             <p>Самый уверенный прогноз сегодня</p>
             <button class="action-btn">ОТКРЫТЬ</button>
@@ -1492,8 +1492,10 @@ filter: drop-shadow(0 0 8px #ff007a);
 
 <!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
-    <h2 style="color:#bc13fe">ЖБ ДНЯ</h2>
-    <p id="jbContent" style="font-size:12px; margin:15px 0;">Прогноз дня: ТБ 2.5 – Лудик уверен!</p>
+    <h2 style="color:#bc13fe">🔥 ЖБ ДНЯ</h2>
+
+    <div id="jbContent" style="margin:15px 0;"></div>
+
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
@@ -3071,7 +3073,60 @@ setInterval(checkMatchStatus, 60000);
     saveMyBets(bets);
 
     alert("🔥 ЖБ ставка принята!");
-}            
+}     
+                        // ===== JB DAY SYSTEM =====
+
+function openJB(){
+
+    openP("jbP");
+
+    let matches = getMatches();
+
+    let bestMatch = matches.find(m => m.isTop === true);
+
+    const box = document.getElementById("jbContent");
+
+    if(!bestMatch){
+        box.innerHTML = "Сегодня нет ЖБ прогноза";
+        return;
+    }
+
+    let time = new Date(bestMatch.startTime).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    box.innerHTML = `
+        <div class="match-card">
+
+            <div class="match-league">
+                ⚽ ${bestMatch.league}
+            </div>
+
+            <div class="match-teams">
+                <div>${bestMatch.home}</div>
+                <div class="vs">VS</div>
+                <div>${bestMatch.away}</div>
+            </div>
+
+            <div class="match-time">
+                🕒 ${time}
+            </div>
+
+            <div style="
+                margin-top:10px;
+                padding:10px;
+                background:#111;
+                border-radius:10px;
+            ">
+                <b>🤖 AI прогноз:</b><br>
+                ${bestMatch.aiPrediction.mainMarket}<br>
+                Уверенность: ${bestMatch.aiPrediction.confidence}%
+            </div>
+
+        </div>
+    `;
+}
 </script>
 </body>
 </html>
