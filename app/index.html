@@ -1590,7 +1590,7 @@ filter: drop-shadow(0 0 8px #ff007a);
 </div>
 
 <script>
-    
+    const tg = window.Telegram.WebApp;
 const navItems = document.querySelectorAll(".nav-item");
 
 navItems.forEach(item => {
@@ -1739,24 +1739,7 @@ function openPredict(){
 // 🔥 ЖБ ДНЯ (20 LC / 1 раз в день)
 // ==========================
 
-
 function openJB(){
-
-    if(!spendLC(20)){
-        alert("Недостаточно LC");
-        return;
-    }
-
-    let matches = getMatches();
-    let topMatch = matches.find(m => m.aiPrediction.isBestBet);
-
-    if(!topMatch){
-        alert("ЖБ прогноз не найден");
-        return;
-    }
-
-    showJBContent(topMatch);
-}function openJB(){
 
     let matches = getMatches();
     let topMatch = matches.find(m => m.isTop === true);
