@@ -2355,6 +2355,7 @@ function canUseAI(){
    
     if(!localStorage.getItem("matches")){
     generateTodayMatches();
+        renderMatches();
 }
    checkSeasonReset();
     showWheelIfAvailable();
@@ -3113,7 +3114,9 @@ function checkMatchStatus(){
         }
     });
 
-    if(updated) saveMatches(matches);
+    if(updated){
+    saveMatches(matches);
+    renderMatches();
 }
 
 function settleBets(match){
@@ -3227,6 +3230,110 @@ function openBetHistory(){
 }
                         
 setInterval(checkMatchStatus, 60000);
+                        // ==========================
+// FLASHCORE STYLE MATCH CARDS
+// ==========================
+
+function renderMatches(){
+
+    const box = document.getElementById("matchList");
+    if(!box) return;
+
+    const matches = getMatches();
+
+    box.innerHTML = "";
+
+    matches.forEach(m => {
+
+        const time = new Date(m.startTime)
+        .toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+        box.innerHTML += `
+        <div style="
+        background:#0f0f0f;
+        border-radius:14px;
+        padding:12px;
+        margin-bottom:10px;
+        border:1px solid #1e1e1e;
+        ">
+
+            <div style="
+            display:flex;
+            justify-content:space-between;
+            font-size:11px;
+            opacity:0.6;
+            margin-bottom:6px;
+            ">
+                <span>${m.league}</span>
+                <span>${time}</span>
+            </div>
+
+            <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:10px;
+            ">
+
+                <div>
+                    <div style="font-size:14px">${m.home}</div>
+                    <div style="font-size:14px;opacity:0.8">${m.away}</div>
+                </div>
+
+                <div style="
+                font-size:11px;
+                opacity:0.5;
+                ">
+                VS
+                </div>
+
+            </div>
+
+            <div style="
+            display:flex;
+            gap:6px;
+            ">
+
+                <button onclick="placeBet('${m.id}','home')" style="
+                flex:1;
+                background:#1a1a1a;
+                border:none;
+                border-radius:8px;
+                padding:6px;
+                color:#fff;
+                ">
+                П1 ${m.odds.home}
+                </button>
+
+                <button onclick="placeBet('${m.id}','draw')" style="
+                flex:1;
+                background:#1a1a1a;
+                border:none;
+                border-radius:8px;
+                padding:6px;
+                color:#fff;
+                ">
+                X ${m.odds.draw}
+                </button>
+
+                <button onclick="placeBet('${m.id}','away')" style="
+                flex:1;
+                background:#1a1a1a;
+                border:none;
+                border-radius:8px;
+                padding:6px;
+                color:#fff;
+                ">
+                П2 ${m.odds.away}
+                </button>
+
+            </div>
+
+        </div>
+        `;
+    });
+
+}
                         // ===== MATCH TIMER =====
 
 function getMatchTimer(startTime){
