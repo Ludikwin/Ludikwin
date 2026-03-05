@@ -2879,7 +2879,13 @@ let bestMatch = matches.reduce((best, current) => {
 });
 
 bestMatch.aiPrediction.isBestBet = true;
+let best = matches.find(m => m.aiPrediction.isBestBet);
 
+if(best){
+    setTimeout(()=>{
+        showJBContent(best);
+    },500);
+}
 
     saveMatches(matches);
     
@@ -3221,19 +3227,73 @@ function openBetHistory(){
 }
                         
 setInterval(checkMatchStatus, 60000);
-                        function showJBContent(match){
+                        // ===== MATCH TIMER =====
+
+function getMatchTimer(startTime){
+
+    let diff = startTime - Date.now();
+
+    if(diff <= 0){
+        return "Матч скоро начнётся";
+    }
+
+    let minutes = Math.floor(diff / 60000);
+    let seconds = Math.floor((diff % 60000) / 1000);
+
+    if(seconds < 10) seconds = "0" + seconds;
+
+    return minutes + ":" + seconds;
+}
+                       function showJBContent(match){
 
     const box = document.getElementById("jbContent");
 
+    let bestBadge = "";
+
+    if(match.aiPrediction.isBestBet){
+        bestBadge = `
+        <div style="
+            background:#ffcc00;
+            color:#000;
+            font-weight:bold;
+            font-size:11px;
+            padding:3px 6px;
+            border-radius:6px;
+            display:inline-block;
+            margin-bottom:6px;">
+            🔥 BEST BET
+        </div>
+        `;
+    }
+
     box.innerHTML = `
-        <div style="background:#111;padding:12px;border-radius:12px;">
+        <div style="
+            background:#111;
+            padding:12px;
+            border-radius:12px;
+            margin-bottom:10px;
+        ">
+
+            ${bestBadge}
 
             <div style="opacity:0.7;font-size:12px;">
                 ${match.league}
             </div>
 
-            <div style="font-size:16px;font-weight:bold;margin:6px 0;">
+            <div style="
+                font-size:16px;
+                font-weight:bold;
+                margin:6px 0;
+            ">
                 ${match.home} vs ${match.away}
+            </div>
+
+            <div style="
+                font-size:12px;
+                margin-bottom:8px;
+                opacity:0.8;
+            ">
+                ⏱ До начала: ${getMatchTimer(match.startTime)}
             </div>
 
             <div style="margin:8px 0;">
@@ -3244,13 +3304,34 @@ setInterval(checkMatchStatus, 60000);
                 Уверенность: ${match.aiPrediction.confidence}%
             </div>
 
-            
+            <div style="
+                margin-top:8px;
+                font-size:11px;
+                opacity:0.7;
+            ">
+                Доп. рынки:
+                ${match.aiPrediction.additionalMarkets.join(", ")}
+            </div>
+
         </div>
     `;
 }
                         setInterval(function(){
     ensureActiveMatches();
 }, 5000);
+                        // ===== LIVE TIMER UPDATE =====
+
+setInterval(function(){
+
+    let matches = getMatches();
+
+    let best = matches.find(m => m.aiPrediction?.isBestBet);
+
+    if(best){
+        showJBContent(best);
+    }
+
+}, 1000);
 
 </script>
 </body>
