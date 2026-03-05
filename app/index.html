@@ -2869,7 +2869,9 @@ isBestBet:false
 // ===== УМНЫЙ ВЫБОР ЖБ =====
 
 // ===== ГАРАНТИРОВАННЫЙ ВЫБОР ЖБ =====
-
+matches.forEach(m=>{
+    m.aiPrediction.isBestBet = false;
+});
 let bestMatch = matches.reduce((best, current) => {
     return current.aiPrediction.confidence > best.aiPrediction.confidence
         ? current
@@ -2885,7 +2887,7 @@ bestMatch.aiPrediction.isBestBet = true;
 
 
 // проверяем каждые 10 секунд
-setInterval(checkMatches, 10000);
+setInterval(checkMatchStatus, 10000);
                         // ===== MATCH ENGINE =====
 
 function finishMatch(matchId, result){
@@ -3058,10 +3060,6 @@ function placeBet(matchId, type){
     let bets = getMyBets();
     let coefficient = match.odds[type];
 
-    if(type === "home") coefficient = 1.8;
-    if(type === "draw") coefficient = 3.2;
-    if(type === "away") coefficient = 2.4;
-
     bets.push({
     id: Date.now(),
     matchId,
@@ -3069,7 +3067,7 @@ function placeBet(matchId, type){
     amount,
     coefficient,
     status: "pending",
-    isTop: match.isTop === true
+   isTop: match.aiPrediction.isBestBet === true
 });
 
     saveMyBets(bets);
@@ -3254,7 +3252,6 @@ setInterval(checkMatchStatus, 60000);
     ensureActiveMatches();
 }, 5000);
 
-</script>
 </script>
 </body>
 </html>
