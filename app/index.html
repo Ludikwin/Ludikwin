@@ -1828,6 +1828,9 @@ addLC(-15);
     }
 
     matches.forEach(m => {
+        if(!m.aiPrediction){
+m.aiPrediction = {};
+}
 
     let time = new Date(m.startTime).toLocaleTimeString([], {
         hour: '2-digit',
@@ -2367,7 +2370,7 @@ function canUseAI(){
 
     
    
-   generateTodayMatches();
+  generateTodayMatches();
         
    checkSeasonReset();
     showWheelIfAvailable();
@@ -2910,6 +2913,8 @@ isBestBet:false
 }
 
 ];
+    saveMatches(matches);
+}
 // ===== ВЫБОР ЖБ ПО МАКСИМАЛЬНОЙ УВЕРЕННОСТИ =====
 
 // ===== УМНЫЙ ВЫБОР ЖБ =====
@@ -3013,6 +3018,15 @@ function ensureActiveMatches(){
             if(template){
 
                 let newMatch = JSON.parse(JSON.stringify(template));
+                if(!newMatch.aiPrediction){
+    newMatch.aiPrediction = {
+        mainMarket:"-",
+        confidence:0,
+        goals:"-",
+        cards:"-",
+        corners:"-"
+    };
+}
 
                 newMatch.id = league + "_" + Date.now();
                 newMatch.startTime = Date.now() + (10*60*1000);
