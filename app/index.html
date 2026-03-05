@@ -1367,8 +1367,8 @@ filter: drop-shadow(0 0 8px #ff007a);
 
 <!-- ПРОГНОЗЫ -->
 <div id="predictP" class="popup">
-    <h3 style="color:#ffe57e">ЛИГИ</h3>
-    <div class="league-grid" id="leagueBox"></div>
+    <h3 style="color:#ffe57e;display:flex;justify-content:space-between;align-items:center;gap:8px;">ЛИГИ <span id="predictLC" style="font-size:12px;color:#ffe57e;">0 LC</span> <span style="font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(188,19,254,.16);border:1px solid rgba(188,19,254,.35);">-15 LC</span></h3>
+    <div id="predictSpendFx" style="display:none;margin:2px 0 10px;text-align:center;font-size:13px;font-weight:700;color:#ff7a9f;">-15 LC списано</div><div class="league-grid" id="leagueBox"></div>
     <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px;"></div>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
@@ -1748,7 +1748,7 @@ function closeAll(){
 // ===== PREDICT =====
 
 function openPredict(){
-    openP('predictP');
+    openP('predictP'); const predictLC=document.getElementById('predictLC'); if(predictLC) predictLC.innerText=getLC()+' LC'; const spendFx=document.getElementById('predictSpendFx'); if(spendFx){ spendFx.style.display='none'; spendFx.style.opacity='1'; }
     const box=document.getElementById('leagueBox');
     box.innerHTML="";
     const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
@@ -1834,7 +1834,7 @@ if(getLC() < 15){
     return;
 }
 
-addLC(-15);
+addLC(-15); const predictLC=document.getElementById("predictLC"); if(predictLC) predictLC.innerText=getLC()+" LC"; const spendFx=document.getElementById("predictSpendFx"); if(spendFx){ spendFx.style.display="block"; spendFx.style.opacity="1"; setTimeout(()=>{ spendFx.style.opacity="0.15"; },650); setTimeout(()=>{ spendFx.style.display="none"; spendFx.style.opacity="1"; },1500);}
 // =====================
     const resBox = document.getElementById('pRes');
     resBox.innerHTML = "";
