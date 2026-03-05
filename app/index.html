@@ -1793,6 +1793,7 @@ function openJB(){
 
    
 async function getPredict(code){
+    let html = "";
     const leagueNames = {
     "PL":"АПЛ",
     "PD":"Ла Лига",
@@ -1832,6 +1833,7 @@ addLC(-15);
     let time = new Date(m.startTime).toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit'
+        
     });
 
     
@@ -1847,7 +1849,7 @@ ${m.home} — ${m.away}
 </div>
 
 <div class="match-time">
-${new Date(m.startTime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
+${new Date(m.startTime).toLocaleTimeString().slice(0,5)}
 </div>
 
 <div class="bet-row">
@@ -1873,9 +1875,8 @@ AI прогноз: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
 </div>
 `;
 
-        </div>
-    `;
 });
+resBox.innerHTML = html;
 }
 // ===== DAILY SYSTEM =====
 
