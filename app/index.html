@@ -1748,7 +1748,7 @@ function openJB(){
     }
 
     let matches = getMatches();
-    let topMatch = matches.find(m => m.isTop);
+    let topMatch = matches.find(m => m.aiPrediction.isBestBet);
 
     if(!topMatch){
         alert("ЖБ прогноз не найден");
@@ -1814,7 +1814,7 @@ addLC(-15);
     resBox.innerHTML = "";
 
     let matches = getMatches()
-    .filter(m => m.status === "open" && m.league === selectedLeague)
+    .filter(m => m.status === "open" && m.league === code)
     .slice(0, 2);
 
     if(matches.length === 0){
@@ -2353,10 +2353,13 @@ function canUseAI(){
 
     
    
+    document.addEventListener("DOMContentLoaded", () => {
+
     if(!localStorage.getItem("matches")){
-    generateTodayMatches();
-        renderMatches();
-}
+        generateTodayMatches();
+    }
+
+});
    checkSeasonReset();
     showWheelIfAvailable();
    initDaily();
@@ -2595,7 +2598,7 @@ function generateTodayMatches(){
 /* ========= АПЛ ========= */
 {
 id:"pl1",
-league:"АПЛ",
+league:"PL",
 home:"Арсенал",
 away:"Челси",
 startTime:Date.now()+5*60*1000,
@@ -2611,7 +2614,7 @@ isBestBet:true
 },
 {
 id:"pl2",
-league:"АПЛ",
+league:"PL",
 home:"Манчестер Сити",
 away:"Ливерпуль",
 startTime:Date.now()+15*60*1000,
@@ -2629,7 +2632,7 @@ isBestBet:false
 /* ========= ЛА ЛИГА ========= */
 {
 id:"pd1",
-league:"Ла Лига",
+league:"PD",
 home:"Реал",
 away:"Барселона",
 startTime:Date.now()+10*60*1000,
@@ -2645,7 +2648,7 @@ isBestBet:false
 },
 {
 id:"pd2",
-league:"Ла Лига",
+league:"PD",
 home:"Атлетико",
 away:"Севилья",
 startTime:Date.now()+20*60*1000,
@@ -2663,7 +2666,7 @@ isBestBet:false
 /* ========= БУНДЕС ========= */
 {
 id:"bl1",
-league:"Бундес",
+league:"BL1",
 home:"Бавария",
 away:"Боруссия Д",
 startTime:Date.now()+25*60*1000,
@@ -2679,7 +2682,7 @@ isBestBet:false
 },
 {
 id:"bl2",
-league:"Бундес",
+league:"BL1",
 home:"Лейпциг",
 away:"Айнтрахт",
 startTime:Date.now()+30*60*1000,
@@ -2697,7 +2700,7 @@ isBestBet:false
 /* ========= СЕРИЯ А ========= */
 {
 id:"sa1",
-league:"Серия А",
+league:"SA",
 home:"Интер",
 away:"Милан",
 startTime:Date.now()+35*60*1000,
@@ -2706,14 +2709,14 @@ result:null,
 odds:{home:2.2,draw:3.1,away:2.1},
 aiPrediction:{
 mainMarket:"П1",
-confidence:68,
-additionalMarkets:["ТМ 2.5"],
-isBestBet:false
-}
+confidence:82,
+additionalMarkets:["ТБ 2.5"]
+},
+isTop:false
 },
 {
 id:"sa2",
-league:"Серия А",
+league:"SA",
 home:"Ювентус",
 away:"Рома",
 startTime:Date.now()+40*60*1000,
@@ -2731,7 +2734,7 @@ isBestBet:false
 /* ========= ЛЧ ========= */
 {
 id:"cl1",
-league:"ЛЧ",
+league:"CL",
 home:"ПСЖ",
 away:"Манчестер Юн",
 startTime:Date.now()+45*60*1000,
@@ -2747,7 +2750,7 @@ isBestBet:false
 },
 {
 id:"cl2",
-league:"ЛЧ",
+league:"CL",
 home:"Бенфика",
 away:"Порту",
 startTime:Date.now()+50*60*1000,
@@ -2765,7 +2768,7 @@ isBestBet:false
 /* ========= РПЛ ========= */
 {
 id:"rpl1",
-league:"РПЛ",
+league:"RPL",
 home:"Зенит",
 away:"Спартак",
 startTime:Date.now()+55*60*1000,
@@ -2781,7 +2784,7 @@ isBestBet:false
 },
 {
 id:"rpl2",
-league:"РПЛ",
+league:"RPL",
 home:"ЦСКА",
 away:"Локомотив",
 startTime:Date.now()+60*60*1000,
@@ -2833,7 +2836,7 @@ isBestBet:false
 /* ========= ЛЕ ========= */
 {
 id:"el1",
-league:"ЛЕ",
+league:"EL",
 home:"Рома",
 away:"Марсель",
 startTime:Date.now()+75*60*1000,
@@ -2849,7 +2852,7 @@ isBestBet:false
 },
 {
 id:"el2",
-league:"ЛЕ",
+league:"EL",
 home:"Аякс",
 away:"Спортинг",
 startTime:Date.now()+80*60*1000,
