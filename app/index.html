@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -1281,7 +1281,7 @@ filter: drop-shadow(0 0 8px #ff007a);
 @keyframes bLine{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes hitPulse{0%{filter:brightness(1)}50%{filter:brightness(1.22)}100%{filter:brightness(1)}}
 </style>
-</head>
+<style>/* REF UI */ .ref-hero{margin:10px 0 12px;padding:12px;border-radius:14px;border:1px solid rgba(255,215,0,.35);background:radial-gradient(circle at 20% 0%,rgba(255,215,0,.22),transparent 45%),linear-gradient(135deg,#1a1200,#120018);box-shadow:0 8px 24px rgba(0,0,0,.45),0 0 20px rgba(255,215,0,.12);text-align:center}.ref-hero-title{font-size:15px;font-weight:800;color:#ffe57e}.ref-hero-sub{font-size:12px;opacity:.92;margin-top:4px}.ref-link-label{font-size:12px;color:#9aa0a6;margin-bottom:6px}.ref-link-box{font-size:12px;line-height:1.35;color:#fff;background:#101010;border:1px solid rgba(255,255,255,.12);padding:10px;border-radius:10px;word-break:break-all}.ref-copy-btn{margin-top:10px;background:linear-gradient(90deg,#ffd700,#ffb700,#ffd700)!important;color:#111!important;text-shadow:none!important}.ref-count-card{padding:10px;border-radius:12px;border:1px solid rgba(188,19,254,.35);background:linear-gradient(145deg,rgba(188,19,254,.10),rgba(0,0,0,.2));text-align:center}#refCount{font-size:15px;font-weight:800;color:#ffe57e}.nav-ref{position:relative}.nav-ref-badge{position:absolute;top:0;right:16px;font-style:normal;font-size:9px;font-weight:800;color:#111;background:linear-gradient(90deg,#ffd700,#ffb700);padding:2px 6px;border-radius:999px;box-shadow:0 0 10px rgba(255,215,0,.45)}</style></head>
 <body>
     <div class="header-block">
     <div class="app-title">LUDIK AI</div>
@@ -1502,22 +1502,29 @@ filter: drop-shadow(0 0 8px #ff007a);
 
 <!-- РЕФЕРАЛ -->
 <div id="refP" class="popup">
-    <h2>👥 РЕФЕРАЛЫ</h2>
+    <h2 style="color:#ffe57e;text-align:center;">👥 РЕФЕРАЛЫ</h2>
 
-    <p id="refLink"
-       style="font-size:10px;color:#888;background:#111;padding:10px;border-radius:10px;word-break:break-all;">
-    </p>
-
-    <button class="action-btn" onclick="copyRef()">КОПИРОВАТЬ ССЫЛКУ</button>
-
-    <div style="margin-top:20px;">
-        <p id="refCount" style="font-size:13px;color:#ffe57e;">Приглашено: 0</p>
-        <div id="refList" style="margin-top:10px;"></div>
+    <div class="ref-hero">
+        <div class="ref-hero-title">Приглашай друзей</div>
+        <div class="ref-hero-sub">Получай <b>50 LC</b> за каждого реферала</div>
     </div>
+
+    <div class="ref-link-label">Твоя ссылка:</div>
+    <div id="refLink" class="ref-link-box"></div>
+
+    <button class="action-btn ref-copy-btn" onclick="copyRef()">СКОПИРОВАТЬ ССЫЛКУ</button>
+
+    <div class="ref-stats">
+        <div class="ref-count-card">
+            <small>Твои рефералы</small>
+            <div id="refCount">Приглашено: 0</div>
+        </div>
+    </div>
+
+    <div id="refList" style="margin-top:10px;"></div>
 
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
-
 <!-- СТАТИСТИКА -->
 <div id="statsP" class="popup">
     <h2>AI СТАТИСТИКА</h2>
@@ -2285,7 +2292,7 @@ function processReferral(referrerId){
         localStorage.setItem(key, JSON.stringify(list));
 
         let inviterBalance = getLCById(referrerId);
-        setLCById(referrerId, inviterBalance + 10);
+        setLCById(referrerId, inviterBalance + 50);
     }
 }
     
@@ -2338,9 +2345,9 @@ function copyRef(){
         <span>Главная</span>
     </div>
 
-    <div class="nav-item" onclick="openP('refP')">
+    <div class="nav-item nav-ref" onclick="openP('refP')">
         <div class="icon">🔗</div>
-        <span>Рефералы</span>
+        <span>Рефералы</span><i class="nav-ref-badge">50 LC</i>
     </div>
 
     <div class="nav-item" onclick="openP('profileP')">
@@ -2477,27 +2484,33 @@ function battle(mode){
     }
 
     box.innerHTML = `
-        ⚔️ Битва начинается!<br><br>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><b>⚔️ БИТВА</b><span id="battleRound" style="font-size:11px;opacity:.85;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);">Раунд 1/3</span></div>
 
-        ❤️ Твой HP
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;opacity:.9;"><span>❤️ Твой HP</span><b id="pHpVal">100%</b></div>
         <div style="background:#222;height:14px;border-radius:9px;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 0 8px rgba(0,0,0,.35);">
             <div id="pBar" style="background:linear-gradient(90deg,#00ff88,#00cc66);height:14px;width:100%;box-shadow:0 0 12px rgba(0,255,136,.35);transition:width .55s ease,filter .25s ease;border-radius:6px;"></div>
         </div>
 
         <br>
 
-        💀 Враг HP
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;opacity:.9;"><span>💀 Враг HP</span><b id="eHpVal">100%</b></div>
         <div style="background:#222;height:14px;border-radius:9px;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 0 8px rgba(0,0,0,.35);">
             <div id="eBar" style="background:linear-gradient(90deg,#ff4d6d,#cc1439);height:14px;width:100%;box-shadow:0 0 12px rgba(255,77,109,.35);transition:width .55s ease,filter .25s ease;border-radius:6px;"></div>
         </div>
 
         <br>
-        <div id="battleLog"></div>
+        <div id="battleLog" style="max-height:130px;overflow:auto;padding-right:2px;"></div>
     `;
+
+    const stage = document.getElementById("battleResult");
 
     function updateBars(){
         document.getElementById("pBar").style.width = playerHP + "%";
+        document.getElementById("pHpVal").innerText = playerHP + "%";
+        document.getElementById("pBar").style.filter = playerHP < 35 ? "saturate(1.4)" : "none";
         document.getElementById("eBar").style.width = enemyHP + "%";
+        document.getElementById("eHpVal").innerText = enemyHP + "%";
+        document.getElementById("eBar").style.filter = enemyHP < 35 ? "saturate(1.4)" : "none";
     }
 
     let round = 1;
@@ -2509,6 +2522,8 @@ function battle(mode){
             return;
         }
 
+        document.getElementById("battleRound").innerText = `Раунд ${round}/3`;
+
         let damage = Math.floor(Math.random()*20)+15;
 
         let crit = false;
@@ -2516,6 +2531,8 @@ function battle(mode){
         if(Math.random() < 0.2){
             damage *= 2;
             crit = true;
+            stage.style.boxShadow = "0 0 28px rgba(255,70,120,.35), inset 0 0 24px rgba(255,255,255,.03)";
+            setTimeout(()=>{ stage.style.boxShadow = ""; }, 220);
         }
 
         let playerHits = Math.random() < winChance;
@@ -2532,7 +2549,7 @@ function battle(mode){
             log.innerHTML += `<br>🩸 Раунд ${round}: Враг наносит ${damage}${crit ? " ⚡ КРИТ!" : ""}`;
         }
 
-        updateBars();
+        stage.style.animation = "none"; void stage.offsetWidth; stage.style.animation = "hitPulse .45s ease"; updateBars();
 
         round++;
         setTimeout(doRound, 900);
