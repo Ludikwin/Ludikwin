@@ -1874,17 +1874,15 @@ AI прогноз: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
 <div class="extra-markets">
 
 <div class="market-line">
-⚽ Голы: ${(m.aiPrediction?.additionalMarkets?.[0]) || "-"}
+⚽ Голы: ${m.aiPrediction.goals || "-"}
 </div>
 
 <div class="market-line">
-🚩 Угловые: ${(m.aiPrediction?.additionalMarkets?.[2]) || "-"}
+🚩 Угловые: ${m.aiPrediction.corners || "-"}
 </div>
 
 <div class="market-line">
-🟨 ЖК: ${(m.aiPrediction?.additionalMarkets?.[1]) || "-"}
-</div>
-
+🟨 ЖК: ${m.aiPrediction.cards || "-"}
 </div>
 
 </div>
