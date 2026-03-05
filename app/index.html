@@ -1085,7 +1085,7 @@ body{
   height: 100%;
   width: 100%;
   background: linear-gradient(90deg,#00ff88,#00cc66);
-  transition: width 0.4s ease;
+  transition: width 0.55s ease, filter 0.25s ease; box-shadow:0 0 12px rgba(255,255,255,0.12);
 }
 
 .hp-enemy {
@@ -2473,15 +2473,15 @@ function battle(mode){
         ⚔️ Битва начинается!<br><br>
 
         ❤️ Твой HP
-        <div style="background:#222;height:12px;border-radius:6px;">
-            <div id="pBar" style="background:#00ff88;height:12px;width:100%;border-radius:6px;"></div>
+        <div style="background:#222;height:14px;border-radius:9px;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 0 8px rgba(0,0,0,.35);">
+            <div id="pBar" style="background:linear-gradient(90deg,#00ff88,#00cc66);height:14px;width:100%;box-shadow:0 0 12px rgba(0,255,136,.35);transition:width .55s ease,filter .25s ease;border-radius:6px;"></div>
         </div>
 
         <br>
 
         💀 Враг HP
-        <div style="background:#222;height:12px;border-radius:6px;">
-            <div id="eBar" style="background:#ff4444;height:12px;width:100%;border-radius:6px;"></div>
+        <div style="background:#222;height:14px;border-radius:9px;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 0 8px rgba(0,0,0,.35);">
+            <div id="eBar" style="background:linear-gradient(90deg,#ff4d6d,#cc1439);height:14px;width:100%;box-shadow:0 0 12px rgba(255,77,109,.35);transition:width .55s ease,filter .25s ease;border-radius:6px;"></div>
         </div>
 
         <br>
