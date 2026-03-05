@@ -1273,6 +1273,13 @@ filter: drop-shadow(0 0 8px #ff007a);
 .bet-row button:active{
     transform:scale(0.95);
 }
+
+.battle-line{font-size:12px;padding:6px 8px;border-radius:8px;margin-bottom:6px;background:rgba(255,255,255,.04);animation:bLine .3s ease;}
+.battle-line.me{border-left:2px solid #00ff88;}
+.battle-line.enemy{border-left:2px solid #ff4d6d;}
+.battle-line.crit{background:rgba(255,90,90,.2);box-shadow:0 0 10px rgba(255,90,90,.25);}
+@keyframes bLine{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hitPulse{0%{filter:brightness(1)}50%{filter:brightness(1.22)}100%{filter:brightness(1)}}
 </style>
 </head>
 <body>
