@@ -1874,15 +1874,15 @@ AI прогноз: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
 <div class="extra-markets">
 
 <div class="market-line">
-⚽ Голы: ${(m.aiPrediction && m.aiPrediction.goals) ? m.aiPrediction.goals : "-"}
+⚽ Голы: ${(m.aiPrediction?.additionalMarkets?.[0]) || "-"}
 </div>
 
 <div class="market-line">
-🚩 Угловые: ${(m.aiPrediction && m.aiPrediction.corners) ? m.aiPrediction.corners : "-"}
+🚩 Угловые: ${(m.aiPrediction?.additionalMarkets?.[2]) || "-"}
 </div>
 
 <div class="market-line">
-🟨 ЖК: ${(m.aiPrediction && m.aiPrediction.cards) ? m.aiPrediction.cards : "-"}
+🟨 ЖК: ${(m.aiPrediction?.additionalMarkets?.[1]) || "-"}
 </div>
 
 </div>
@@ -3352,14 +3352,19 @@ function getMatchTimer(startTime){
                 Уверенность: ${match.aiPrediction.confidence}%
             </div>
 
-            <div style="
-                margin-top:8px;
-                font-size:11px;
-                opacity:0.7;
-            ">
-                Доп. рынки:
-                ${match.aiPrediction.additionalMarkets.join(", ")}
-            </div>
+           <div style="
+margin-top:8px;
+font-size:12px;
+opacity:0.85;
+">
+
+<div>⚽ Голы: ${match.aiPrediction.goals || "-"}</div>
+
+<div>🚩 Угловые: ${match.aiPrediction.corners || "-"}</div>
+
+<div>🟨 ЖК: ${match.aiPrediction.cards || "-"}</div>
+
+</div>
 
         </div>
     `;
