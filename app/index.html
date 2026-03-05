@@ -1675,7 +1675,55 @@ function spendLC(amount){
 }
 
 setLC(getLC());
-  
+let matches = [
+
+{
+id:"rpl1",
+league:"РПЛ",
+home:"Зенит",
+away:"Спартак",
+startTime:Date.now()+3600000,
+status:"open",
+
+odds:{
+home:1.8,
+draw:3.4,
+away:4.2
+},
+
+aiPrediction:{
+mainMarket:"П1",
+confidence:78,
+additionalMarkets:["ТБ 2.5","Обе забьют"]
+},
+
+isTop:true
+},
+
+{
+id:"laliga1",
+league:"Ла Лига",
+home:"Реал",
+away:"Севилья",
+startTime:Date.now()+7200000,
+status:"open",
+
+odds:{
+home:1.6,
+draw:3.8,
+away:5.0
+},
+
+aiPrediction:{
+mainMarket:"П1",
+confidence:82,
+additionalMarkets:["ТБ 2.5"]
+},
+
+isTop:false
+}
+
+];  
 
 // ===== POPUPS =====
 
@@ -1797,7 +1845,7 @@ addLC(-15);
     resBox.innerHTML = "";
 
     let matches = getMatches()
-    .filter(m => m.status === "open" && m.league === code)
+    .filter(m => m.status === "open" && m.league === selectedLeague)
     .slice(0, 2);
 
     if(matches.length === 0){
@@ -3425,7 +3473,9 @@ setInterval(function(){
     }
 
 }, 1000);
-
+function getMatches(){
+    return matches;
+}
 </script>
 </body>
 </html>
