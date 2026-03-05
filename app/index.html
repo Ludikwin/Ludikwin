@@ -219,7 +219,7 @@ html {
     background:linear-gradient(145deg,#111,#0c0c0c);
     border-radius:22px;
     padding:22px;
-    border:1px solid rgba(255,255,255,0.05);
+    border:1px solid rgba(102,220,255,0.25);
     cursor:pointer;
     transition: all 0.35s ease;
 
@@ -1208,11 +1208,11 @@ filter: drop-shadow(0 0 8px #ff007a);
     transform:scale(0.97);
 }
     .match-card{
-    background: linear-gradient(145deg,#1a1a1a,#111);
+    background: radial-gradient(circle at 100% 0%, rgba(255,215,0,0.16), transparent 45%), radial-gradient(circle at 0% 100%, rgba(188,19,254,0.12), transparent 46%), linear-gradient(145deg,#1a1a1a,#111);
     padding:15px;
     margin-bottom:15px;
     border-radius:16px;
-    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+    box-shadow:0 10px 26px rgba(0,0,0,0.45),0 0 20px rgba(188,19,254,0.12);
     border:1px solid rgba(255,255,255,0.05);
 }
 
@@ -1822,7 +1822,10 @@ addLC(-15);
         return;
     }
 
+    function normalizeMarkets(arr){arr=Array.isArray(arr)?arr.slice():[];const g=arr.some(x=>/ТБ|ТМ|гол/i.test(x));const y=arr.some(x=>/ЖК|карточ/i.test(x));const c=arr.some(x=>/углов|Углов/i.test(x));if(!g)arr.push("ТБ 2.5");if(!y)arr.push("ЖК > 3.5");if(!c)arr.push("Угловые > 8.5");return arr;}
+
     matches.forEach(m => {
+    m.aiPrediction.additionalMarkets = normalizeMarkets(m.aiPrediction.additionalMarkets);
 
     let time = new Date(m.startTime).toLocaleTimeString([], {
         hour: '2-digit',
