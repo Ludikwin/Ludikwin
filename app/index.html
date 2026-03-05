@@ -2570,7 +2570,7 @@ function battle(mode){
     updateBars();
     setTimeout(doRound, 700);
 }
-                        // ===== BONUS SYSTEM =====
+                        
 // ==========================
 // 🏆 MATCH SYSTEM CORE
 // ==========================
@@ -2881,6 +2881,48 @@ bestMatch.aiPrediction.isBestBet = true;
 
     saveMatches(matches);
     
+}
+
+
+// проверяем каждые 10 секунд
+setInterval(checkMatches, 10000);
+                        // ===== MATCH ENGINE =====
+
+function finishMatch(matchId, result){
+
+    let matches = getMatches();
+    let bets = getBets();
+
+    let match = matches.find(m => m.id === matchId);
+    if(!match) return;
+
+    match.status = "finished";
+    match.result = result;
+
+    bets.forEach(bet => {
+
+        if(bet.matchId !== matchId) return;
+        if(bet.status !== "open") return;
+
+        if(bet.pick === result){
+
+            let odds = match.odds[result];
+            let win = Math.floor(bet.amount * odds);
+
+            addLC(win);
+
+            bet.status = "win";
+
+        } else {
+
+            bet.status = "lose";
+
+        }
+
+    });
+
+    saveMatches(matches);
+    saveBets(bets);
 }
     // ==========================
 // АВТО-ПЕРЕСОЗДАНИЕ МАТЧЕЙ
