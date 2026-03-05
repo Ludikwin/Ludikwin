@@ -3486,5 +3486,116 @@ setInterval(function(){
 }, 1000);
 
 </script>
+  <script>
+// ===== ИНИЦИАЛИЗАЦИЯ TELEGRAM WEB APP =====
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+// ===== СИСТЕМА БАЛАНСА (LC) И RP =====
+if (!localStorage.getItem("lc")) localStorage.setItem("lc", 100);
+if (!localStorage.getItem("rp")) localStorage.setItem("rp", 0);
+
+function getLC() { return parseInt(localStorage.getItem("lc")); }
+function addLC(amount) {
+    let current = getLC();
+    localStorage.setItem("lc", current + amount);
+    updateUI();
+}
+
+function updateUI() {
+    const bal = getLC();
+    document.getElementById('lcBalance').innerText = bal;
+    if(document.getElementById('profileBalance')) {
+        document.getElementById('profileBalance').innerText = bal + " LC";
+    }
+    if(document.getElementById('uID') && tg.initDataUnsafe.user) {
+        document.getElementById('uID').innerText = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.id;
+    }
+}
+
+// ===== УПРАВЛЕНИЕ ПОПАПАМИ =====
+function openP(id) {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById(id).style.display = 'block';
+}
+
+function closeAll() {
+    document.getElementById('overlay').style.display = 'none';
+    const popups = document.querySelectorAll('.popup');
+    popups.forEach(p => p.style.display = 'none');
+}
+
+// ===== ЛОГИКА ЛИГ И ПРОГНОЗОВ (УГЛОВЫЕ, ЖК, ТОТАЛ) =====
+const leaguesData = [
+    { name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 АПЛ", icon: "⚽" },
+    { name: "🇪🇸 Ла Лига", icon: "🇪🇸" },
+    { name: "🇩🇪 Бундеслига", icon: "🇩🇪" },
+    { name: "🇮🇹 Серия А", icon: "🇮🇹" },
+    { name: "🇫🇷 Лига 1", icon: "🇫🇷" },
+    { name: "🇷🇺 РПЛ", icon: "🇷🇺" },
+    { name: "🇹🇷 Суперлига", icon: "🇹🇷" },
+    { name: "🇧🇷 Серия А", icon: "🇧🇷" },
+    { name: "🏆 Лига Чемпионов", icon: "✨" },
+    { name: "🌍 Лига Европы", icon: "🇪🇺" }
+];
+
+function openPredict() {
+    const box = document.getElementById('leagueBox');
+    box.innerHTML = ''; // Очищаем перед рендером
+    
+    leaguesData.forEach((league) => {
+        const btn = document.createElement('div');
+        btn.className = 'bonus-card';
+        btn.innerHTML = `${league.icon} ${league.name} <span>АНАЛИЗ</span>`;
+        btn.onclick = () => showLeagueStats(league.name);
+        box.appendChild(btn);
+    });
+    
+    openP('predictP');
+}
+
+function showLeagueStats(name) {
+    if (getLC() < 15) {
+        tg.showAlert("Недостаточно LC! Стоимость анализа — 15 LC.");
+        return;
+    }
+
+    addLC(-15);
+    
+    // Генерация случайных данных для угловых, ЖК и тотала
+    const corners = (Math.random() * (11 - 8) + 8).toFixed(1);
+    const cards = (Math.random() * (5 - 2) + 2).toFixed(1);
+    const total = (Math.random() * (3.5 - 1.5) + 1.5).toFixed(1);
+
+    const res = document.getElementById('pRes');
+    res.innerHTML = `
+        <div class="match-card" style="border: 1px solid #bc13fe; background: #000;">
+            <div style="color:#ffe57e; font-weight:bold; margin-bottom:10px;">📊 ${name} (AI ПРОГНОЗ)</div>
+            <div class="market-line">📐 Угловые: БОЛЬШЕ ${corners}</div>
+            <div class="market-line">🟨 Карточки (ЖК): МЕНЬШЕ ${cards}</div>
+            <div class="market-line">⚽ Тотал голов: БОЛЬШЕ ${total}</div>
+        </div>
+    `;
+}
+
+// ===== ЖБ ДНЯ =====
+function openJB() {
+    if (getLC() < 20) {
+        tg.showAlert("Для открытия ЖБ дня нужно 20 LC!");
+        return;
+    }
+
+    tg.showConfirm("Открыть ЖБ ДНЯ за 20 LC?", (confirm) => {
+        if (confirm) {
+            addLC(-20);
+            tg.showAlert("🔥 ЖБ ДНЯ ВЫБРАН!\n\nМатч: Манчестер Сити — Арсенал\nПрогноз: П1 (Победа первой)\nКоэффициент: 1.85\nУверенность AI: 94%");
+        }
+    });
+}
+
+// Запуск при старте
+window.onload = updateUI;
+</script>      
 </body>
 </html>
