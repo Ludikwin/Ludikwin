@@ -1207,7 +1207,7 @@ filter: drop-shadow(0 0 8px #ff007a);
 .bonus-card:active{
     transform:scale(0.97);
 }
-   .match-card{
+    .match-card{
 background:#1a1a1a;
 border:1px solid #333;
 border-radius:10px;
@@ -1216,21 +1216,15 @@ margin-top:10px;
 }
 
 .match-league{
-font-size:11px;
-opacity:0.6;
-margin-bottom:3px;
+    font-size:12px;
+    opacity:0.7;
+    margin-bottom:8px;
 }
 
 .match-teams{
-font-size:15px;
-font-weight:bold;
-margin-bottom:5px;
-}
-
-.match-time{
-font-size:12px;
-opacity:0.7;
-margin-bottom:6px;
+    text-align:center;
+    font-weight:bold;
+    font-size:16px;
 }
 
 .vs{
@@ -1265,21 +1259,6 @@ margin-bottom:6px;
 
 .bet-row button:active{
     transform:scale(0.95);
-}
-    .extra-markets{
-margin-top:8px;
-display:flex;
-flex-direction:column;
-gap:4px;
-}
-
-.market-line{
-background:#111;
-border:1px solid #333;
-border-radius:8px;
-padding:6px;
-font-size:12px;
-opacity:0.9;
 }
 </style>
 </head>
@@ -1762,6 +1741,22 @@ function openPredict(){
 
 function openJB(){
 
+    if(!spendLC(20)){
+        alert("Недостаточно LC");
+        return;
+    }
+
+    let matches = getMatches();
+    let topMatch = matches.find(m => m.isTop);
+
+    if(!topMatch){
+        alert("ЖБ прогноз не найден");
+        return;
+    }
+
+    showJBContent(topMatch);
+}function openJB(){
+
     let matches = getMatches();
     let topMatch = matches.find(m => m.isTop === true);
 
@@ -1792,7 +1787,6 @@ function openJB(){
 
    
 async function getPredict(code){
-    let html = "";
     const leagueNames = {
     "PL":"АПЛ",
     "PD":"Ла Лига",
@@ -1828,18 +1822,14 @@ addLC(-15);
     }
 
     matches.forEach(m => {
-        if(!m.aiPrediction){
-m.aiPrediction = {};
-}
 
     let time = new Date(m.startTime).toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit'
-        
     });
 
-    
-    html+=`
+    resBox.innerHTML += `
+       html+=`
 <div class="match-card">
 
 <div class="match-league">
@@ -1851,7 +1841,7 @@ ${m.home} — ${m.away}
 </div>
 
 <div class="match-time">
-${new Date(m.startTime).toLocaleTimeString().slice(0,5)}
+${new Date(m.startTime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
 </div>
 
 <div class="bet-row">
@@ -1871,28 +1861,15 @@ X ${m.odds.draw}
 </div>
 
 <div style="margin-top:6px;color:#bc13fe;font-size:12px">
-AI прогноз: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
-</div>
-
-<div class="extra-markets">
-
-<div class="market-line">
-⚽ Голы: ${m.aiPrediction.goals || "-"}
-</div>
-
-<div class="market-line">
-🚩 Угловые: ${m.aiPrediction.corners || "-"}
-</div>
-
-<div class="market-line">
-🟨 ЖК: ${m.aiPrediction.cards || "-"}
+AI: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
 </div>
 
 </div>
 `;
 
+        </div>
+    `;
 });
-resBox.innerHTML = html;
 }
 // ===== DAILY SYSTEM =====
 
@@ -2370,15 +2347,12 @@ function canUseAI(){
 
     
    
-  window.onload = function(){
-
-generateTodayMatches();
-
-checkSeasonReset();
-showWheelIfAvailable();
-initDaily();
-
-};
+    if(!localStorage.getItem("matches")){
+    generateTodayMatches();
+}
+   checkSeasonReset();
+    showWheelIfAvailable();
+   initDaily();
 
 
     function goHome(){
@@ -2624,9 +2598,7 @@ odds:{home:1.8,draw:3.2,away:2.4},
 aiPrediction:{
 mainMarket:"П1",
 confidence:78,
-goals:"ТБ 2.5",
-cards:"ЖК > 3.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["ТБ 2.5","ЖК > 3.5","Угловые > 8.5"],
 isBestBet:true
 }
 },
@@ -2642,9 +2614,7 @@ odds:{home:2.0,draw:3.5,away:2.2},
 aiPrediction:{
 mainMarket:"ТБ 2.5",
 confidence:74,
-goals:"ТБ 3.5",
-cards:"ЖК > 4.5",
-corners:"Угловые > 9.5",
+additionalMarkets:["ЖК > 4.5","Угловые > 9.5"],
 isBestBet:false
 }
 },
@@ -2662,9 +2632,7 @@ odds:{home:2.1,draw:3.4,away:2.0},
 aiPrediction:{
 mainMarket:"П2",
 confidence:72,
-goals:"ТМ 3.5",
-cards:"ЖК > 4.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["ТМ 3.5","ЖК > 4.5"],
 isBestBet:false
 }
 },
@@ -2680,9 +2648,7 @@ odds:{home:1.9,draw:3.1,away:3.0},
 aiPrediction:{
 mainMarket:"П1",
 confidence:69,
-goals:"ТМ 2.5",
-cards:"ЖК > 3.5",
-corners:"Угловые > 7.5",
+additionalMarkets:["ТМ 2.5"],
 isBestBet:false
 }
 },
@@ -2700,9 +2666,7 @@ odds:{home:1.7,draw:3.8,away:3.5},
 aiPrediction:{
 mainMarket:"П1",
 confidence:81,
-goals:"ТБ 3.5",
-cards:"ЖК > 4.5",
-corners:"Угловые > 9.5",
+additionalMarkets:["ТБ 3.5"],
 isBestBet:false
 }
 },
@@ -2718,9 +2682,7 @@ odds:{home:2.0,draw:3.2,away:2.8},
 aiPrediction:{
 mainMarket:"ТБ 2.5",
 confidence:66,
-goals:"ТБ 2.5",
-cards:"ЖК > 3.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["ЖК > 3.5"],
 isBestBet:false
 }
 },
@@ -2738,9 +2700,7 @@ odds:{home:2.2,draw:3.1,away:2.1},
 aiPrediction:{
 mainMarket:"П1",
 confidence:68,
-goals:"ТМ 2.5",
-cards:"ЖК > 4.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["ТМ 2.5"],
 isBestBet:false
 }
 },
@@ -2756,9 +2716,7 @@ odds:{home:1.9,draw:3.0,away:3.2},
 aiPrediction:{
 mainMarket:"П1",
 confidence:73,
-goals:"ТБ 2.5",
-cards:"ЖК > 4.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["ЖК > 4.5"],
 isBestBet:false
 }
 },
@@ -2776,9 +2734,7 @@ odds:{home:1.8,draw:3.4,away:2.6},
 aiPrediction:{
 mainMarket:"П1",
 confidence:75,
-goals:"ТБ 2.5",
-cards:"ЖК > 4.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["ТБ 2.5"],
 isBestBet:false
 }
 },
@@ -2794,9 +2750,7 @@ odds:{home:2.3,draw:3.0,away:2.4},
 aiPrediction:{
 mainMarket:"ТМ 2.5",
 confidence:67,
-goals:"ТМ 2.5",
-cards:"ЖК > 5.5",
-corners:"Угловые > 9.5",
+additionalMarkets:["ЖК > 5.5"],
 isBestBet:false
 }
 },
@@ -2814,9 +2768,7 @@ odds:{home:1.6,draw:3.5,away:4.0},
 aiPrediction:{
 mainMarket:"П1",
 confidence:82,
-goals:"ТБ 2.5",
-cards:"ЖК > 4.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["ТБ 2.5"],
 isBestBet:false
 }
 },
@@ -2832,9 +2784,7 @@ odds:{home:2.1,draw:3.1,away:2.7},
 aiPrediction:{
 mainMarket:"П1",
 confidence:70,
-goals:"ТБ 2.5",
-cards:"ЖК > 3.5",
-corners:"Угловые > 7.5",
+additionalMarkets:["ЖК > 3.5"],
 isBestBet:false
 }
 },
@@ -2852,9 +2802,7 @@ odds:{home:2.0,draw:3.3,away:2.2},
 aiPrediction:{
 mainMarket:"ТБ 2.5",
 confidence:64,
-goals:"ТБ 2.5",
-cards:"ЖК > 3.5",
-corners:"Угловые > 9.5",
+additionalMarkets:["Угловые > 9.5"],
 isBestBet:false
 }
 },
@@ -2870,9 +2818,7 @@ odds:{home:2.4,draw:3.2,away:2.3},
 aiPrediction:{
 mainMarket:"П2",
 confidence:71,
-goals:"ТБ 2.5",
-cards:"ЖК > 3.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["ЖК > 3.5"],
 isBestBet:false
 }
 },
@@ -2890,9 +2836,7 @@ odds:{home:2.2,draw:3.1,away:2.5},
 aiPrediction:{
 mainMarket:"П1",
 confidence:69,
-goals:"ТМ 2.5",
-cards:"ЖК > 4.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["ТМ 2.5"],
 isBestBet:false
 }
 },
@@ -2908,33 +2852,36 @@ odds:{home:2.1,draw:3.3,away:2.6},
 aiPrediction:{
 mainMarket:"ТБ 2.5",
 confidence:74,
-goals:"ТБ 2.5",
-cards:"ЖК > 4.5",
-corners:"Угловые > 8.5",
+additionalMarkets:["Угловые > 8.5"],
 isBestBet:false
-
 }
 }
 
 ];
-    // ===== ВЫБОР BEST BET =====
+// ===== ВЫБОР ЖБ ПО МАКСИМАЛЬНОЙ УВЕРЕННОСТИ =====
+
+// ===== УМНЫЙ ВЫБОР ЖБ =====
+
+// ===== ГАРАНТИРОВАННЫЙ ВЫБОР ЖБ =====
 matches.forEach(m=>{
     m.aiPrediction.isBestBet = false;
 });
-
-let bestMatch = matches.reduce((best,current)=>{
+let bestMatch = matches.reduce((best, current) => {
     return current.aiPrediction.confidence > best.aiPrediction.confidence
         ? current
         : best;
 });
 
 bestMatch.aiPrediction.isBestBet = true;
+let best = matches.find(m => m.aiPrediction.isBestBet);
 
-saveMatches(matches);
+if(best){
+    setTimeout(()=>{
+        showJBContent(best);
+    },500);
+}
 
-setTimeout(()=>{
-    showJBContent(bestMatch);
-},500);
+    saveMatches(matches);
     
 }
 
@@ -3014,16 +2961,6 @@ function ensureActiveMatches(){
             if(template){
 
                 let newMatch = JSON.parse(JSON.stringify(template));
-                if(!newMatch.aiPrediction){
-    newMatch.aiPrediction = {
-        mainMarket:"-",
-        confidence:0,
-        goals:"-",
-        cards:"-",
-        corners:"-",
-        isBestBet:false
-    };
-}
 
                 newMatch.id = league + "_" + Date.now();
                 newMatch.startTime = Date.now() + (10*60*1000);
@@ -3282,98 +3219,8 @@ function openBetHistory(){
 
     box.style.display = "block";
 }
-                        <div id="matchesBox"></div>
-                        // ==========================
-// 📺 RENDER MATCHES
-// ==========================
-
-function renderMatches(){
-
-    const box = document.getElementById("matchesBox");
-
-    if(!box) return;
-
-    let matches = getMatches();
-
-    box.innerHTML = "";
-
-    matches.forEach(match=>{
-
-        if(match.status !== "open") return;
-
-        box.innerHTML += `
-
-        <div style="
-        background:#111;
-        padding:12px;
-        border-radius:12px;
-        margin-bottom:10px;
-        ">
-
-        <div style="font-size:12px;opacity:0.7;">
-        ${match.league}
-        </div>
-
-        <div style="
-        font-size:15px;
-        font-weight:bold;
-        margin:6px 0;
-        ">
-        ${match.home} vs ${match.away}
-        </div>
-
-        <div style="
-        font-size:12px;
-        margin-bottom:6px;
-        opacity:0.8;
-        ">
-        ⏱ ${getMatchTimer(match.startTime)}
-        </div>
-
-        <div style="font-size:12px;margin-bottom:6px;">
-        🤖 ${match.aiPrediction.mainMarket} (${match.aiPrediction.confidence}%)
-        </div>
-
-        <div style="
-        margin-top:8px;
-        font-size:12px;
-        opacity:0.85;
-        ">
-
-        <div>⚽ Голы: ${match.aiPrediction.goals || "-"}</div>
-
-        <div>🚩 Угловые: ${match.aiPrediction.corners || "-"}</div>
-
-        <div>🟨 ЖК: ${match.aiPrediction.cards || "-"}</div>
-
-        </div>
-
-        <div style="margin-top:10px;display:flex;gap:6px;">
-
-        <button onclick="placeBet('${match.id}','home')">
-        П1 ${match.odds.home}
-        </button>
-
-        <button onclick="placeBet('${match.id}','draw')">
-        X ${match.odds.draw}
-        </button>
-
-        <button onclick="placeBet('${match.id}','away')">
-        П2 ${match.odds.away}
-        </button>
-
-        </div>
-
-        </div>
-
-        `;
-
-    });
-
-}
                         
 setInterval(checkMatchStatus, 60000);
-                        setInterval(renderMatches,1000);
                         // ===== MATCH TIMER =====
 
 function getMatchTimer(startTime){
@@ -3451,19 +3298,14 @@ function getMatchTimer(startTime){
                 Уверенность: ${match.aiPrediction.confidence}%
             </div>
 
-           <div style="
-margin-top:8px;
-font-size:12px;
-opacity:0.85;
-">
-
-<div>⚽ Голы: ${match.aiPrediction.goals || "-"}</div>
-
-<div>🚩 Угловые: ${match.aiPrediction.corners || "-"}</div>
-
-<div>🟨 ЖК: ${match.aiPrediction.cards || "-"}</div>
-
-</div>
+            <div style="
+                margin-top:8px;
+                font-size:11px;
+                opacity:0.7;
+            ">
+                Доп. рынки:
+                ${match.aiPrediction.additionalMarkets.join(", ")}
+            </div>
 
         </div>
     `;
@@ -3486,116 +3328,5 @@ setInterval(function(){
 }, 1000);
 
 </script>
-  <script>
-// ===== ИНИЦИАЛИЗАЦИЯ TELEGRAM WEB APP =====
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
-
-// ===== СИСТЕМА БАЛАНСА (LC) И RP =====
-if (!localStorage.getItem("lc")) localStorage.setItem("lc", 100);
-if (!localStorage.getItem("rp")) localStorage.setItem("rp", 0);
-
-function getLC() { return parseInt(localStorage.getItem("lc")); }
-function addLC(amount) {
-    let current = getLC();
-    localStorage.setItem("lc", current + amount);
-    updateUI();
-}
-
-function updateUI() {
-    const bal = getLC();
-    document.getElementById('lcBalance').innerText = bal;
-    if(document.getElementById('profileBalance')) {
-        document.getElementById('profileBalance').innerText = bal + " LC";
-    }
-    if(document.getElementById('uID') && tg.initDataUnsafe.user) {
-        document.getElementById('uID').innerText = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.id;
-    }
-}
-
-// ===== УПРАВЛЕНИЕ ПОПАПАМИ =====
-function openP(id) {
-    document.getElementById('overlay').style.display = 'block';
-    document.getElementById(id).style.display = 'block';
-}
-
-function closeAll() {
-    document.getElementById('overlay').style.display = 'none';
-    const popups = document.querySelectorAll('.popup');
-    popups.forEach(p => p.style.display = 'none');
-}
-
-// ===== ЛОГИКА ЛИГ И ПРОГНОЗОВ (УГЛОВЫЕ, ЖК, ТОТАЛ) =====
-const leaguesData = [
-    { name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 АПЛ", icon: "⚽" },
-    { name: "🇪🇸 Ла Лига", icon: "🇪🇸" },
-    { name: "🇩🇪 Бундеслига", icon: "🇩🇪" },
-    { name: "🇮🇹 Серия А", icon: "🇮🇹" },
-    { name: "🇫🇷 Лига 1", icon: "🇫🇷" },
-    { name: "🇷🇺 РПЛ", icon: "🇷🇺" },
-    { name: "🇹🇷 Суперлига", icon: "🇹🇷" },
-    { name: "🇧🇷 Серия А", icon: "🇧🇷" },
-    { name: "🏆 Лига Чемпионов", icon: "✨" },
-    { name: "🌍 Лига Европы", icon: "🇪🇺" }
-];
-
-function openPredict() {
-    const box = document.getElementById('leagueBox');
-    box.innerHTML = ''; // Очищаем перед рендером
-    
-    leaguesData.forEach((league) => {
-        const btn = document.createElement('div');
-        btn.className = 'bonus-card';
-        btn.innerHTML = `${league.icon} ${league.name} <span>АНАЛИЗ</span>`;
-        btn.onclick = () => showLeagueStats(league.name);
-        box.appendChild(btn);
-    });
-    
-    openP('predictP');
-}
-
-function showLeagueStats(name) {
-    if (getLC() < 15) {
-        tg.showAlert("Недостаточно LC! Стоимость анализа — 15 LC.");
-        return;
-    }
-
-    addLC(-15);
-    
-    // Генерация случайных данных для угловых, ЖК и тотала
-    const corners = (Math.random() * (11 - 8) + 8).toFixed(1);
-    const cards = (Math.random() * (5 - 2) + 2).toFixed(1);
-    const total = (Math.random() * (3.5 - 1.5) + 1.5).toFixed(1);
-
-    const res = document.getElementById('pRes');
-    res.innerHTML = `
-        <div class="match-card" style="border: 1px solid #bc13fe; background: #000;">
-            <div style="color:#ffe57e; font-weight:bold; margin-bottom:10px;">📊 ${name} (AI ПРОГНОЗ)</div>
-            <div class="market-line">📐 Угловые: БОЛЬШЕ ${corners}</div>
-            <div class="market-line">🟨 Карточки (ЖК): МЕНЬШЕ ${cards}</div>
-            <div class="market-line">⚽ Тотал голов: БОЛЬШЕ ${total}</div>
-        </div>
-    `;
-}
-
-// ===== ЖБ ДНЯ =====
-function openJB() {
-    if (getLC() < 20) {
-        tg.showAlert("Для открытия ЖБ дня нужно 20 LC!");
-        return;
-    }
-
-    tg.showConfirm("Открыть ЖБ ДНЯ за 20 LC?", (confirm) => {
-        if (confirm) {
-            addLC(-20);
-            tg.showAlert("🔥 ЖБ ДНЯ ВЫБРАН!\n\nМатч: Манчестер Сити — Арсенал\nПрогноз: П1 (Победа первой)\nКоэффициент: 1.85\nУверенность AI: 94%");
-        }
-    });
-}
-
-// Запуск при старте
-window.onload = updateUI;
-</script>      
 </body>
 </html>
