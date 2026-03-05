@@ -1266,6 +1266,21 @@ margin-bottom:6px;
 .bet-row button:active{
     transform:scale(0.95);
 }
+    .extra-markets{
+margin-top:8px;
+display:flex;
+flex-direction:column;
+gap:4px;
+}
+
+.market-line{
+background:#111;
+border:1px solid #333;
+border-radius:8px;
+padding:6px;
+font-size:12px;
+opacity:0.9;
+}
 </style>
 </head>
 <body>
@@ -1747,22 +1762,6 @@ function openPredict(){
 
 function openJB(){
 
-    if(!spendLC(20)){
-        alert("Недостаточно LC");
-        return;
-    }
-
-    let matches = getMatches();
-    let topMatch = matches.find(m => m.isTop);
-
-    if(!topMatch){
-        alert("ЖБ прогноз не найден");
-        return;
-    }
-
-    showJBContent(topMatch);
-}function openJB(){
-
     let matches = getMatches();
     let topMatch = matches.find(m => m.isTop === true);
 
@@ -1870,6 +1869,22 @@ X ${m.odds.draw}
 
 <div style="margin-top:6px;color:#bc13fe;font-size:12px">
 AI прогноз: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
+</div>
+
+<div class="extra-markets">
+
+<div class="market-line">
+⚽ Голы: ${m.aiPrediction.goals || "-"}
+</div>
+
+<div class="market-line">
+🚩 Угловые: ${m.aiPrediction.corners || "-"}
+</div>
+
+<div class="market-line">
+🟨 ЖК: ${m.aiPrediction.cards || "-"}
+</div>
+
 </div>
 
 </div>
@@ -2605,7 +2620,11 @@ odds:{home:1.8,draw:3.2,away:2.4},
 aiPrediction:{
 mainMarket:"П1",
 confidence:78,
-additionalMarkets:["ТБ 2.5","ЖК > 3.5","Угловые > 8.5"],
+
+goals:"ТБ 2.5",
+cards:"ЖК > 3.5",
+corners:"Угловые > 8.5",
+
 isBestBet:true
 }
 },
