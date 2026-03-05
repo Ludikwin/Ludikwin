@@ -1208,12 +1208,11 @@ filter: drop-shadow(0 0 8px #ff007a);
     transform:scale(0.97);
 }
     .match-card{
-    background: linear-gradient(145deg,#1a1a1a,#111);
-    padding:15px;
-    margin-bottom:15px;
-    border-radius:16px;
-    box-shadow:0 6px 20px rgba(0,0,0,0.4);
-    border:1px solid rgba(255,255,255,0.05);
+background:#1a1a1a;
+border:1px solid #333;
+border-radius:10px;
+padding:12px;
+margin-top:10px;
 }
 
 .match-league{
@@ -1830,48 +1829,43 @@ addLC(-15);
     });
 
     resBox.innerHTML += `
-        <div class="match-card">
-        <div style="margin-top:8px; padding:8px; background:#111; border-radius:8px;">
+       html+=`
+<div class="match-card">
 
-<b>🤖 AI прогноз:</b><br>
-
-Основной рынок: <b>${m.aiPrediction.mainMarket.toUpperCase()}</b><br>
-Уверенность: <b>${m.aiPrediction.confidence}%</b><br>
-
-Дополнительно:<br>
-${m.aiPrediction.additionalMarkets.map(mk => "• "+mk).join("<br>")}
-
-${m.isTop ? "<div style='color:gold; margin-top:6px;'>🔥 ЖБ ПРОГНОЗ ДНЯ</div>" : ""}
-
+<div class="match-league">
+${m.league}
 </div>
 
-            <div class="match-league">
-                ⚽ ${m.league}
-            </div>
+<div class="match-teams">
+${m.home} — ${m.away}
+</div>
 
-            <div class="match-teams">
-                <div class="team">${m.home}</div>
-                <div class="vs">VS</div>
-                <div class="team">${m.away}</div>
-            </div>
+<div class="match-time">
+${new Date(m.startTime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
+</div>
 
-            <div class="match-time">
-                🕒 ${time}
-            </div>
+<div class="bet-row">
 
-            <div class="bet-row">
-                <button onclick="placeBet('${m.id}','home')">
-    П1 ${m.odds.home}
+<button onclick="placeBet('${m.id}','home')">
+П1 ${m.odds.home}
 </button>
 
 <button onclick="placeBet('${m.id}','draw')">
-    X ${m.odds.draw}
+X ${m.odds.draw}
 </button>
 
 <button onclick="placeBet('${m.id}','away')">
-    П2 ${m.odds.away}
+П2 ${m.odds.away}
 </button>
-            </div>
+
+</div>
+
+<div style="margin-top:6px;color:#bc13fe;font-size:12px">
+AI: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
+</div>
+
+</div>
+`;
 
         </div>
     `;
