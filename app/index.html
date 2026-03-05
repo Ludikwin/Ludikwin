@@ -1874,15 +1874,15 @@ AI прогноз: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
 <div class="extra-markets">
 
 <div class="market-line">
-⚽ Голы: ${m.aiPrediction.goals || "-"}
+⚽ Голы: ${(m.aiPrediction && m.aiPrediction.goals) ? m.aiPrediction.goals : "-"}
 </div>
 
 <div class="market-line">
-🚩 Угловые: ${m.aiPrediction.corners || "-"}
+🚩 Угловые: ${(m.aiPrediction && m.aiPrediction.corners) ? m.aiPrediction.corners : "-"}
 </div>
 
 <div class="market-line">
-🟨 ЖК: ${m.aiPrediction.cards || "-"}
+🟨 ЖК: ${(m.aiPrediction && m.aiPrediction.cards) ? m.aiPrediction.cards : "-"}
 </div>
 
 </div>
@@ -2369,9 +2369,8 @@ function canUseAI(){
 
     
    
-    if(!localStorage.getItem("matches")){
-    generateTodayMatches();
-}
+   generateTodayMatches();
+        
    checkSeasonReset();
     showWheelIfAvailable();
    initDaily();
