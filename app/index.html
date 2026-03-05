@@ -1207,7 +1207,7 @@ filter: drop-shadow(0 0 8px #ff007a);
 .bonus-card:active{
     transform:scale(0.97);
 }
-    .match-card{
+   .match-card{
 background:#1a1a1a;
 border:1px solid #333;
 border-radius:10px;
@@ -1216,15 +1216,21 @@ margin-top:10px;
 }
 
 .match-league{
-    font-size:12px;
-    opacity:0.7;
-    margin-bottom:8px;
+font-size:11px;
+opacity:0.6;
+margin-bottom:3px;
 }
 
 .match-teams{
-    text-align:center;
-    font-weight:bold;
-    font-size:16px;
+font-size:15px;
+font-weight:bold;
+margin-bottom:5px;
+}
+
+.match-time{
+font-size:12px;
+opacity:0.7;
+margin-bottom:6px;
 }
 
 .vs{
@@ -1828,8 +1834,8 @@ addLC(-15);
         minute: '2-digit'
     });
 
-    resBox.innerHTML += `
-       html+=`
+    
+    html+=`
 <div class="match-card">
 
 <div class="match-league">
@@ -1861,7 +1867,7 @@ X ${m.odds.draw}
 </div>
 
 <div style="margin-top:6px;color:#bc13fe;font-size:12px">
-AI: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
+AI прогноз: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
 </div>
 
 </div>
