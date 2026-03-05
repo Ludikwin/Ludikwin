@@ -1973,9 +1973,14 @@ function updateProfile() {
 
     // ID пользователя
     if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
-        document.getElementById("uID").innerText =
-            Telegram.WebApp.initDataUnsafe.user.id;
+        if(window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user){
+
+    let uid = document.getElementById("uID");
+
+    if(uid){
+        uid.innerText = Telegram.WebApp.initDataUnsafe.user.id;
     }
+}
 
     // Баланс LC
 let balance = getLC();
@@ -2182,7 +2187,11 @@ wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.32,1)";
     wheel.style.transform = `rotate(${finalDeg}deg)`;
 let tickInterval = setInterval(()=>{
     document.getElementById("tickSound").currentTime = 0;
-    document.getElementById("tickSound").play();
+    let tick = document.getElementById("tickSound");
+if(tick){
+    tick.currentTime = 0;
+    tick.play().catch(()=>{});
+}
 }, 150);
     setTimeout(()=>{
 clearInterval(tickInterval);
@@ -2866,11 +2875,17 @@ isBestBet:false
 matches.forEach(m=>{
     m.aiPrediction.isBestBet = false;
 });
+if(matches.length > 0){
+
 let bestMatch = matches.reduce((best, current) => {
     return current.aiPrediction.confidence > best.aiPrediction.confidence
         ? current
         : best;
 });
+
+bestMatch.aiPrediction.isBestBet = true;
+
+}
 
 bestMatch.aiPrediction.isBestBet = true;
 let best = matches.find(m => m.aiPrediction.isBestBet);
@@ -2887,7 +2902,7 @@ if(best){
 
 
 // проверяем каждые 10 секунд
-setInterval(checkMatchStatus, 10000);
+
                         // ===== MATCH ENGINE =====
 
 function finishMatch(matchId, result){
@@ -3113,8 +3128,7 @@ function checkMatchStatus(){
 function settleBets(match){
 
     let bets = getMyBets();
-
-    bets.forEach(b => {
+    let history = getBetHistory();
 
     if(b.matchId === match.id && b.status === "pending"){
 
