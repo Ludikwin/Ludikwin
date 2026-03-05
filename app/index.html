@@ -1590,7 +1590,7 @@ filter: drop-shadow(0 0 8px #ff007a);
 </div>
 
 <script>
-    const tg = window.Telegram.WebApp;
+    
 const navItems = document.querySelectorAll(".nav-item");
 
 navItems.forEach(item => {
@@ -1675,55 +1675,7 @@ function spendLC(amount){
 }
 
 setLC(getLC());
-let matches = [
-
-{
-id:"rpl1",
-league:"РПЛ",
-home:"Зенит",
-away:"Спартак",
-startTime:Date.now()+3600000,
-status:"open",
-
-odds:{
-home:1.8,
-draw:3.4,
-away:4.2
-},
-
-aiPrediction:{
-mainMarket:"П1",
-confidence:78,
-additionalMarkets:["ТБ 2.5","Обе забьют"]
-},
-
-isTop:true
-},
-
-{
-id:"laliga1",
-league:"Ла Лига",
-home:"Реал",
-away:"Севилья",
-startTime:Date.now()+7200000,
-status:"open",
-
-odds:{
-home:1.6,
-draw:3.8,
-away:5.0
-},
-
-aiPrediction:{
-mainMarket:"П1",
-confidence:82,
-additionalMarkets:["ТБ 2.5"]
-},
-
-isTop:false
-}
-
-];  
+  
 
 // ===== POPUPS =====
 
@@ -1787,7 +1739,24 @@ function openPredict(){
 // 🔥 ЖБ ДНЯ (20 LC / 1 раз в день)
 // ==========================
 
+
 function openJB(){
+
+    if(!spendLC(20)){
+        alert("Недостаточно LC");
+        return;
+    }
+
+    let matches = getMatches();
+    let topMatch = matches.find(m => m.isTop);
+
+    if(!topMatch){
+        alert("ЖБ прогноз не найден");
+        return;
+    }
+
+    showJBContent(topMatch);
+}function openJB(){
 
     let matches = getMatches();
     let topMatch = matches.find(m => m.isTop === true);
@@ -2384,13 +2353,9 @@ function canUseAI(){
 
     
    
-    document.addEventListener("DOMContentLoaded", () => {
-
     if(!localStorage.getItem("matches")){
-        generateTodayMatches();
-    }
-
-});
+    generateTodayMatches();
+}
    checkSeasonReset();
     showWheelIfAvailable();
    initDaily();
@@ -2629,7 +2594,7 @@ function generateTodayMatches(){
 /* ========= АПЛ ========= */
 {
 id:"pl1",
-league:"PL",
+league:"АПЛ",
 home:"Арсенал",
 away:"Челси",
 startTime:Date.now()+5*60*1000,
@@ -2645,7 +2610,7 @@ isBestBet:true
 },
 {
 id:"pl2",
-league:"PL",
+league:"АПЛ",
 home:"Манчестер Сити",
 away:"Ливерпуль",
 startTime:Date.now()+15*60*1000,
@@ -2663,7 +2628,7 @@ isBestBet:false
 /* ========= ЛА ЛИГА ========= */
 {
 id:"pd1",
-league:"PD",
+league:"Ла Лига",
 home:"Реал",
 away:"Барселона",
 startTime:Date.now()+10*60*1000,
@@ -2679,7 +2644,7 @@ isBestBet:false
 },
 {
 id:"pd2",
-league:"PD",
+league:"Ла Лига",
 home:"Атлетико",
 away:"Севилья",
 startTime:Date.now()+20*60*1000,
@@ -2697,7 +2662,7 @@ isBestBet:false
 /* ========= БУНДЕС ========= */
 {
 id:"bl1",
-league:"BL1",
+league:"Бундес",
 home:"Бавария",
 away:"Боруссия Д",
 startTime:Date.now()+25*60*1000,
@@ -2713,7 +2678,7 @@ isBestBet:false
 },
 {
 id:"bl2",
-league:"BL1",
+league:"Бундес",
 home:"Лейпциг",
 away:"Айнтрахт",
 startTime:Date.now()+30*60*1000,
@@ -2731,7 +2696,7 @@ isBestBet:false
 /* ========= СЕРИЯ А ========= */
 {
 id:"sa1",
-league:"SA",
+league:"Серия А",
 home:"Интер",
 away:"Милан",
 startTime:Date.now()+35*60*1000,
@@ -2740,14 +2705,14 @@ result:null,
 odds:{home:2.2,draw:3.1,away:2.1},
 aiPrediction:{
 mainMarket:"П1",
-confidence:82,
-additionalMarkets:["ТБ 2.5"]
-},
-isTop:false
+confidence:68,
+additionalMarkets:["ТМ 2.5"],
+isBestBet:false
+}
 },
 {
 id:"sa2",
-league:"SA",
+league:"Серия А",
 home:"Ювентус",
 away:"Рома",
 startTime:Date.now()+40*60*1000,
@@ -2765,7 +2730,7 @@ isBestBet:false
 /* ========= ЛЧ ========= */
 {
 id:"cl1",
-league:"CL",
+league:"ЛЧ",
 home:"ПСЖ",
 away:"Манчестер Юн",
 startTime:Date.now()+45*60*1000,
@@ -2781,7 +2746,7 @@ isBestBet:false
 },
 {
 id:"cl2",
-league:"CL",
+league:"ЛЧ",
 home:"Бенфика",
 away:"Порту",
 startTime:Date.now()+50*60*1000,
@@ -2799,7 +2764,7 @@ isBestBet:false
 /* ========= РПЛ ========= */
 {
 id:"rpl1",
-league:"RPL",
+league:"РПЛ",
 home:"Зенит",
 away:"Спартак",
 startTime:Date.now()+55*60*1000,
@@ -2815,7 +2780,7 @@ isBestBet:false
 },
 {
 id:"rpl2",
-league:"RPL",
+league:"РПЛ",
 home:"ЦСКА",
 away:"Локомотив",
 startTime:Date.now()+60*60*1000,
@@ -2867,7 +2832,7 @@ isBestBet:false
 /* ========= ЛЕ ========= */
 {
 id:"el1",
-league:"EL",
+league:"ЛЕ",
 home:"Рома",
 away:"Марсель",
 startTime:Date.now()+75*60*1000,
@@ -2883,7 +2848,7 @@ isBestBet:false
 },
 {
 id:"el2",
-league:"EL",
+league:"ЛЕ",
 home:"Аякс",
 away:"Спортинг",
 startTime:Date.now()+80*60*1000,
@@ -3148,9 +3113,7 @@ function checkMatchStatus(){
         }
     });
 
-    if(updated){
-    saveMatches(matches);
-    renderMatches();
+    if(updated) saveMatches(matches);
 }
 
 function settleBets(match){
@@ -3264,110 +3227,6 @@ function openBetHistory(){
 }
                         
 setInterval(checkMatchStatus, 60000);
-                        // ==========================
-// FLASHCORE STYLE MATCH CARDS
-// ==========================
-
-function renderMatches(){
-
-    const box = document.getElementById("matchList");
-    if(!box) return;
-
-    const matches = getMatches();
-
-    box.innerHTML = "";
-
-    matches.forEach(m => {
-
-        const time = new Date(m.startTime)
-        .toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-
-        box.innerHTML += `
-        <div style="
-        background:#0f0f0f;
-        border-radius:14px;
-        padding:12px;
-        margin-bottom:10px;
-        border:1px solid #1e1e1e;
-        ">
-
-            <div style="
-            display:flex;
-            justify-content:space-between;
-            font-size:11px;
-            opacity:0.6;
-            margin-bottom:6px;
-            ">
-                <span>${m.league}</span>
-                <span>${time}</span>
-            </div>
-
-            <div style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:10px;
-            ">
-
-                <div>
-                    <div style="font-size:14px">${m.home}</div>
-                    <div style="font-size:14px;opacity:0.8">${m.away}</div>
-                </div>
-
-                <div style="
-                font-size:11px;
-                opacity:0.5;
-                ">
-                VS
-                </div>
-
-            </div>
-
-            <div style="
-            display:flex;
-            gap:6px;
-            ">
-
-                <button onclick="placeBet('${m.id}','home')" style="
-                flex:1;
-                background:#1a1a1a;
-                border:none;
-                border-radius:8px;
-                padding:6px;
-                color:#fff;
-                ">
-                П1 ${m.odds.home}
-                </button>
-
-                <button onclick="placeBet('${m.id}','draw')" style="
-                flex:1;
-                background:#1a1a1a;
-                border:none;
-                border-radius:8px;
-                padding:6px;
-                color:#fff;
-                ">
-                X ${m.odds.draw}
-                </button>
-
-                <button onclick="placeBet('${m.id}','away')" style="
-                flex:1;
-                background:#1a1a1a;
-                border:none;
-                border-radius:8px;
-                padding:6px;
-                color:#fff;
-                ">
-                П2 ${m.odds.away}
-                </button>
-
-            </div>
-
-        </div>
-        `;
-    });
-
-}
                         // ===== MATCH TIMER =====
 
 function getMatchTimer(startTime){
@@ -3473,9 +3332,7 @@ setInterval(function(){
     }
 
 }, 1000);
-function getMatches(){
-    return matches;
-}
+
 </script>
 </body>
 </html>
