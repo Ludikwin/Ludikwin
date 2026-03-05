@@ -1208,11 +1208,12 @@ filter: drop-shadow(0 0 8px #ff007a);
     transform:scale(0.97);
 }
     .match-card{
-background:#1a1a1a;
-border:1px solid #333;
-border-radius:10px;
-padding:12px;
-margin-top:10px;
+    background: linear-gradient(145deg,#1a1a1a,#111);
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:16px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
+    border:1px solid rgba(255,255,255,0.05);
 }
 
 .match-league{
@@ -1829,43 +1830,48 @@ addLC(-15);
     });
 
     resBox.innerHTML += `
-       html+=`
-<div class="match-card">
+        <div class="match-card">
+        <div style="margin-top:8px; padding:8px; background:#111; border-radius:8px;">
 
-<div class="match-league">
-${m.league}
+<b>🤖 AI прогноз:</b><br>
+
+Основной рынок: <b>${m.aiPrediction.mainMarket.toUpperCase()}</b><br>
+Уверенность: <b>${m.aiPrediction.confidence}%</b><br>
+
+Дополнительно:<br>
+${m.aiPrediction.additionalMarkets.map(mk => "• "+mk).join("<br>")}
+
+${m.isTop ? "<div style='color:gold; margin-top:6px;'>🔥 ЖБ ПРОГНОЗ ДНЯ</div>" : ""}
+
 </div>
 
-<div class="match-teams">
-${m.home} — ${m.away}
-</div>
+            <div class="match-league">
+                ⚽ ${m.league}
+            </div>
 
-<div class="match-time">
-${new Date(m.startTime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
-</div>
+            <div class="match-teams">
+                <div class="team">${m.home}</div>
+                <div class="vs">VS</div>
+                <div class="team">${m.away}</div>
+            </div>
 
-<div class="bet-row">
+            <div class="match-time">
+                🕒 ${time}
+            </div>
 
-<button onclick="placeBet('${m.id}','home')">
-П1 ${m.odds.home}
+            <div class="bet-row">
+                <button onclick="placeBet('${m.id}','home')">
+    П1 ${m.odds.home}
 </button>
 
 <button onclick="placeBet('${m.id}','draw')">
-X ${m.odds.draw}
+    X ${m.odds.draw}
 </button>
 
 <button onclick="placeBet('${m.id}','away')">
-П2 ${m.odds.away}
+    П2 ${m.odds.away}
 </button>
-
-</div>
-
-<div style="margin-top:6px;color:#bc13fe;font-size:12px">
-AI: ${m.aiPrediction.mainMarket} (${m.aiPrediction.confidence}%)
-</div>
-
-</div>
-`;
+            </div>
 
         </div>
     `;
@@ -1973,14 +1979,9 @@ function updateProfile() {
 
     // ID пользователя
     if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
-        if(window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user){
-
-    let uid = document.getElementById("uID");
-
-    if(uid){
-        uid.innerText = Telegram.WebApp.initDataUnsafe.user.id;
+        document.getElementById("uID").innerText =
+            Telegram.WebApp.initDataUnsafe.user.id;
     }
-}
 
     // Баланс LC
 let balance = getLC();
@@ -2187,11 +2188,7 @@ wheel.style.transition = "transform 4s cubic-bezier(.17,.67,.32,1)";
     wheel.style.transform = `rotate(${finalDeg}deg)`;
 let tickInterval = setInterval(()=>{
     document.getElementById("tickSound").currentTime = 0;
-    let tick = document.getElementById("tickSound");
-if(tick){
-    tick.currentTime = 0;
-    tick.play().catch(()=>{});
-}
+    document.getElementById("tickSound").play();
 }, 150);
     setTimeout(()=>{
 clearInterval(tickInterval);
@@ -2875,17 +2872,11 @@ isBestBet:false
 matches.forEach(m=>{
     m.aiPrediction.isBestBet = false;
 });
-if(matches.length > 0){
-
 let bestMatch = matches.reduce((best, current) => {
     return current.aiPrediction.confidence > best.aiPrediction.confidence
         ? current
         : best;
 });
-
-bestMatch.aiPrediction.isBestBet = true;
-
-}
 
 bestMatch.aiPrediction.isBestBet = true;
 let best = matches.find(m => m.aiPrediction.isBestBet);
@@ -2902,7 +2893,7 @@ if(best){
 
 
 // проверяем каждые 10 секунд
-
+setInterval(checkMatchStatus, 10000);
                         // ===== MATCH ENGINE =====
 
 function finishMatch(matchId, result){
@@ -3128,7 +3119,8 @@ function checkMatchStatus(){
 function settleBets(match){
 
     let bets = getMyBets();
-    let history = getBetHistory();
+
+    bets.forEach(b => {
 
     if(b.matchId === match.id && b.status === "pending"){
 
