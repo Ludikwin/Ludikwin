@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -1369,7 +1369,10 @@ filter: drop-shadow(0 0 8px #ff007a);
 <div id="predictP" class="popup">
     <h3 style="color:#ffe57e;display:flex;justify-content:space-between;align-items:center;gap:8px;">ЛИГИ <span id="predictLC" style="font-size:12px;color:#ffe57e;">0 LC</span> <span style="font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(188,19,254,.16);border:1px solid rgba(188,19,254,.35);">-15 LC</span></h3>
     <div id="predictSpendFx" style="display:none;margin:2px 0 10px;text-align:center;font-size:13px;font-weight:700;color:#ff7a9f;">-15 LC списано</div>
-    <div id="stakePresetBar">
+    <button id="stakePresetToggle" class="action-btn" style="padding:10px 12px;font-size:13px;margin-bottom:8px;" onclick="toggleStakePreset()">
+        Сумма ставки: <span id="stakePresetValue">10</span> LC
+    </button>
+    <div id="stakePresetBar" style="display:none;">
         <button onclick="setBetAmount(10)">10</button>
         <button onclick="setBetAmount(25)">25</button>
         <button onclick="setBetAmount(50)">50</button>
@@ -1854,6 +1857,9 @@ if(getLC() < 15){
     return;
 }
 
+if(!confirm("Списать 15 LC за открытие прогнозов лиги?")){
+    return;
+}
 addLC(-15); const predictLC=document.getElementById("predictLC"); if(predictLC) predictLC.innerText=getLC()+" LC"; const spendFx=document.getElementById("predictSpendFx"); if(spendFx){ spendFx.style.display="block"; spendFx.style.opacity="1"; setTimeout(()=>{ spendFx.style.opacity="0.15"; },650); setTimeout(()=>{ spendFx.style.display="none"; spendFx.style.opacity="1"; },1500);}
 // =====================
     const resBox = document.getElementById('pRes');
@@ -2380,10 +2386,19 @@ function copyRef(){
 function getToday(){
     return new Date().toDateString();
 }
+function toggleStakePreset(){
+    const bar = document.getElementById("stakePresetBar");
+    if(!bar) return;
+    bar.style.display = (bar.style.display === "none" || bar.style.display === "") ? "block" : "none";
+}
+
 function setBetAmount(amount){
     let val = parseInt(amount || 10);
     if(![10,25,50,100].includes(val)) val = 10;
     localStorage.setItem("bet_amount", val);
+    const valEl = document.getElementById("stakePresetValue");
+    if(valEl) valEl.innerText = String(val);
+
 
     const bar = document.getElementById("stakePresetBar");
     if(bar){
