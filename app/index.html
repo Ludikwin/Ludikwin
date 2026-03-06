@@ -1798,7 +1798,7 @@ function openJB(){
 }function openJB(){
 
     let matches = getMatches();
-    let topMatch = matches.find(m => m.isTop === true);
+    let topMatch = matches.find(m => m.aiPrediction && m.aiPrediction.isBestBet === true) || matches.find(m => m.isTop === true);
 
     if(!topMatch){
         tg.showAlert("Сегодня нет ЖБ прогноза");
@@ -1883,7 +1883,7 @@ addLC(-15); const predictLC=document.getElementById("predictLC"); if(predictLC) 
 Дополнительно:<br>
 ${m.aiPrediction.additionalMarkets.map(mk => "• "+mk).join("<br>")}
 
-${m.isTop ? "<div style='color:gold; margin-top:6px;'>🔥 ЖБ ПРОГНОЗ ДНЯ</div>" : ""}
+${m.aiPrediction && m.aiPrediction.isBestBet ? "<div style='color:gold; margin-top:6px;'>🔥 ЖБ ПРОГНОЗ ДНЯ</div>" : ""}
 
 </div>
 
@@ -3387,7 +3387,7 @@ setInterval(function(){
 
 </script>
 <script>
-(function(){if(window.__ux)return;window.__ux=1;const g=(id)=>document.getElementById(id);if(!g("txToast")){const t=document.createElement("div");t.id="txToast";t.style.cssText="position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:4000;display:none;padding:10px 14px;border-radius:999px;font-weight:800;font-size:13px";document.body.appendChild(t)}window.showTxToast=(m,k)=>{const t=g("txToast");if(!t)return;t.textContent=m;t.style.display="block";t.style.background=k==="plus"?"#00a95f":k==="minus"?"#cc1439":"#111";t.style.color="#fff";clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.style.display="none",1300)};try{const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(/[ÐÑ]{2,}/.test(n.nodeValue||"")){try{const f=decodeURIComponent(escape(n.nodeValue));if(f)n.nodeValue=f}catch(e){}}}}catch(e){}localStorage.setItem("onboard_v3","1");
+(function(){if(window.__ux)return;window.__ux=1;const g=(id)=>document.getElementById(id);if(!g("txToast")){const t=document.createElement("div");t.id="txToast";t.style.cssText="position:fixed;top:calc(env(safe-area-inset-top,0px) + 68px);left:50%;transform:translateX(-50%);z-index:4000;display:none;padding:10px 14px;border-radius:999px;font-weight:800;font-size:13px;max-width:92vw;text-align:center";document.body.appendChild(t)}window.showTxToast=(m,k)=>{const t=g("txToast");if(!t)return;t.textContent=m;t.style.display="block";t.style.background=k==="plus"?"#00a95f":k==="minus"?"#cc1439":"#111";t.style.color="#fff";clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.style.display="none",1300)};try{const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(/[ÐÑ]{2,}/.test(n.nodeValue||"")){try{const f=decodeURIComponent(escape(n.nodeValue));if(f)n.nodeValue=f}catch(e){}}}}catch(e){}localStorage.setItem("onboard_v3","1");
 if(window.addLC&&!window.__a){window.__a=1;const a=window.addLC;window.addLC=function(x){const r=a.apply(this,arguments);if(typeof x==="number"&&x!==0)showTxToast((x>0?"+":"")+x+" LC",x>0?"plus":"minus");return r;};}
 if(window.spendLC&&!window.__s){window.__s=1;const s=window.spendLC;window.spendLC=function(x){const ok=s.apply(this,arguments);if(ok)showTxToast("-"+x+" LC","minus");return ok;};}
 if(window.getPredict&&!window.__c1){window.__c1=1;const f=window.getPredict;window.getPredict=async function(){if(!confirm("Списать 15 LC за AI прогноз?"))return;return f.apply(this,arguments);};}
