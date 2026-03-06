@@ -1286,7 +1286,7 @@ filter: drop-shadow(0 0 8px #ff007a);
     <div class="header-block">
     <div class="app-title">LUDIK AI</div>
     <div id="lcBar" class="balance">
-        🪙 <span id="lcBalance">100</span> LC
+        🪙 <span id="lcBalance">300</span> LC
     </div>
    <div id="seasonBox" style="display:none; margin-top:20px;"></div>
 <div class="main-card">
@@ -1299,7 +1299,7 @@ filter: drop-shadow(0 0 8px #ff007a);
                 <div class="daily-title">DAILY LUDIK</div>
                 <div class="daily-sub">Забирай ежедневный бонус</div>
             </div>
-            <div class="daily-reward" id="dailyRewardText">+10 LC</div>
+            <div class="daily-reward" id="dailyRewardText">+40 LC</div>
         </div>
 
         <!-- ЖБ ДНЯ -->
@@ -1605,7 +1605,7 @@ filter: drop-shadow(0 0 8px #ff007a);
     </div>
     <div class="stat-row">
         <span>Баланс:</span>
-        <span id="dailyBalance" class="gold-t">100</span>
+        <span id="dailyBalance" class="gold-t">300</span>
     </div>
     <div class="stat-row">
     <span>RP:</span>
@@ -1650,15 +1650,15 @@ initRefSystem();
 function getLC(){
 
     const user = tg.initDataUnsafe?.user;
-    if(!user) return 100;
+    if(!user) return 300;
 
     let key = "lc_user_" + user.id;
 
     let stored = localStorage.getItem(key);
 
     if(stored === null){
-        localStorage.setItem(key, 100);
-        return 100;
+        localStorage.setItem(key, 300);
+        return 300;
     }
 
     return parseInt(stored);
@@ -1683,7 +1683,7 @@ function setLC(amount){
     if(profileBal) profileBal.innerText = amount + " LC";
 }
     function getLCById(id){
-    return parseInt(localStorage.getItem("lc_user_" + id) || 100);
+    return parseInt(localStorage.getItem("lc_user_" + id) || 300);
 }
 
 function setLCById(id, amount){
@@ -1934,7 +1934,7 @@ function initDaily(){
         rewardBox.innerText = "ЗАБРАНО";
     } else {
         let nextStreak = streak + 1;
-        let nextReward = (nextStreak % 7 === 0) ? 50 : 10;
+        let nextReward = (nextStreak % 7 === 0) ? 200 : 40;
         rewardBox.innerText = "+" + nextReward + " LC";
     }
 }
@@ -1999,7 +1999,7 @@ function claimDaily(){
         streak = 1;
     }
 
-    let reward = (streak % 7 === 0) ? 50 : 10;
+    let reward = (streak % 7 === 0) ? 200 : 40;
 
     if(streak % 7 === 0){
         tg.showAlert("🔥 7 дней подряд! Бонус x5!");
