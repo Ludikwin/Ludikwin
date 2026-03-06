@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -31,29 +31,29 @@ function addRP(amount) {
         function getRank() {
     let rp = getRP();
 
-    if (rp >= 1500) return "рџ‘‘ Р›РµРіРµРЅРґР°";
-    if (rp >= 900) return "рџ§  РђРЅР°Р»РёС‚РёРє";
-    if (rp >= 500) return "рџ”Ґ РњР°С€РёРЅР°";
-    if (rp >= 200) return "рџЋЇ РћС…РѕС‚РЅРёРє";
+    if (rp >= 1500) return "👑 Легенда";
+    if (rp >= 900) return "🧠 Аналитик";
+    if (rp >= 500) return "🔥 Машина";
+    if (rp >= 200) return "🎯 Охотник";
 
-    return "рџђЈ РќРѕРІРёС‡РѕРє";
+    return "🐣 Новичок";
 }
 const tg = window.Telegram.WebApp;
         
 tg.ready();
 
-// Р•СЃР»Рё РґРѕСЃС‚СѓРїРµРЅ РЅРѕРІС‹Р№ fullscreen API
+// Если доступен новый fullscreen API
 if (tg.requestFullscreen) {
     tg.requestFullscreen();
 } else {
     tg.expand();
 }
 
-// Р¦РІРµС‚Р° РґРѕР»Р¶РЅС‹ СЃРѕРІРїР°РґР°С‚СЊ СЃ С„РѕРЅРѕРј
+// Цвета должны совпадать с фоном
 tg.setHeaderColor("#050505");
 tg.setBackgroundColor("#050505");
 
-// РћС‚РєР»СЋС‡Р°РµРј СЃРІР°Р№Рї РІРЅРёР·
+// Отключаем свайп вниз
 // if (tg.disableVerticalSwipes) {
 //     tg.disableVerticalSwipes();
 // }
@@ -95,10 +95,10 @@ function checkSeasonReset(){
 
         let finalRP = getSeasonRP();
 
-        // РЅР°РіСЂР°РґР° Р·Р° СѓС‡Р°СЃС‚РёРµ
+        // награда за участие
         if(finalRP >= 300){
             addLC(100);
-            tg.showAlert("рџЏ† РЎРµР·РѕРЅ Р·Р°РІРµСЂС€С‘РЅ! Р’С‹ РїРѕР»СѓС‡РёР»Рё 100 LC");
+            tg.showAlert("🏆 Сезон завершён! Вы получили 100 LC");
         }
 
         localStorage.setItem("season_start", now);
@@ -129,7 +129,7 @@ function activateVIP(days){
 
     let baseTime = now;
 
-    // РµСЃР»Рё VIP СѓР¶Рµ Р°РєС‚РёРІРµРЅ вЂ” РїСЂРѕРґР»РµРІР°РµРј
+    // если VIP уже активен — продлеваем
     if(current > now){
         baseTime = current;
     }
@@ -138,14 +138,14 @@ function activateVIP(days){
 
     localStorage.setItem("vip_until", newUntil);
 
-    tg.showAlert("рџ‘‘ VIP Р°РєС‚РёРІРёСЂРѕРІР°РЅ РЅР° " + days + " РґРЅРµР№!");
+    tg.showAlert("👑 VIP активирован на " + days + " дней!");
 }
 
 function checkVIPStatus(){
 
     if(!isVIP() && getVIPUntil() !== 0){
         localStorage.removeItem("vip_until");
-        tg.showAlert("вЏі VIP Р·Р°РєРѕРЅС‡РёР»СЃСЏ");
+        tg.showAlert("⏳ VIP закончился");
     }
 }
 </script>
@@ -211,7 +211,7 @@ html {
 .cards-container{
     display: flex;
     flex-direction: column;
-    gap: 12px;  /* РіР»Р°РІРЅС‹Р№ РєРѕРЅС‚СЂРѕР»Р»РµСЂ СЂР°СЃСЃС‚РѕСЏРЅРёСЏ */
+    gap: 12px;  /* главный контроллер расстояния */
 }
 
 .big-card{
@@ -339,13 +339,13 @@ html {
     pointer-events:none;
 }
 
-/* hover СЌС„С„РµРєС‚ */
+/* hover эффект */
 .daily-premium:hover{
     transform:scale(1.04);
     box-shadow:0 0 25px rgba(255,215,0,0.4);
 }
 
-/* СЌР»РµРјРµРЅС‚С‹ */
+/* элементы */
 .daily-icon{
     font-size:26px;
 }
@@ -373,7 +373,7 @@ html {
     font-size:13px;
 }
 
-/* Р°РЅРёРјР°С†РёСЏ */
+/* анимация */
 @keyframes pulseGlow{
     0%{opacity:0.4;}
     50%{opacity:0.8;}
@@ -384,7 +384,7 @@ html {
 .daily-progress{
     width:100%;
     height:8px;
-    background:#222;              /* С‚С‘РјРЅР°СЏ РґРѕСЂРѕР¶РєР° */
+    background:#222;              /* тёмная дорожка */
     border-radius:10px;
     overflow:hidden;
     margin-top:8px;
@@ -410,7 +410,7 @@ html {
 }
 
 .balance {
-    margin-top: 20px;  /* РѕРїСѓСЃРєР°РµРј РїР»Р°РЅРµС‚Сѓ */
+    margin-top: 20px;  /* опускаем планету */
 
     display:flex;
     justify-content:center;
@@ -470,7 +470,7 @@ html {
     transition:0.3s;
 }
 
-/* РђРљРўРР’РќРћР• РЎРћРЎРўРћРЇРќРР• */
+/* АКТИВНОЕ СОСТОЯНИЕ */
 .nav-item.active .icon{
     transform:scale(1.2);
     filter:drop-shadow(0 0 8px #bc13fe);
@@ -514,7 +514,7 @@ html {
     z-index:1001;
     box-shadow:0 0 25px var(--neon);
 }
-    /* FIX: С‚РµРєСЃС‚ РІРЅСѓС‚СЂРё РІСЃРµС… РєРЅРѕРїРѕРє */
+    /* FIX: текст внутри всех кнопок */
 
 button,
 .action-btn{
@@ -583,7 +583,7 @@ text-shadow:
         0 0 10px rgba(212,175,55,0.3);
 
 }
- ... С‚РІРѕРё РїРѕСЃР»РµРґРЅРёРµ СЃС‚РёР»Рё ...
+ ... твои последние стили ...
 
 .card-glow{
    ...
@@ -610,7 +610,7 @@ text-shadow:
     position:relative;
     z-index:2;
 }
-    /* AI РџР РћР“РќРћР—Р« */
+    /* AI ПРОГНОЗЫ */
 .card-predict{
     background:linear-gradient(145deg,#0c0f1a,#090c14);
     border:1px solid rgba(80,120,255,0.3);
@@ -630,7 +630,7 @@ text-shadow:
     z-index:0;
 }
 
-/* Р‘РРўР’Рђ */
+/* БИТВА */
 .card-battle{
     background:linear-gradient(145deg,#140c14,#100a12);
     border:1px solid rgba(255,80,120,0.3);
@@ -702,7 +702,7 @@ text-shadow:
         0 0 60px rgba(200,0,255,0.25),
         inset 0 0 30px rgba(255,215,0,0.15);
 }
-    /* ===== Р–Р‘ Р”РќРЇ ===== */
+    /* ===== ЖБ ДНЯ ===== */
 
 .card-jb{
     position:relative;
@@ -831,12 +831,12 @@ body{
     margin-top:4px;
 }
 
-/* СѓРјРµРЅСЊС€Р°РµРј РѕС‚СЃС‚СѓРї main */
+/* уменьшаем отступ main */
 .main-card{
     padding:10px 14px 14px 14px;
 }
 
-/* daily РєРѕРјРїР°РєС‚РЅРµРµ */
+/* daily компактнее */
 .daily-premium{
     padding:10px 14px;
     margin-bottom:8px;
@@ -850,7 +850,7 @@ body{
     font-size:12px;
 }
 
-/* Р¶Р± РєРѕРјРїР°РєС‚РЅРµРµ */
+/* жб компактнее */
 
 .card-jb h2{
     font-size:16px;
@@ -867,7 +867,7 @@ body{
     font-size:13px;
 }
 
-/* РѕСЃС‚Р°Р»СЊРЅС‹Рµ РєР°СЂС‚РѕС‡РєРё */
+/* остальные карточки */
 .cards-container{
     gap:6px;
     }
@@ -876,7 +876,7 @@ body{
     padding:14px;
 }
 
-/* СѓРјРµРЅСЊС€Р°РµРј РёРєРѕРЅРєРё */
+/* уменьшаем иконки */
 .card-icon{
     font-size:24px;
     margin-bottom:6px;
@@ -889,7 +889,7 @@ body{
 .card-sub{
     font-size:12px;
 }
-    /* DAILY С‡СѓС‚СЊ РІС‹С€Рµ */
+    /* DAILY чуть выше */
 
     .main-card{
     padding-bottom:10px;
@@ -1002,7 +1002,7 @@ body{
 
 .profile-balance-value{
     font-family:'Inter', sans-serif;
-    font-size:18px;   /* РјРµРЅСЊС€Рµ С‡РµРј РІРµСЂС…РЅРёРµ 5 LC */
+    font-size:18px;   /* меньше чем верхние 5 LC */
     font-weight:600;
     color:#ffe57e;
 }
@@ -1141,14 +1141,14 @@ body{
     animation: pulsePointer 1.2s infinite;
 filter: drop-shadow(0 0 8px #ff007a);
     position:absolute;
-    top:-5px; /* Р±Р»РёР¶Рµ Рє РєРѕР»РµСЃСѓ */
+    top:-5px; /* ближе к колесу */
     left:50%;
     transform:translateX(-50%);
     width:0;
     height:0;
     border-left:15px solid transparent;
     border-right:15px solid transparent;
-    border-top:30px solid #ff007a; /* Р’РђР–РќРћ вЂ” border-top РІРјРµСЃС‚Рѕ border-bottom */
+    border-top:30px solid #ff007a; /* ВАЖНО — border-top вместо border-bottom */
     z-index:10;
 }
 
@@ -1286,7 +1286,7 @@ filter: drop-shadow(0 0 8px #ff007a);
     <div class="header-block">
     <div class="app-title">LUDIK AI</div>
     <div id="lcBar" class="balance">
-        рџЄ™ <span id="lcBalance">300</span> LC
+        🪙 <span id="lcBalance">300</span> LC
     </div>
    <div id="seasonBox" style="display:none; margin-top:20px;"></div>
 <div class="main-card">
@@ -1297,42 +1297,42 @@ filter: drop-shadow(0 0 8px #ff007a);
         <div class="daily-premium" onclick="openP('dailyP')">
             <div>
                 <div class="daily-title">DAILY LUDIK</div>
-                <div class="daily-sub">Р—Р°Р±РёСЂР°Р№ РµР¶РµРґРЅРµРІРЅС‹Р№ Р±РѕРЅСѓСЃ</div>
+                <div class="daily-sub">Забирай ежедневный бонус</div>
             </div>
             <div class="daily-reward" id="dailyRewardText">+40 LC</div>
         </div>
 
-        <!-- Р–Р‘ Р”РќРЇ -->
+        <!-- ЖБ ДНЯ -->
         <div class="big-card card-jb">
-            <h2>Р–Р‘ Р”РќРЇ</h2>
-            <p>РЎР°РјС‹Р№ СѓРІРµСЂРµРЅРЅС‹Р№ РїСЂРѕРіРЅРѕР· СЃРµРіРѕРґРЅСЏ</p>
-            <button class="action-btn" onclick="openJB()">РћРўРљР Р«РўР¬ вЂ” 20 LC</button>
+            <h2>ЖБ ДНЯ</h2>
+            <p>Самый уверенный прогноз сегодня</p>
+            <button class="action-btn" onclick="openJB()">ОТКРЫТЬ — 20 LC</button>
         </div>
 
-        <!-- AI РџР РћР“РќРћР—Р« -->
+        <!-- AI ПРОГНОЗЫ -->
         <div class="big-card card-predict" onclick="openPredict()">
             <div class="card-content">
-                <div class="card-icon">рџ¤–</div>
-                <div class="card-title">AI РџР РћР“РќРћР—Р«</div>
-                <div class="card-sub">РђРЅР°Р»РёС‚РёРєР° Р·Р° 15 LC</div>
+                <div class="card-icon">🤖</div>
+                <div class="card-title">AI ПРОГНОЗЫ</div>
+                <div class="card-sub">Аналитика за 15 LC</div>
             </div>
         </div>
 
-        <!-- Р‘РРўР’Рђ -->
+        <!-- БИТВА -->
         <div class="big-card card-battle" onclick="openP('battleP')">
             <div class="card-content">
-                <div class="card-icon">вљ”пёЏ</div>
-                <div class="card-title">Р‘РРўР’Рђ Р›РЈР”РРљРћР’</div>
-                <div class="card-sub">РЎРґРµР»Р°Р№ СЃРІРѕР№ РІС‹Р±РѕСЂ</div>
+                <div class="card-icon">⚔️</div>
+                <div class="card-title">БИТВА ЛУДИКОВ</div>
+                <div class="card-sub">Сделай свой выбор</div>
             </div>
         </div>
 
         <!-- VIP -->
         <div class="big-card card-vip" onclick="openP('vipP')">
             <div class="card-content">
-                <div class="card-icon">рџ’Ћ</div>
-                <div class="card-title">VIP Р”РћРЎРўРЈРџ</div>
-                <div class="card-sub">2 РЅРµРґРµР»Рё РїСЂРµРјРёСѓРј РїСЂРѕРіРЅРѕР·РѕРІ</div>
+                <div class="card-icon">💎</div>
+                <div class="card-title">VIP ДОСТУП</div>
+                <div class="card-sub">2 недели премиум прогнозов</div>
             </div>
         </div>
 
@@ -1358,19 +1358,19 @@ filter: drop-shadow(0 0 8px #ff007a);
     </div>
 
     <button style="margin-top:25px;" onclick="spinWheel()" id="spinBtn">
-        РљР РЈРўРРўР¬
+        КРУТИТЬ
     </button>
 
     <div id="wheelResult"></div>
 
 </div>
 
-<!-- РџР РћР“РќРћР—Р« -->
+<!-- ПРОГНОЗЫ -->
 <div id="predictP" class="popup">
-    <h3 style="color:#ffe57e;display:flex;justify-content:space-between;align-items:center;gap:8px;">Р›РР“Р <span id="predictLC" style="font-size:12px;color:#ffe57e;">0 LC</span> <span style="font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(188,19,254,.16);border:1px solid rgba(188,19,254,.35);">-15 LC</span></h3>
-    <div id="predictSpendFx" style="display:none;margin:2px 0 10px;text-align:center;font-size:13px;font-weight:700;color:#ff7a9f;">-15 LC СЃРїРёСЃР°РЅРѕ</div>
+    <h3 style="color:#ffe57e;display:flex;justify-content:space-between;align-items:center;gap:8px;">ЛИГИ <span id="predictLC" style="font-size:12px;color:#ffe57e;">0 LC</span> <span style="font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(188,19,254,.16);border:1px solid rgba(188,19,254,.35);">-15 LC</span></h3>
+    <div id="predictSpendFx" style="display:none;margin:2px 0 10px;text-align:center;font-size:13px;font-weight:700;color:#ff7a9f;">-15 LC списано</div>
     <button id="stakePresetToggle" class="action-btn" style="padding:10px 12px;font-size:13px;margin-bottom:8px;" onclick="toggleStakePreset()">
-        РЎСѓРјРјР° СЃС‚Р°РІРєРё: <span id="stakePresetValue">10</span> LC
+        Сумма ставки: <span id="stakePresetValue">10</span> LC
     </button>
     <div id="stakePresetBar" style="display:none;">
         <button onclick="setBetAmount(10)">10</button>
@@ -1380,22 +1380,22 @@ filter: drop-shadow(0 0 8px #ff007a);
     </div>
     <div class="league-grid" id="leagueBox"></div>
     <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px;"></div>
-    <button class="close-btn" onclick="closeAll()">Р—РђРљР Р«РўР¬</button>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <!-- VIP -->
 <div id="vipP" class="popup">
-    <h2 style="color:#bc13fe">VIP РџРђРљР•Рў</h2>
-    <p style="font-size:12px; margin:15px 0;">Р”РѕСЃС‚СѓРї Рє VIP РїСЂРѕРіРЅРѕР·Р°Рј РЅР° 2 РЅРµРґРµР»Рё.</p>
-    <div class="stat-row"><span>Р¦РµРЅР°:</span><span class="gold-t">15.00 USDT</span></div>
-    <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">РћРџР›РђРўРРўР¬</a>
-    <button class="close-btn" onclick="closeAll()">РћРўРњР•РќРђ</button>
+    <h2 style="color:#bc13fe">VIP ПАКЕТ</h2>
+    <p style="font-size:12px; margin:15px 0;">Доступ к VIP прогнозам на 2 недели.</p>
+    <div class="stat-row"><span>Цена:</span><span class="gold-t">15.00 USDT</span></div>
+    <a href="https://t.me/send?start=IVPgcC9RDROO" class="action-btn">ОПЛАТИТЬ</a>
+    <button class="close-btn" onclick="closeAll()">ОТМЕНА</button>
 </div>
 
-<!-- РџР РћР¤РР›Р¬ -->
+<!-- ПРОФИЛЬ -->
 <div id="profileP" class="popup">
 
-    <h2 style="text-align:center;color:#bc13fe;">рџ‘¤ РџР РћР¤РР›Р¬</h2>
+    <h2 style="text-align:center;color:#bc13fe;">👤 ПРОФИЛЬ</h2>
 
     <!-- TOP CARD -->
     <div style="
@@ -1413,7 +1413,7 @@ filter: drop-shadow(0 0 8px #ff007a);
             </div>
 
             <div style="text-align:right;">
-                <div style="font-size:12px;opacity:0.6;">Р‘Р°Р»Р°РЅСЃ</div>
+                <div style="font-size:12px;opacity:0.6;">Баланс</div>
                 <div id="profileBalance" style="font-weight:bold;font-size:16px;color:#00ff88;">0 LC</div>
             </div>
         </div>
@@ -1425,8 +1425,8 @@ filter: drop-shadow(0 0 8px #ff007a);
             </div>
 
             <div style="text-align:right;">
-                <div style="font-size:12px;opacity:0.6;">Р Р°РЅРі</div>
-                <div id="profileRank" style="font-weight:bold;color:#ffd700;">РќРѕРІРёС‡РѕРє</div>
+                <div style="font-size:12px;opacity:0.6;">Ранг</div>
+                <div id="profileRank" style="font-weight:bold;color:#ffd700;">Новичок</div>
             </div>
         </div>
     </div>
@@ -1435,27 +1435,27 @@ filter: drop-shadow(0 0 8px #ff007a);
     <div style="display:flex;flex-direction:column;gap:10px;">
 
         <button class="action-btn" onclick="openPFromProfile('historyP')">
-            рџ“Љ РСЃС‚РѕСЂРёСЏ РїСЂРѕРіРЅРѕР·РѕРІ
+            📊 История прогнозов
         </button>
 
         <button class="action-btn" onclick="openBetHistory()">
-            рџ“њ РСЃС‚РѕСЂРёСЏ СЃС‚Р°РІРѕРє
+            📜 История ставок
         </button>
 
-       <button class="action-btn" onclick="openPFromProfile('bonusP')">Р‘РћРќРЈРЎР«</button>
+       <button class="action-btn" onclick="openPFromProfile('bonusP')">БОНУСЫ</button>
 
         <button class="action-btn" onclick="openPFromProfile('chatP')">
-            рџ’¬ Р§Р°С‚
+            💬 Чат
         </button>
 
         <button class="action-btn" onclick="window.open('https://t.me/Titlyanov022','_blank')">
-            рџ“© РЎРІСЏР·СЊ
+            📩 Связь
         </button>
 
 
         
         <button class="action-btn" onclick="openPFromProfile('shopP')">
-            рџ’Ћ РњР°РіР°Р·РёРЅ
+            💎 Магазин
         </button>
 
     </div>
@@ -1463,107 +1463,107 @@ filter: drop-shadow(0 0 8px #ff007a);
     <div id="betHistoryBox" style="display:none;margin-top:12px;"></div>
 
     <button class="close-btn" onclick="closeAll()" style="margin-top:15px;">
-        Р—РђРљР Р«РўР¬
+        ЗАКРЫТЬ
     </button>
 
 </div>
 <div id="shopP" class="popup">
-    <h2 style="color:#bc13fe;text-align:center;">рџ’Ћ РњРђР“РђР—РРќ LC</h2>
+    <h2 style="color:#bc13fe;text-align:center;">💎 МАГАЗИН LC</h2>
 
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:15px;">
 
         <button class="action-btn" onclick="addLC(50)">
-            50 в­ђ = 50 LC
+            50 ⭐ = 50 LC
         </button>
 
         <button class="action-btn" onclick="addLC(170)">
-            150 в­ђ = 170 LC
+            150 ⭐ = 170 LC
         </button>
 
         <button class="action-btn" onclick="addLC(380)">
-            300 в­ђ = 380 LC
+            300 ⭐ = 380 LC
         </button>
 
     </div>
 
     <button class="close-btn" onclick="closeAll()" style="margin-top:15px;">
-        Р—РђРљР Р«РўР¬
+        ЗАКРЫТЬ
     </button>
 </div>
-<!-- Р‘РћРќРЈРЎР« -->
+<!-- БОНУСЫ -->
 <div id="bonusP" class="popup">
-    <h3 style="color:#bc13fe">рџ”Ґ РџРђР РўРќРЃР РЎРљРР• Р‘РћРќРЈРЎР«</h3>
+    <h3 style="color:#bc13fe">🔥 ПАРТНЁРСКИЕ БОНУСЫ</h3>
     <p style="font-size:12px;opacity:0.7;margin-bottom:15px;">
-        РџРѕР»СѓС‡Р°Р№ +10 LC Р·Р° РїРµСЂРµС…РѕРґ (СЂР°Р· РІ 24 С‡Р°СЃР°)
+        Получай +10 LC за переход (раз в 24 часа)
     </p>
 
     <div class="bonus-card" onclick="claimBonus('1win','https://1wrlst.com/?p=h14y')">
-        рџ’° 1WIN
+        💰 1WIN
         <span>+10 LC</span>
     </div>
 
     <div class="bonus-card" onclick="claimBonus('stake','https://stake.com/ru?c=oeVgnFIa')">
-        рџЋІ STAKE
+        🎲 STAKE
         <span>+10 LC</span>
     </div>
 
     <div class="bonus-card" onclick="claimBonus('channel','https://t.me/+oEnEz7IOZ90wN2Ri')">
-        рџ“ў TELEGRAM РљРђРќРђР›
+        📢 TELEGRAM КАНАЛ
         <span>+10 LC</span>
     </div>
 
-    <button class="close-btn" onclick="closeAll()">Р—РђРљР Р«РўР¬</button>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- Р Р•Р¤Р•Р РђР› -->
+<!-- РЕФЕРАЛ -->
 <div id="refP" class="popup">
-    <h2 style="color:#ffe57e;text-align:center;">рџ‘Ґ Р Р•Р¤Р•Р РђР›Р«</h2>
+    <h2 style="color:#ffe57e;text-align:center;">👥 РЕФЕРАЛЫ</h2>
 
     <div class="ref-hero">
-        <div class="ref-hero-title">РџСЂРёРіР»Р°С€Р°Р№ РґСЂСѓР·РµР№</div>
-        <div class="ref-hero-sub">РџРѕР»СѓС‡Р°Р№ <b>50 LC</b> Р·Р° РєР°Р¶РґРѕРіРѕ СЂРµС„РµСЂР°Р»Р°</div>
+        <div class="ref-hero-title">Приглашай друзей</div>
+        <div class="ref-hero-sub">Получай <b>50 LC</b> за каждого реферала</div>
     </div>
 
-    <div class="ref-link-label">РўРІРѕСЏ СЃСЃС‹Р»РєР°:</div>
+    <div class="ref-link-label">Твоя ссылка:</div>
     <div id="refLink" class="ref-link-box"></div>
 
-    <button class="action-btn ref-copy-btn" onclick="copyRef()">РЎРљРћРџРР РћР’РђРўР¬ РЎРЎР«Р›РљРЈ</button>
+    <button class="action-btn ref-copy-btn" onclick="copyRef()">СКОПИРОВАТЬ ССЫЛКУ</button>
 
     <div class="ref-stats">
         <div class="ref-count-card">
-            <small>РўРІРѕРё СЂРµС„РµСЂР°Р»С‹</small>
-            <div id="refCount">РџСЂРёРіР»Р°С€РµРЅРѕ: 0</div>
+            <small>Твои рефералы</small>
+            <div id="refCount">Приглашено: 0</div>
         </div>
     </div>
 
     <div id="refList" style="margin-top:10px;"></div>
 
-    <button class="close-btn" onclick="closeAll()">Р—РђРљР Р«РўР¬</button>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
-<!-- РЎРўРђРўРРЎРўРРљРђ -->
+<!-- СТАТИСТИКА -->
 <div id="statsP" class="popup">
-    <h2>AI РЎРўРђРўРРЎРўРРљРђ</h2>
-    <div class="stat-row"><span>РџСЂРѕС…РѕРґРёРјРѕСЃС‚СЊ:</span><span style="color:#00ff00;">84.2%</span></div>
-    <button class="close-btn" onclick="closeAll()">Р—РђРљР Р«РўР¬</button>
+    <h2>AI СТАТИСТИКА</h2>
+    <div class="stat-row"><span>Проходимость:</span><span style="color:#00ff00;">84.2%</span></div>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- Р‘РРўР’Рђ Р›РЈР”РРљРћР’ -->
+<!-- БИТВА ЛУДИКОВ -->
 <div id="battleP" class="popup">
 
-    <h2 style="color:#bc13fe">Р‘РРўР’Рђ Р›РЈР”РРљРћР’</h2>
+    <h2 style="color:#bc13fe">БИТВА ЛУДИКОВ</h2>
 
     <div id="battleBox">
 
         <button onclick="battle('safe')">
-            рџџў РћСЃС‚РѕСЂРѕР¶РЅС‹Р№ (10 LC)
+            🟢 Осторожный (10 LC)
         </button>
 
         <button onclick="battle('mid')">
-            рџџЎ РЎСЂРµРґРЅРёР№ (25 LC)
+            🟡 Средний (25 LC)
         </button>
 
         <button onclick="battle('high')">
-            рџ”ґ РђРіСЂРµСЃСЃРёРІРЅС‹Р№ (50 LC)
+            🔴 Агрессивный (50 LC)
         </button>
 
         <div id="battleResult"
@@ -1573,48 +1573,48 @@ filter: drop-shadow(0 0 8px #ff007a);
     </div>
 
     <button class="close-btn" onclick="closeAll()">
-        Р—РђРљР Р«РўР¬
+        ЗАКРЫТЬ
     </button>
 
 </div>
 
-<!-- Р–Р‘ Р”РќРЇ -->
+<!-- ЖБ ДНЯ -->
 <div id="jbP" class="popup">
-    <h2 style="color:#bc13fe">рџ”Ґ Р–Р‘ Р”РќРЇ</h2>
+    <h2 style="color:#bc13fe">🔥 ЖБ ДНЯ</h2>
 
     <div id="jbContent" style="margin:15px 0;"></div>
 
-    <button class="close-btn" onclick="closeAll()">Р—РђРљР Р«РўР¬</button>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- РРЎРўРћР РРЇ РџР РћР“РќРћР—РћР’ -->
+<!-- ИСТОРИЯ ПРОГНОЗОВ -->
 <div id="historyP" class="popup">
-    <h2 style="color:#bc13fe">РСЃС‚РѕСЂРёСЏ РїСЂРѕРіРЅРѕР·РѕРІ</h2>
+    <h2 style="color:#bc13fe">История прогнозов</h2>
     <table>
-        <tr><th>Р”Р°С‚Р°</th><th>РњР°С‚С‡</th><th>РџСЂРѕРіРЅРѕР·</th><th>Р РµР·СѓР»СЊС‚Р°С‚</th></tr>
-        <tr><td>23.02</td><td>Р‘РµРЅС„РёРєР° - Р РµР°Р»</td><td>РўР‘ 2.5</td><td>вњ”пёЏ</td></tr>
-        <tr><td>22.02</td><td>РњР® - Р›РёРІРµСЂРїСѓР»СЊ</td><td>Рџ2</td><td>вќЊ</td></tr>
-        <tr><td>21.02</td><td>Р‘Р°СЂСЃР° - РђС‚Р»РµС‚РёРєРѕ</td><td>РќРёС‡СЊСЏ</td><td>вњ”пёЏ</td></tr>
+        <tr><th>Дата</th><th>Матч</th><th>Прогноз</th><th>Результат</th></tr>
+        <tr><td>23.02</td><td>Бенфика - Реал</td><td>ТБ 2.5</td><td>✔️</td></tr>
+        <tr><td>22.02</td><td>МЮ - Ливерпуль</td><td>П2</td><td>❌</td></tr>
+        <tr><td>21.02</td><td>Барса - Атлетико</td><td>Ничья</td><td>✔️</td></tr>
     </table>
-    <button class="close-btn" onclick="closeAll()">Р—РђРљР Р«РўР¬</button>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<div id="betHistoryP" class="popup"><h2 style="color:#bc13fe">РСЃС‚РѕСЂРёСЏ СЃС‚Р°РІРѕРє</h2><div id="betHistoryList" style="margin-top:12px;"></div><button class="close-btn" onclick="closeAll()">Р—РђРљР Р«РўР¬</button></div><!-- Р§РђРў -->
+<div id="betHistoryP" class="popup"><h2 style="color:#bc13fe">История ставок</h2><div id="betHistoryList" style="margin-top:12px;"></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div><!-- ЧАТ -->
 <div id="chatP" class="popup">
-    <h2 style="color:#bc13fe">Р§РђРў</h2>
-    <p style="font-size:12px; margin:15px 0;">РџСЂРёСЃРѕРµРґРёРЅСЏР№С‚РµСЃСЊ Рє С‡Р°С‚Сѓ Ludik:</p>
-    <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="action-btn" target="_blank">РћРўРљР Р«РўР¬ Р§РђРў</a>
-    <button class="close-btn" onclick="closeAll()">Р—РђРљР Р«РўР¬</button>
+    <h2 style="color:#bc13fe">ЧАТ</h2>
+    <p style="font-size:12px; margin:15px 0;">Присоединяйтесь к чату Ludik:</p>
+    <a href="https://t.me/+BrVJbCy5i5hjMjYy" class="action-btn" target="_blank">ОТКРЫТЬ ЧАТ</a>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
-    <!-- DAILY Р‘РћРќРЈРЎ -->
+    <!-- DAILY БОНУС -->
 <div id="dailyP" class="popup">
-    <h2 style="color:#bc13fe">Р•Р–Р•Р”РќР•Р’РќР«Р™ Р‘РћРќРЈРЎ</h2>
+    <h2 style="color:#bc13fe">ЕЖЕДНЕВНЫЙ БОНУС</h2>
     <div class="stat-row">
         <span>Streak:</span>
         <span id="dailyStreak" class="gold-t">0</span>
     </div>
     <div class="stat-row">
-        <span>Р‘Р°Р»Р°РЅСЃ:</span>
+        <span>Баланс:</span>
         <span id="dailyBalance" class="gold-t">300</span>
     </div>
     <div class="stat-row">
@@ -1623,11 +1623,11 @@ filter: drop-shadow(0 0 8px #ff007a);
 </div>
 
 <div class="stat-row">
-    <span>Р Р°РЅРі:</span>
-    <span id="profileRank" class="gold-t">РќРѕРІРёС‡РѕРє</span>
+    <span>Ранг:</span>
+    <span id="profileRank" class="gold-t">Новичок</span>
 </div>
-    <button class="action-btn" id="claimBtn" onclick="claimDaily()">Р—РђР‘Р РђРўР¬</button>
-    <button class="close-btn" onclick="closeAll()">Р—РђРљР Р«РўР¬</button>
+    <button class="action-btn" id="claimBtn" onclick="claimDaily()">ЗАБРАТЬ</button>
+    <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
 <script>
@@ -1637,10 +1637,10 @@ const navItems = document.querySelectorAll(".nav-item");
 navItems.forEach(item => {
     item.addEventListener("click", function(){
 
-        // РЈР±РёСЂР°РµРј active Сѓ РІСЃРµС…
+        // Убираем active у всех
         navItems.forEach(i => i.classList.remove("active"));
 
-        // Р”РѕР±Р°РІР»СЏРµРј active С‚РµРєСѓС‰РµРјСѓ
+        // Добавляем active текущему
         this.classList.add("active");
 
     });
@@ -1708,7 +1708,7 @@ function addLC(amount){
 function spendLC(amount){
     let current = getLC();
     if(current < amount){
-        tg.showAlert("РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ Ludik Coin");
+        tg.showAlert("Недостаточно Ludik Coin");
         return false;
     }
     setLC(current - amount);
@@ -1733,15 +1733,15 @@ setLC(getLC());
    function openP(id){
        
 
-    // СЃРєСЂС‹РІР°РµРј РІСЃРµ РїРѕРїР°РїС‹
+    // скрываем все попапы
     document.querySelectorAll(".popup").forEach(p => {
         p.style.display = "none";
     });
 
-    // РїРѕРєР°Р·С‹РІР°РµРј overlay
+    // показываем overlay
     document.getElementById("overlay").style.display = "block";
 
-    // РїРѕРєР°Р·С‹РІР°РµРј РЅСѓР¶РЅС‹Р№ РїРѕРїР°Рї
+    // показываем нужный попап
     const popup = document.getElementById(id);
     if(popup){
         popup.style.display = "block";
@@ -1774,7 +1774,7 @@ function openPredict(){
     openP('predictP'); const predictLC=document.getElementById('predictLC'); if(predictLC) predictLC.innerText=getLC()+' LC'; const spendFx=document.getElementById('predictSpendFx'); if(spendFx){ spendFx.style.display='none'; spendFx.style.opacity='1'; } setBetAmount(parseInt(localStorage.getItem("bet_amount") || "10"));
     const box=document.getElementById('leagueBox');
     box.innerHTML="";
-    const leagues={"PL":"РђРџР›","PD":"Р›Р° Р›РёРіР°","BL1":"Р‘СѓРЅРґРµСЃ","SA":"РЎРµСЂРёСЏ Рђ","CL":"Р›Р§","RPL":"Р РџР›","MLS":"MLS","EL":"Р›Р•"};
+    const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
     Object.keys(leagues).forEach(code=>{
         const btn=document.createElement('button');
         btn.className="league-btn";
@@ -1785,14 +1785,14 @@ function openPredict(){
 }
 
     // ==========================
-// рџ”Ґ Р–Р‘ Р”РќРЇ (20 LC / 1 СЂР°Р· РІ РґРµРЅСЊ)
+// 🔥 ЖБ ДНЯ (20 LC / 1 раз в день)
 // ==========================
 
 
 function openJB(){
 
     if(!spendLC(20)){
-        alert("РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ LC");
+        alert("Недостаточно LC");
         return;
     }
 
@@ -1800,7 +1800,7 @@ function openJB(){
     let topMatch = matches.find(m => m.isTop);
 
     if(!topMatch){
-        alert("Р–Р‘ РїСЂРѕРіРЅРѕР· РЅРµ РЅР°Р№РґРµРЅ");
+        alert("ЖБ прогноз не найден");
         return;
     }
 
@@ -1811,7 +1811,7 @@ function openJB(){
     let topMatch = matches.find(m => m.aiPrediction && m.aiPrediction.isBestBet === true) || matches.find(m => m.isTop === true);
 
     if(!topMatch){
-        tg.showAlert("РЎРµРіРѕРґРЅСЏ РЅРµС‚ Р–Р‘ РїСЂРѕРіРЅРѕР·Р°");
+        tg.showAlert("Сегодня нет ЖБ прогноза");
         return;
     }
 
@@ -1838,14 +1838,14 @@ function openJB(){
    
 async function getPredict(code){
     const leagueNames = {
-    "PL":"РђРџР›",
-    "PD":"Р›Р° Р›РёРіР°",
-    "BL1":"Р‘СѓРЅРґРµСЃ",
-    "SA":"РЎРµСЂРёСЏ Рђ",
-    "CL":"Р›Р§",
-    "RPL":"Р РџР›",
+    "PL":"АПЛ",
+    "PD":"Ла Лига",
+    "BL1":"Бундес",
+    "SA":"Серия А",
+    "CL":"ЛЧ",
+    "RPL":"РПЛ",
     "MLS":"MLS",
-    "EL":"Р›Р•"
+    "EL":"ЛЕ"
 };
 
 let selectedLeague = leagueNames[code];
@@ -1853,11 +1853,11 @@ let selectedLeague = leagueNames[code];
 console.log("SELECTED:", selectedLeague);
 // ====== AI COST ======
 if(getLC() < 15){
-    tg.showAlert("РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ LC РґР»СЏ AI РїСЂРѕРіРЅРѕР·Р°");
+    tg.showAlert("Недостаточно LC для AI прогноза");
     return;
 }
 
-if(!confirm("РЎРїРёСЃР°С‚СЊ 15 LC Р·Р° РѕС‚РєСЂС‹С‚РёРµ РїСЂРѕРіРЅРѕР·РѕРІ Р»РёРіРё?")){
+if(!confirm("Списать 15 LC за открытие прогнозов лиги?")){
     return;
 }
 addLC(-15); const predictLC=document.getElementById("predictLC"); if(predictLC) predictLC.innerText=getLC()+" LC"; const spendFx=document.getElementById("predictSpendFx"); if(spendFx){ spendFx.style.display="block"; spendFx.style.opacity="1"; setTimeout(()=>{ spendFx.style.opacity="0.15"; },650); setTimeout(()=>{ spendFx.style.display="none"; spendFx.style.opacity="1"; },1500);}
@@ -1870,11 +1870,11 @@ addLC(-15); const predictLC=document.getElementById("predictLC"); if(predictLC) 
     .slice(0, 2);
 
     if(matches.length === 0){
-        resBox.innerText = "РќРµС‚ РґРѕСЃС‚СѓРїРЅС‹С… РјР°С‚С‡РµР№";
+        resBox.innerText = "Нет доступных матчей";
         return;
     }
 
-    function normalizeMarkets(arr){arr=Array.isArray(arr)?arr.slice():[];const g=arr.some(x=>/РўР‘|РўРњ|РіРѕР»/i.test(x));const y=arr.some(x=>/Р–Рљ|РєР°СЂС‚РѕС‡/i.test(x));const c=arr.some(x=>/СѓРіР»РѕРІ|РЈРіР»РѕРІ/i.test(x));if(!g)arr.push("РўР‘ 2.5");if(!y)arr.push("Р–Рљ > 3.5");if(!c)arr.push("РЈРіР»РѕРІС‹Рµ > 8.5");return arr;}
+    function normalizeMarkets(arr){arr=Array.isArray(arr)?arr.slice():[];const g=arr.some(x=>/ТБ|ТМ|гол/i.test(x));const y=arr.some(x=>/ЖК|карточ/i.test(x));const c=arr.some(x=>/углов|Углов/i.test(x));if(!g)arr.push("ТБ 2.5");if(!y)arr.push("ЖК > 3.5");if(!c)arr.push("Угловые > 8.5");return arr;}
 
     matches.forEach(m => {
     m.aiPrediction.additionalMarkets = normalizeMarkets(m.aiPrediction.additionalMarkets);
@@ -1888,20 +1888,20 @@ addLC(-15); const predictLC=document.getElementById("predictLC"); if(predictLC) 
         <div class="match-card">
         <div style="margin-top:8px; padding:8px; background:#111; border-radius:8px;">
 
-<b>рџ§  РџСЂРѕРіРЅРѕР· AI:</b><br>
+<b>🧠 Прогноз AI:</b><br>
 
-РћСЃРЅРѕРІРЅРѕР№ РёСЃС…РѕРґ: <b>${m.aiPrediction.mainMarket.toUpperCase()}</b><br>
-РЈРІРµСЂРµРЅРЅРѕСЃС‚СЊ: <b>${m.aiPrediction.confidence}%</b><br>
+Основной исход: <b>${m.aiPrediction.mainMarket.toUpperCase()}</b><br>
+Уверенность: <b>${m.aiPrediction.confidence}%</b><br>
 
-Р”РѕРї. РјР°СЂРєРµС‚С‹:<br>
-${m.aiPrediction.additionalMarkets.map(mk => "вЂў "+mk).join("<br>")}
+Доп. маркеты:<br>
+${m.aiPrediction.additionalMarkets.map(mk => "• "+mk).join("<br>")}
 
-${m.aiPrediction && m.aiPrediction.isBestBet ? "<div style='color:gold; margin-top:6px;'>рџ”Ґ Р–Р‘ РџР РћР“РќРћР— Р”РќРЇ</div>" : ""}
+${m.aiPrediction && m.aiPrediction.isBestBet ? "<div style='color:gold; margin-top:6px;'>🔥 ЖБ ПРОГНОЗ ДНЯ</div>" : ""}
 
 </div>
 
             <div class="match-league">
-                вљЅ ${m.league}
+                ⚽ ${m.league}
             </div>
 
             <div class="match-teams">
@@ -1911,20 +1911,20 @@ ${m.aiPrediction && m.aiPrediction.isBestBet ? "<div style='color:gold; margin-t
             </div>
 
             <div class="match-time">
-                рџ•’ ${time}
+                🕒 ${time}
             </div>
 
             <div class="bet-row">
                 <button onclick="placeBet('${m.id}','home')">
-    РСЃС…РѕРґ Рџ1 вЂў ${m.odds.home}
+    Исход П1 • ${m.odds.home}
 </button>
 
 <button onclick="placeBet('${m.id}','draw')">
-    РСЃС…РѕРґ X вЂў ${m.odds.draw}
+    Исход X • ${m.odds.draw}
 </button>
 
 <button onclick="placeBet('${m.id}','away')">
-    РСЃС…РѕРґ Рџ2 вЂў ${m.odds.away}
+    Исход П2 • ${m.odds.away}
 </button>
             </div>
 
@@ -1940,11 +1940,11 @@ function initDaily(){
     let today = new Date().toDateString();
     let lastClaim = localStorage.getItem("lastClaimDate");
 
-    // ===== РќРђР“Р РђР”Рђ Р’ Р’Р•Р РҐРќР•Рњ Р‘Р›РћРљР• =====
+    // ===== НАГРАДА В ВЕРХНЕМ БЛОКЕ =====
     const rewardBox = document.getElementById("dailyRewardText");
     if(rewardBox){
     if(lastClaim === today){
-        rewardBox.innerText = "Р—РђР‘Р РђРќРћ";
+        rewardBox.innerText = "ЗАБРАНО";
     } else {
         let nextStreak = streak + 1;
         let nextReward = (nextStreak % 7 === 0) ? 200 : 40;
@@ -1962,7 +1962,7 @@ function initDaily(){
     const dailyBal = document.getElementById("dailyBalance");
     if(dailyBal) dailyBal.innerText = getLC();
 
-    // ===== РџР РћР“Р Р•РЎРЎ =====
+    // ===== ПРОГРЕСС =====
     const progressBar = document.getElementById("dailyProgressBar");
     if(progressBar){
         let day = streak % 7;
@@ -1976,17 +1976,17 @@ function initDaily(){
         }
     }
 
-    // ===== Р‘Р›РћРљРР РћР’РљРђ РљРќРћРџРљР =====
+    // ===== БЛОКИРОВКА КНОПКИ =====
     const claimBtn = document.getElementById("claimBtn");
     if(claimBtn){
         if(lastClaim === today){
             claimBtn.style.opacity = "0.5";
             claimBtn.style.pointerEvents = "none";
-            claimBtn.innerText = "РЈР–Р• РџРћР›РЈР§Р•РќРћ";
+            claimBtn.innerText = "УЖЕ ПОЛУЧЕНО";
         } else {
             claimBtn.style.opacity = "1";
             claimBtn.style.pointerEvents = "auto";
-            claimBtn.innerText = "Р—РђР‘Р РђРўР¬";
+            claimBtn.innerText = "ЗАБРАТЬ";
         }
     }
 }
@@ -1998,11 +1998,11 @@ function claimDaily(){
     let streak = parseInt(localStorage.getItem("streak") || 0);
 
     if(lastClaim === today){
-        tg.showAlert("Р’С‹ СѓР¶Рµ Р·Р°Р±СЂР°Р»Рё Р±РѕРЅСѓСЃ СЃРµРіРѕРґРЅСЏ!");
+        tg.showAlert("Вы уже забрали бонус сегодня!");
         return;
     }
 
-    // РїСЂРѕРІРµСЂСЏРµРј РІС‡РµСЂР°С€РЅРёР№ РґРµРЅСЊ
+    // проверяем вчерашний день
     let yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
@@ -2015,7 +2015,7 @@ function claimDaily(){
     let reward = (streak % 7 === 0) ? 200 : 40;
 
     if(streak % 7 === 0){
-        tg.showAlert("рџ”Ґ 7 РґРЅРµР№ РїРѕРґСЂСЏРґ! Р‘РѕРЅСѓСЃ x5!");
+        tg.showAlert("🔥 7 дней подряд! Бонус x5!");
     }
 
     addLC(reward);
@@ -2024,21 +2024,21 @@ function claimDaily(){
     localStorage.setItem("lastClaimDate", today);
 
     initDaily();
-    tg.showAlert("Р’С‹ РїРѕР»СѓС‡РёР»Рё +" + reward + " LC");
+    tg.showAlert("Вы получили +" + reward + " LC");
 }
 
 initDaily();
-    // ===== РћР‘РќРћР’Р›Р•РќРР• РџР РћР¤РР›РЇ =====
+    // ===== ОБНОВЛЕНИЕ ПРОФИЛЯ =====
 
 function updateProfile() {
 
-    // ID РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+    // ID пользователя
     if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
         document.getElementById("uID").innerText =
             Telegram.WebApp.initDataUnsafe.user.id;
     }
 
-    // Р‘Р°Р»Р°РЅСЃ LC
+    // Баланс LC
 let balance = getLC();
 document.getElementById("profileBalance").innerText = balance + " LC";
 
@@ -2046,7 +2046,7 @@ document.getElementById("profileBalance").innerText = balance + " LC";
     let rp = parseInt(localStorage.getItem("rp")) || 0;
     document.getElementById("profileRP").innerText = rp;
 
-    // Р Р°РЅРі
+    // Ранг
     document.getElementById("profileRank").innerText = getRank();
 }
     // ===== SEASON SCREEN =====
@@ -2061,7 +2061,7 @@ function openSeason(){
     let seasonRP = getSeasonRP();
     let daysLeft = getSeasonDaysLeft();
 
-    // СѓСЂРѕРІРЅРё РЅР°РіСЂР°Рґ
+    // уровни наград
     let tier1 = 300;
     let tier2 = 700;
     let tier3 = 1500;
@@ -2077,25 +2077,25 @@ function openSeason(){
     }
 
     box.innerHTML = `
-    <h2>рџЏ† РЎР•Р—РћРќ</h2>
-    <p>вЏі РћСЃС‚Р°Р»РѕСЃСЊ РґРЅРµР№: <b>${daysLeft}</b></p>
-    <p>рџ”Ґ РўРІРѕР№ СЃРµР·РѕРЅРЅС‹Р№ RP: <b>${seasonRP}</b></p>
+    <h2>🏆 СЕЗОН</h2>
+    <p>⏳ Осталось дней: <b>${daysLeft}</b></p>
+    <p>🔥 Твой сезонный RP: <b>${seasonRP}</b></p>
 
     <hr>
 
-    <h3>рџЋЇ РќР°РіСЂР°РґС‹</h3>
+    <h3>🎯 Награды</h3>
 
-    <p>300 RP в†’ +100 LC</p>
+    <p>300 RP → +100 LC</p>
     ${progress(seasonRP, tier1)}
 
-    <p>700 RP в†’ +300 LC</p>
+    <p>700 RP → +300 LC</p>
     ${progress(seasonRP, tier2)}
 
-    <p>1500 RP в†’ +1000 LC + рџ‘‘ VIP 7 РґРЅРµР№</p>
+    <p>1500 RP → +1000 LC + 👑 VIP 7 дней</p>
     ${progress(seasonRP, tier3)}
 
     <br>
-    <button onclick="closeSeason()">Р—Р°РєСЂС‹С‚СЊ</button>
+    <button onclick="closeSeason()">Закрыть</button>
     `;
 }
 
@@ -2112,26 +2112,26 @@ function checkSeasonRewards(){
     let reward700 = localStorage.getItem("season_reward_700");
     let reward1500 = localStorage.getItem("season_reward_1500");
 
-    // рџЋЃ 300 RP
+    // 🎁 300 RP
     if(seasonRP >= 300 && !reward300){
         addLC(100);
         localStorage.setItem("season_reward_300", true);
-        tg.showAlert("рџЋ‰ РќР°РіСЂР°РґР° СЃРµР·РѕРЅР°: +100 LC");
+        tg.showAlert("🎉 Награда сезона: +100 LC");
     }
 
-    // рџЋЃ 700 RP
+    // 🎁 700 RP
     if(seasonRP >= 700 && !reward700){
         addLC(300);
         localStorage.setItem("season_reward_700", true);
-        tg.showAlert("рџљЂ РќР°РіСЂР°РґР° СЃРµР·РѕРЅР°: +300 LC");
+        tg.showAlert("🚀 Награда сезона: +300 LC");
     }
 
-    // рџ‘‘ 1500 RP
+    // 👑 1500 RP
     if(seasonRP >= 1500 && !reward1500){
         addLC(1000);
         localStorage.setItem("season_reward_1500", true);
         activateVIP(7);
-        tg.showAlert("рџ‘‘ РЎР•Р—РћРќ РњРђРЎРўР•Р ! +1000 LC Рё VIP РЅР° 7 РґРЅРµР№");
+        tg.showAlert("👑 СЕЗОН МАСТЕР! +1000 LC и VIP на 7 дней");
     }
 }
     checkVIPStatus();
@@ -2145,8 +2145,8 @@ const wheelPrizes = [
     {text:"+10 LC", type:"lc", value:10},
     {text:"+25 LC", type:"lc", value:25},
     {text:"+50 LC", type:"lc", value:50},
-    {text:"VIP 1 РґРµРЅСЊ", type:"vip", value:1},
-    {text:"Р‘РµСЃРїР»Р°С‚РЅС‹Р№ РїСЂРѕРіРЅРѕР·", type:"free_ai", value:1},
+    {text:"VIP 1 день", type:"vip", value:1},
+    {text:"Бесплатный прогноз", type:"free_ai", value:1},
     {text:"+100 LC", type:"lc", value:100}
 ];
 
@@ -2171,7 +2171,7 @@ function drawWheel(){
         ctx.moveTo(center,center);
         ctx.arc(center,center,radius,i*arc,(i+1)*arc);
 
-        // РіСЂР°РґРёРµРЅС‚
+        // градиент
         const gradient = ctx.createLinearGradient(0,0,size,size);
         gradient.addColorStop(0, i%2===0 ? "#bc13fe" : "#ff007a");
         gradient.addColorStop(1, "#111");
@@ -2193,7 +2193,7 @@ function drawWheel(){
         ctx.restore();
     }
 
-    // Р·РѕР»РѕС‚Р°СЏ РѕР±РІРѕРґРєР°
+    // золотая обводка
     ctx.beginPath();
     ctx.arc(center,center,radius-5,0,2*Math.PI);
     ctx.strokeStyle="#ffd700";
@@ -2269,7 +2269,7 @@ let fade = setInterval(()=>{
 document.getElementById("winSound").currentTime = 0;
 document.getElementById("winSound").play();
 
-        resultBox.innerText = "Р’Р« Р’Р«РР“Р РђР›Р: " + prize.text;
+        resultBox.innerText = "ВЫ ВЫИГРАЛИ: " + prize.text;
 
         localStorage.setItem("wheel_last_spin", Date.now());
 
@@ -2331,7 +2331,7 @@ function loadReferrals(){
     let list = JSON.parse(localStorage.getItem(key) || "[]");
 
     document.getElementById("refCount").innerText =
-        "РџСЂРёРіР»Р°С€РµРЅРѕ: " + list.length;
+        "Приглашено: " + list.length;
 
     const container = document.getElementById("refList");
     container.innerHTML = "";
@@ -2357,30 +2357,30 @@ function copyRef(){
 
     navigator.clipboard.writeText(text)
     .then(() => {
-        tg.showAlert("РЎСЃС‹Р»РєР° СЃРєРѕРїРёСЂРѕРІР°РЅР°!");
+        tg.showAlert("Ссылка скопирована!");
     })
     .catch(() => {
-        tg.showAlert("РћС€РёР±РєР° РєРѕРїРёСЂРѕРІР°РЅРёСЏ");
+        tg.showAlert("Ошибка копирования");
     });
 }
 </script>
    <div class="bottom-nav">
 
     <div class="nav-item active" onclick="goHome()">
-        <div class="icon">рџЏ </div>
-        <span>Р“Р»Р°РІРЅР°СЏ</span>
+        <div class="icon">🏠</div>
+        <span>Главная</span>
     </div>
 
     <div class="nav-item nav-ref" onclick="openP('refP')">
-        <div class="icon">рџ”—</div>
-        <span>Р РµС„РµСЂР°Р»С‹</span><i class="nav-ref-badge">50 LC</i>
+        <div class="icon">🔗</div>
+        <span>Рефералы</span><i class="nav-ref-badge">50 LC</i>
     </div>
 
     <div class="nav-item" onclick="openP('profileP')">
-        <div class="icon">рџ‘¤</div>
-        <span>РџСЂРѕС„РёР»СЊ</span>
+        <div class="icon">👤</div>
+        <span>Профиль</span>
     </div>
-</div> <!-- Р·Р°РєСЂС‹РІР°РµС‚ bottom-nav -->
+</div> <!-- закрывает bottom-nav -->
     <script>
     // ===== AI LIMIT SYSTEM =====
 function getToday(){
@@ -2413,7 +2413,7 @@ function setBetAmount(amount){
     const res = document.getElementById("pRes");
     if(res){
         res.style.color = "#9dfbd4";
-        res.innerText = "РЎСѓРјРјР° СЃС‚Р°РІРєРё: " + val + " LC";
+        res.innerText = "Сумма ставки: " + val + " LC";
     }
 }
 function getAIUsage(){
@@ -2433,7 +2433,7 @@ function canUseAI(){
     if(isVIP()) return true;
 
     let used = getAIUsage();
-    return used < 5; // РѕР±С‹С‡РЅС‹Рј 5 AI РІ РґРµРЅСЊ
+    return used < 5; // обычным 5 AI в день
 }
 
     
@@ -2483,7 +2483,7 @@ document.querySelectorAll('.big-card').forEach(card=>{
 
 });
 // ==========================
-// рџ”Ґ Р‘РРўР’Рђ Р›РЈР”РРљРћР’ 2.0
+// 🔥 БИТВА ЛУДИКОВ 2.0
 // ==========================
 
 function battle(mode){
@@ -2524,32 +2524,32 @@ function battle(mode){
 
     let winChance = baseChance;
 
-    // VIP Р±РѕРЅСѓСЃ Рє С€Р°РЅСЃСѓ
+    // VIP бонус к шансу
     if(vipActive){
         winChance += 0.05;
     }
 
-    // РђРЅС‚Рё Р»СѓР·СЃС‚СЂРёРє
+    // Анти лузстрик
     if(loseStreak >= 3){
         winChance += 0.15;
     }
 
-    // РЎРµСЂРёСЏ Р±РѕРЅСѓСЃ
+    // Серия бонус
     if(streak >= 5){
         winChance += 0.05;
     }
 
     box.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><b>вљ”пёЏ Р‘РРўР’Рђ</b><span id="battleRound" style="font-size:11px;opacity:.85;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);">Р Р°СѓРЅРґ 1/3</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><b>⚔️ БИТВА</b><span id="battleRound" style="font-size:11px;opacity:.85;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);">Раунд 1/3</span></div>
 
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;opacity:.9;"><span>вќ¤пёЏ РўРІРѕР№ HP</span><b id="pHpVal">100%</b></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;opacity:.9;"><span>❤️ Твой HP</span><b id="pHpVal">100%</b></div>
         <div style="background:#222;height:14px;border-radius:9px;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 0 8px rgba(0,0,0,.35);">
             <div id="pBar" style="background:linear-gradient(90deg,#00ff88,#00cc66);height:14px;width:100%;box-shadow:0 0 12px rgba(0,255,136,.35);transition:width .55s ease,filter .25s ease;border-radius:6px;"></div>
         </div>
 
         <br>
 
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;opacity:.9;"><span>рџ’Ђ Р’СЂР°Рі HP</span><b id="eHpVal">100%</b></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;opacity:.9;"><span>💀 Враг HP</span><b id="eHpVal">100%</b></div>
         <div style="background:#222;height:14px;border-radius:9px;border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 0 8px rgba(0,0,0,.35);">
             <div id="eBar" style="background:linear-gradient(90deg,#ff4d6d,#cc1439);height:14px;width:100%;box-shadow:0 0 12px rgba(255,77,109,.35);transition:width .55s ease,filter .25s ease;border-radius:6px;"></div>
         </div>
@@ -2578,7 +2578,7 @@ function battle(mode){
             return;
         }
 
-        document.getElementById("battleRound").innerText = `Р Р°СѓРЅРґ ${round}/3`;
+        document.getElementById("battleRound").innerText = `Раунд ${round}/3`;
 
         let damage = Math.floor(Math.random()*20)+15;
 
@@ -2598,11 +2598,11 @@ function battle(mode){
         if(playerHits){
             enemyHP -= damage;
             if(enemyHP < 0) enemyHP = 0;
-            log.innerHTML += `<br>рџ’Ґ Р Р°СѓРЅРґ ${round}: РўС‹ РЅР°РЅРѕСЃРёС€СЊ ${damage}${crit ? " вљЎ РљР РРў!" : ""}`;
+            log.innerHTML += `<br>💥 Раунд ${round}: Ты наносишь ${damage}${crit ? " ⚡ КРИТ!" : ""}`;
         } else {
             playerHP -= damage;
             if(playerHP < 0) playerHP = 0;
-            log.innerHTML += `<br>рџ©ё Р Р°СѓРЅРґ ${round}: Р’СЂР°Рі РЅР°РЅРѕСЃРёС‚ ${damage}${crit ? " вљЎ РљР РРў!" : ""}`;
+            log.innerHTML += `<br>🩸 Раунд ${round}: Враг наносит ${damage}${crit ? " ⚡ КРИТ!" : ""}`;
         }
 
         stage.style.animation = "none"; void stage.offsetWidth; stage.style.animation = "hitPulse .45s ease"; updateBars();
@@ -2625,25 +2625,25 @@ function battle(mode){
 
                 let finalReward = reward;
 
-                // VIP Р±РѕРЅСѓСЃ Рє РЅР°РіСЂР°РґРµ
+                // VIP бонус к награде
                 if(vipActive){
                     finalReward = Math.floor(finalReward * 1.3);
-                    box.innerHTML += `<br><br>рџ‘‘ VIP +30% РЅР°РіСЂР°РґС‹`;
+                    box.innerHTML += `<br><br>👑 VIP +30% награды`;
                 }
 
-                // РРґРµР°Р»СЊРЅР°СЏ РїРѕР±РµРґР°
+                // Идеальная победа
                 if(playerHP > 60){
                     finalReward *= 2;
-                    box.innerHTML += `<br>рџ’Ћ РР”Р•РђР›Р¬РќРђРЇ РџРћР‘Р•Р”Рђ x2`;
+                    box.innerHTML += `<br>💎 ИДЕАЛЬНАЯ ПОБЕДА x2`;
                 }
 
                 addLC(finalReward);
 
                 box.innerHTML += `
                     <br><br>
-                    рџЏ† РџРћР‘Р•Р”Рђ!
+                    🏆 ПОБЕДА!
                     <br>+${finalReward} LC
-                    <br>рџ”Ґ РЎРµСЂРёСЏ: ${streak}
+                    <br>🔥 Серия: ${streak}
                 `;
 
             } else {
@@ -2654,7 +2654,7 @@ function battle(mode){
 
                 box.innerHTML += `
                     <br><br>
-                    рџ’Ђ РџРћР РђР–Р•РќРР•
+                    💀 ПОРАЖЕНИЕ
                     <br>-${cost} LC
                 `;
             }
@@ -2667,225 +2667,225 @@ function battle(mode){
 }
                         
 // ==========================
-// рџЏ† MATCH SYSTEM CORE
+// 🏆 MATCH SYSTEM CORE
 // ==========================
 
-// РџРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РјР°С‚С‡РµР№
+// Получить список матчей
 function getMatches(){
     return JSON.parse(localStorage.getItem("matches") || "[]");
 }
 
-// РЎРѕС…СЂР°РЅРёС‚СЊ РјР°С‚С‡Рё
+// Сохранить матчи
 function saveMatches(list){
     localStorage.setItem("matches", JSON.stringify(list));
 }
 
-// РЎРѕР·РґР°С‚СЊ РјР°С‚С‡Рё РЅР° РґРµРЅСЊ (РїРѕРєР° РІСЂСѓС‡РЅСѓСЋ)
+// Создать матчи на день (пока вручную)
 function generateTodayMatches(){
-// рџ”Ґ РћР§РРЎРўРљРђ РЎРўРђР Р«РҐ РњРђРўР§Р•Р™
+// 🔥 ОЧИСТКА СТАРЫХ МАТЧЕЙ
     localStorage.removeItem("matches");   
     const matches = [
 
-/* ========= РђРџР› ========= */
+/* ========= АПЛ ========= */
 {
 id:"pl1",
-league:"РђРџР›",
-home:"РђСЂСЃРµРЅР°Р»",
-away:"Р§РµР»СЃРё",
+league:"АПЛ",
+home:"Арсенал",
+away:"Челси",
 startTime:Date.now()+5*60*1000,
 status:"open",
 result:null,
 odds:{home:1.8,draw:3.2,away:2.4},
 aiPrediction:{
-mainMarket:"Рџ1",
+mainMarket:"П1",
 confidence:78,
-additionalMarkets:["РўР‘ 2.5","Р–Рљ > 3.5","РЈРіР»РѕРІС‹Рµ > 8.5"],
+additionalMarkets:["ТБ 2.5","ЖК > 3.5","Угловые > 8.5"],
 isBestBet:true
 }
 },
 {
 id:"pl2",
-league:"РђРџР›",
-home:"РњР°РЅС‡РµСЃС‚РµСЂ РЎРёС‚Рё",
-away:"Р›РёРІРµСЂРїСѓР»СЊ",
+league:"АПЛ",
+home:"Манчестер Сити",
+away:"Ливерпуль",
 startTime:Date.now()+15*60*1000,
 status:"open",
 result:null,
 odds:{home:2.0,draw:3.5,away:2.2},
 aiPrediction:{
-mainMarket:"РўР‘ 2.5",
+mainMarket:"ТБ 2.5",
 confidence:74,
-additionalMarkets:["Р–Рљ > 4.5","РЈРіР»РѕРІС‹Рµ > 9.5"],
+additionalMarkets:["ЖК > 4.5","Угловые > 9.5"],
 isBestBet:false
 }
 },
 
-/* ========= Р›Рђ Р›РР“Рђ ========= */
+/* ========= ЛА ЛИГА ========= */
 {
 id:"pd1",
-league:"Р›Р° Р›РёРіР°",
-home:"Р РµР°Р»",
-away:"Р‘Р°СЂСЃРµР»РѕРЅР°",
+league:"Ла Лига",
+home:"Реал",
+away:"Барселона",
 startTime:Date.now()+10*60*1000,
 status:"open",
 result:null,
 odds:{home:2.1,draw:3.4,away:2.0},
 aiPrediction:{
-mainMarket:"Рџ2",
+mainMarket:"П2",
 confidence:72,
-additionalMarkets:["РўРњ 3.5","Р–Рљ > 4.5"],
+additionalMarkets:["ТМ 3.5","ЖК > 4.5"],
 isBestBet:false
 }
 },
 {
 id:"pd2",
-league:"Р›Р° Р›РёРіР°",
-home:"РђС‚Р»РµС‚РёРєРѕ",
-away:"РЎРµРІРёР»СЊСЏ",
+league:"Ла Лига",
+home:"Атлетико",
+away:"Севилья",
 startTime:Date.now()+20*60*1000,
 status:"open",
 result:null,
 odds:{home:1.9,draw:3.1,away:3.0},
 aiPrediction:{
-mainMarket:"Рџ1",
+mainMarket:"П1",
 confidence:69,
-additionalMarkets:["РўРњ 2.5"],
+additionalMarkets:["ТМ 2.5"],
 isBestBet:false
 }
 },
 
-/* ========= Р‘РЈРќР”Р•РЎ ========= */
+/* ========= БУНДЕС ========= */
 {
 id:"bl1",
-league:"Р‘СѓРЅРґРµСЃ",
-home:"Р‘Р°РІР°СЂРёСЏ",
-away:"Р‘РѕСЂСѓСЃСЃРёСЏ Р”",
+league:"Бундес",
+home:"Бавария",
+away:"Боруссия Д",
 startTime:Date.now()+25*60*1000,
 status:"open",
 result:null,
 odds:{home:1.7,draw:3.8,away:3.5},
 aiPrediction:{
-mainMarket:"Рџ1",
+mainMarket:"П1",
 confidence:81,
-additionalMarkets:["РўР‘ 3.5"],
+additionalMarkets:["ТБ 3.5"],
 isBestBet:false
 }
 },
 {
 id:"bl2",
-league:"Р‘СѓРЅРґРµСЃ",
-home:"Р›РµР№РїС†РёРі",
-away:"РђР№РЅС‚СЂР°С…С‚",
+league:"Бундес",
+home:"Лейпциг",
+away:"Айнтрахт",
 startTime:Date.now()+30*60*1000,
 status:"open",
 result:null,
 odds:{home:2.0,draw:3.2,away:2.8},
 aiPrediction:{
-mainMarket:"РўР‘ 2.5",
+mainMarket:"ТБ 2.5",
 confidence:66,
-additionalMarkets:["Р–Рљ > 3.5"],
+additionalMarkets:["ЖК > 3.5"],
 isBestBet:false
 }
 },
 
-/* ========= РЎР•Р РРЇ Рђ ========= */
+/* ========= СЕРИЯ А ========= */
 {
 id:"sa1",
-league:"РЎРµСЂРёСЏ Рђ",
-home:"РРЅС‚РµСЂ",
-away:"РњРёР»Р°РЅ",
+league:"Серия А",
+home:"Интер",
+away:"Милан",
 startTime:Date.now()+35*60*1000,
 status:"open",
 result:null,
 odds:{home:2.2,draw:3.1,away:2.1},
 aiPrediction:{
-mainMarket:"Рџ1",
+mainMarket:"П1",
 confidence:68,
-additionalMarkets:["РўРњ 2.5"],
+additionalMarkets:["ТМ 2.5"],
 isBestBet:false
 }
 },
 {
 id:"sa2",
-league:"РЎРµСЂРёСЏ Рђ",
-home:"Р®РІРµРЅС‚СѓСЃ",
-away:"Р РѕРјР°",
+league:"Серия А",
+home:"Ювентус",
+away:"Рома",
 startTime:Date.now()+40*60*1000,
 status:"open",
 result:null,
 odds:{home:1.9,draw:3.0,away:3.2},
 aiPrediction:{
-mainMarket:"Рџ1",
+mainMarket:"П1",
 confidence:73,
-additionalMarkets:["Р–Рљ > 4.5"],
+additionalMarkets:["ЖК > 4.5"],
 isBestBet:false
 }
 },
 
-/* ========= Р›Р§ ========= */
+/* ========= ЛЧ ========= */
 {
 id:"cl1",
-league:"Р›Р§",
-home:"РџРЎР–",
-away:"РњР°РЅС‡РµСЃС‚РµСЂ Р®РЅ",
+league:"ЛЧ",
+home:"ПСЖ",
+away:"Манчестер Юн",
 startTime:Date.now()+45*60*1000,
 status:"open",
 result:null,
 odds:{home:1.8,draw:3.4,away:2.6},
 aiPrediction:{
-mainMarket:"Рџ1",
+mainMarket:"П1",
 confidence:75,
-additionalMarkets:["РўР‘ 2.5"],
+additionalMarkets:["ТБ 2.5"],
 isBestBet:false
 }
 },
 {
 id:"cl2",
-league:"Р›Р§",
-home:"Р‘РµРЅС„РёРєР°",
-away:"РџРѕСЂС‚Сѓ",
+league:"ЛЧ",
+home:"Бенфика",
+away:"Порту",
 startTime:Date.now()+50*60*1000,
 status:"open",
 result:null,
 odds:{home:2.3,draw:3.0,away:2.4},
 aiPrediction:{
-mainMarket:"РўРњ 2.5",
+mainMarket:"ТМ 2.5",
 confidence:67,
-additionalMarkets:["Р–Рљ > 5.5"],
+additionalMarkets:["ЖК > 5.5"],
 isBestBet:false
 }
 },
 
-/* ========= Р РџР› ========= */
+/* ========= РПЛ ========= */
 {
 id:"rpl1",
-league:"Р РџР›",
-home:"Р—РµРЅРёС‚",
-away:"РЎРїР°СЂС‚Р°Рє",
+league:"РПЛ",
+home:"Зенит",
+away:"Спартак",
 startTime:Date.now()+55*60*1000,
 status:"open",
 result:null,
 odds:{home:1.6,draw:3.5,away:4.0},
 aiPrediction:{
-mainMarket:"Рџ1",
+mainMarket:"П1",
 confidence:82,
-additionalMarkets:["РўР‘ 2.5"],
+additionalMarkets:["ТБ 2.5"],
 isBestBet:false
 }
 },
 {
 id:"rpl2",
-league:"Р РџР›",
-home:"Р¦РЎРљРђ",
-away:"Р›РѕРєРѕРјРѕС‚РёРІ",
+league:"РПЛ",
+home:"ЦСКА",
+away:"Локомотив",
 startTime:Date.now()+60*60*1000,
 status:"open",
 result:null,
 odds:{home:2.1,draw:3.1,away:2.7},
 aiPrediction:{
-mainMarket:"Рџ1",
+mainMarket:"П1",
 confidence:70,
-additionalMarkets:["Р–Рљ > 3.5"],
+additionalMarkets:["ЖК > 3.5"],
 isBestBet:false
 }
 },
@@ -2901,9 +2901,9 @@ status:"open",
 result:null,
 odds:{home:2.0,draw:3.3,away:2.2},
 aiPrediction:{
-mainMarket:"РўР‘ 2.5",
+mainMarket:"ТБ 2.5",
 confidence:64,
-additionalMarkets:["РЈРіР»РѕРІС‹Рµ > 9.5"],
+additionalMarkets:["Угловые > 9.5"],
 isBestBet:false
 }
 },
@@ -2917,53 +2917,53 @@ status:"open",
 result:null,
 odds:{home:2.4,draw:3.2,away:2.3},
 aiPrediction:{
-mainMarket:"Рџ2",
+mainMarket:"П2",
 confidence:71,
-additionalMarkets:["Р–Рљ > 3.5"],
+additionalMarkets:["ЖК > 3.5"],
 isBestBet:false
 }
 },
 
-/* ========= Р›Р• ========= */
+/* ========= ЛЕ ========= */
 {
 id:"el1",
-league:"Р›Р•",
-home:"Р РѕРјР°",
-away:"РњР°СЂСЃРµР»СЊ",
+league:"ЛЕ",
+home:"Рома",
+away:"Марсель",
 startTime:Date.now()+75*60*1000,
 status:"open",
 result:null,
 odds:{home:2.2,draw:3.1,away:2.5},
 aiPrediction:{
-mainMarket:"Рџ1",
+mainMarket:"П1",
 confidence:69,
-additionalMarkets:["РўРњ 2.5"],
+additionalMarkets:["ТМ 2.5"],
 isBestBet:false
 }
 },
 {
 id:"el2",
-league:"Р›Р•",
-home:"РђСЏРєСЃ",
-away:"РЎРїРѕСЂС‚РёРЅРі",
+league:"ЛЕ",
+home:"Аякс",
+away:"Спортинг",
 startTime:Date.now()+80*60*1000,
 status:"open",
 result:null,
 odds:{home:2.1,draw:3.3,away:2.6},
 aiPrediction:{
-mainMarket:"РўР‘ 2.5",
+mainMarket:"ТБ 2.5",
 confidence:74,
-additionalMarkets:["РЈРіР»РѕРІС‹Рµ > 8.5"],
+additionalMarkets:["Угловые > 8.5"],
 isBestBet:false
 }
 }
 
 ];
-// ===== Р’Р«Р‘РћР  Р–Р‘ РџРћ РњРђРљРЎРРњРђР›Р¬РќРћР™ РЈР’Р•Р Р•РќРќРћРЎРўР =====
+// ===== ВЫБОР ЖБ ПО МАКСИМАЛЬНОЙ УВЕРЕННОСТИ =====
 
-// ===== РЈРњРќР«Р™ Р’Р«Р‘РћР  Р–Р‘ =====
+// ===== УМНЫЙ ВЫБОР ЖБ =====
 
-// ===== Р“РђР РђРќРўРР РћР’РђРќРќР«Р™ Р’Р«Р‘РћР  Р–Р‘ =====
+// ===== ГАРАНТИРОВАННЫЙ ВЫБОР ЖБ =====
 matches.forEach(m=>{
     m.aiPrediction.isBestBet = false;
 });
@@ -2987,7 +2987,7 @@ if(best){
 }
 
 
-// РїСЂРѕРІРµСЂСЏРµРј РєР°Р¶РґС‹Рµ 10 СЃРµРєСѓРЅРґ
+// проверяем каждые 10 секунд
 setInterval(checkMatchStatus, 10000);
                         // ===== MATCH ENGINE =====
 
@@ -3028,7 +3028,7 @@ function finishMatch(matchId, result){
     saveBets(bets);
 }
     // ==========================
-// РђР’РўРћ-РџР•Р Р•РЎРћР—Р”РђРќРР• РњРђРўР§Р•Р™
+// АВТО-ПЕРЕСОЗДАНИЕ МАТЧЕЙ
 // ==========================
 
 function ensureActiveMatches(){
@@ -3038,7 +3038,7 @@ function ensureActiveMatches(){
 
     matches.forEach(match => {
 
-        // РµСЃР»Рё РјР°С‚С‡ РїСЂРѕС€С‘Р» 90 РјРёРЅСѓС‚ вЂ” Р·Р°РєСЂС‹РІР°РµРј
+        // если матч прошёл 90 минут — закрываем
         if(match.status === "open" && Date.now() > match.startTime + (90*60*1000)){
             match.status = "finished";
             updated = true;
@@ -3046,7 +3046,7 @@ function ensureActiveMatches(){
 
     });
 
-    const leagues = ["РђРџР›","Р›Р° Р›РёРіР°","Р‘СѓРЅРґРµСЃ","РЎРµСЂРёСЏ Рђ","Р›Р§","Р РџР›","MLS","Р›Р•"];
+    const leagues = ["АПЛ","Ла Лига","Бундес","Серия А","ЛЧ","РПЛ","MLS","ЛЕ"];
 
     leagues.forEach(league => {
 
@@ -3054,7 +3054,7 @@ function ensureActiveMatches(){
             m.league === league && m.status === "open"
         );
 
-        // РµСЃР»Рё РІ Р»РёРіРµ РЅРµС‚ Р°РєС‚РёРІРЅС‹С… РјР°С‚С‡РµР№ вЂ” СЃРѕР·РґР°С‘Рј РЅРѕРІС‹Р№
+        // если в лиге нет активных матчей — создаём новый
         if(openMatches.length === 0){
 
             let template = matches.find(m => m.league === league);
@@ -3081,7 +3081,7 @@ function ensureActiveMatches(){
 }
 
 // ==========================
-// рџ’° BET SYSTEM
+// 💰 BET SYSTEM
 // ==========================
 
 
@@ -3116,20 +3116,20 @@ function claimBonus(key, url){
     let last = localStorage.getItem("bonus_" + key);
     let now = Date.now();
 
-    // вњ… РЎСЃС‹Р»РєСѓ РѕС‚РєСЂС‹РІР°РµРј Р’РЎР•Р“Р”Рђ
+    // ✅ Ссылку открываем ВСЕГДА
     window.open(url, "_blank");
 
-    // Р•СЃР»Рё Р±РѕРЅСѓСЃ СѓР¶Рµ РїРѕР»СѓС‡РµРЅ Рё РЅРµ РїСЂРѕС€Р»Рѕ 24С‡ вЂ” РїСЂРѕСЃС‚Рѕ РїРѕРєР°Р·С‹РІР°РµРј СЃРѕРѕР±С‰РµРЅРёРµ
+    // Если бонус уже получен и не прошло 24ч — просто показываем сообщение
     if(last && (now - parseInt(last)) < 86400000){
-        tg.showAlert("Р‘РѕРЅСѓСЃ СѓР¶Рµ РїРѕР»СѓС‡РµРЅ СЃРµРіРѕРґРЅСЏ");
+        tg.showAlert("Бонус уже получен сегодня");
         return;
     }
 
-    // вњ… РќР°С‡РёСЃР»СЏРµРј С‚РѕР»СЊРєРѕ РµСЃР»Рё РїСЂРѕС€Р»Рѕ 24 С‡Р°СЃР°
+    // ✅ Начисляем только если прошло 24 часа
     addLC(10);
     localStorage.setItem("bonus_" + key, now);
 
-    tg.showAlert("+10 LC РЅР°С‡РёСЃР»РµРЅРѕ рџ”Ґ");
+    tg.showAlert("+10 LC начислено 🔥");
 }
                         
 
@@ -3150,7 +3150,7 @@ function placeBet(matchId, type){
     let match = matches.find(m => m.id === matchId);
 
     if(!match || match.status !== "open"){
-        tg.showAlert("РњР°С‚С‡ Р·Р°РєСЂС‹С‚");
+        tg.showAlert("Матч закрыт");
         return;
     }
 
@@ -3158,19 +3158,19 @@ function placeBet(matchId, type){
     if(![10,25,50,100].includes(amount)) amount = 10;
 
     let coefficient = match.odds[type];
-    let pickLabel = type === "home" ? "Рџ1" : (type === "draw" ? "X" : "Рџ2");
-    let riskLabel = amount <= 25 ? "РќРёР·РєРёР№" : (amount <= 50 ? "РЎСЂРµРґРЅРёР№" : "Р’С‹СЃРѕРєРёР№");
+    let pickLabel = type === "home" ? "П1" : (type === "draw" ? "X" : "П2");
+    let riskLabel = amount <= 25 ? "Низкий" : (amount <= 50 ? "Средний" : "Высокий");
     let potentialWin = Math.floor(amount * coefficient);
 
     let couponText =
-        "РљСѓРїРѕРЅ СЃС‚Р°РІРєРё\n\n" +
-        "РњР°С‚С‡: " + match.home + " vs " + match.away + "\n" +
-        "РСЃС…РѕРґ: " + pickLabel + "\n" +
-        "РљРѕСЌС„С„РёС†РёРµРЅС‚: " + coefficient + "\n" +
-        "Р РёСЃРє: " + riskLabel + "\n" +
-        "РЎСѓРјРјР°: " + amount + " LC\n" +
-        "РџРѕС‚РµРЅС†РёР°Р»СЊРЅС‹Р№ РІС‹РёРіСЂС‹С€: " + potentialWin + " LC\n\n" +
-        "РџРѕРґС‚РІРµСЂРґРёС‚СЊ СЃС‚Р°РІРєСѓ?";
+        "Купон ставки\n\n" +
+        "Матч: " + match.home + " vs " + match.away + "\n" +
+        "Исход: " + pickLabel + "\n" +
+        "Коэффициент: " + coefficient + "\n" +
+        "Риск: " + riskLabel + "\n" +
+        "Сумма: " + amount + " LC\n" +
+        "Потенциальный выигрыш: " + potentialWin + " LC\n\n" +
+        "Подтвердить ставку?";
 
     if(!confirm(couponText)) return;
 
@@ -3200,7 +3200,7 @@ function placeBet(matchId, type){
         date: new Date().toLocaleString()
     });
 
-    document.getElementById("pRes").innerHTML = "вњ… РЎС‚Р°РІРєР° РїСЂРёРЅСЏС‚Р°: " + amount + " LC";
+    document.getElementById("pRes").innerHTML = "✅ Ставка принята: " + amount + " LC";
 }
 
 // ===== RESULT SYSTEM =====
@@ -3247,7 +3247,7 @@ if(b.type === match.result){
 
 if(b.isTop){
 
-    // РїРѕР»СѓС‡Р°РµРј РјР°С‚С‡
+    // получаем матч
     let fullMatch = getMatches().find(m => m.id === match.id);
 
     if(fullMatch && fullMatch.aiPrediction){
@@ -3255,8 +3255,8 @@ if(b.isTop){
         let main = fullMatch.aiPrediction.mainMarket;
 
         if(
-            (main === "Рџ1" && match.result === "home") ||
-            (main === "Рџ2" && match.result === "away") ||
+            (main === "П1" && match.result === "home") ||
+            (main === "П2" && match.result === "away") ||
             (main === "X" && match.result === "draw")
         ){
             winCondition = true;
@@ -3296,7 +3296,7 @@ if(winCondition){
     }
    
                         
-// рџ“њ BET HISTORY VIEW
+// 📜 BET HISTORY VIEW
 // ==========================
 
 function openBetHistory(){
@@ -3311,7 +3311,7 @@ function openBetHistory(){
     let bets = getMyBets();
 
     if(bets.length === 0){
-        box.innerHTML = "<div style='font-size:12px;opacity:0.7;'>РЎС‚Р°РІРѕРє РїРѕРєР° РЅРµС‚</div>";
+        box.innerHTML = "<div style='font-size:12px;opacity:0.7;'>Ставок пока нет</div>";
         openPFromProfile("betHistoryP");
         return;
     }
@@ -3328,9 +3328,9 @@ function openBetHistory(){
                 margin-bottom:6px;
                 font-size:12px;
                 opacity:0.85;">
-                РњР°С‚С‡: ${b.matchId}<br>
-                РџСЂРѕРіРЅРѕР·: ${b.type}<br>
-                РЎС‚Р°С‚СѓСЃ: ${b.status}
+                Матч: ${b.matchId}<br>
+                Прогноз: ${b.type}<br>
+                Статус: ${b.status}
             </div>
         `;
     });
@@ -3346,7 +3346,7 @@ function getMatchTimer(startTime){
     let diff = startTime - Date.now();
 
     if(diff <= 0){
-        return "РњР°С‚С‡ СЃРєРѕСЂРѕ РЅР°С‡РЅС‘С‚СЃСЏ";
+        return "Матч скоро начнётся";
     }
 
     let minutes = Math.floor(diff / 60000);
@@ -3373,7 +3373,7 @@ function getMatchTimer(startTime){
             border-radius:6px;
             display:inline-block;
             margin-bottom:6px;">
-            рџ”Ґ BEST BET
+            🔥 BEST BET
         </div>
         `;
     }
@@ -3405,15 +3405,15 @@ function getMatchTimer(startTime){
                 margin-bottom:8px;
                 opacity:0.8;
             ">
-                вЏ± Р”Рѕ РЅР°С‡Р°Р»Р°: ${getMatchTimer(match.startTime)}
+                ⏱ До начала: ${getMatchTimer(match.startTime)}
             </div>
 
             <div style="margin:8px 0;">
-                рџ¤– РџСЂРѕРіРЅРѕР·: <b>${match.aiPrediction.mainMarket}</b>
+                🤖 Прогноз: <b>${match.aiPrediction.mainMarket}</b>
             </div>
 
             <div style="font-size:12px;opacity:0.8;">
-                РЈРІРµСЂРµРЅРЅРѕСЃС‚СЊ: ${match.aiPrediction.confidence}%
+                Уверенность: ${match.aiPrediction.confidence}%
             </div>
 
             <div style="
@@ -3421,7 +3421,7 @@ function getMatchTimer(startTime){
                 font-size:11px;
                 opacity:0.7;
             ">
-                Р”РѕРї. СЂС‹РЅРєРё:
+                Доп. рынки:
                 ${match.aiPrediction.additionalMarkets.join(", ")}
             </div>
 
@@ -3446,6 +3446,5 @@ setInterval(function(){
 }, 1000);
 
 </script>
-<script>window.openBotDeepLink=function(){var link="https://t.me/LudikWin_bot?start=main";if(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.openTelegramLink){Telegram.WebApp.openTelegramLink(link);return;}window.location.href=link;};</script>
 </body>
 </html>
