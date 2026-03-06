@@ -1424,7 +1424,7 @@ filter: drop-shadow(0 0 8px #ff007a);
     <!-- ACTION BUTTONS -->
     <div style="display:flex;flex-direction:column;gap:10px;">
 
-        <button class="action-btn" onclick="openP('historyP')">
+        <button class="action-btn" onclick="openPFromProfile('historyP')">
             📊 История прогнозов
         </button>
 
@@ -1432,14 +1432,14 @@ filter: drop-shadow(0 0 8px #ff007a);
             📜 История ставок
         </button>
 
-       <button class="action-btn" onclick="openP('bonusP')">БОНУСЫ</button>
+       <button class="action-btn" onclick="openPFromProfile('bonusP')">БОНУСЫ</button>
 
-        <button class="action-btn" onclick="openP('chatP')">
+        <button class="action-btn" onclick="openPFromProfile('chatP')">
             💬 Чат
         </button>
 
         
-        <button class="action-btn" onclick="openP('shopP')">
+        <button class="action-btn" onclick="openPFromProfile('shopP')">
             💎 Магазин
         </button>
 
@@ -1584,7 +1584,7 @@ filter: drop-shadow(0 0 8px #ff007a);
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
 
-<!-- ЧАТ -->
+<div id="betHistoryP" class="popup"><h2 style="color:#bc13fe">История ставок</h2><div id="betHistoryList" style="margin-top:12px;"></div><button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button></div><!-- ЧАТ -->
 <div id="chatP" class="popup">
     <h2 style="color:#bc13fe">ЧАТ</h2>
     <p style="font-size:12px; margin:15px 0;">Присоединяйтесь к чату Ludik:</p>
@@ -1707,6 +1707,14 @@ setLC(getLC());
 
 
 
+   function openPFromProfile(id){
+    openP(id);
+    const popup = document.getElementById(id);
+    if(popup){
+        popup.setAttribute("data-back", "profileP");
+    }
+}
+
    function openP(id){
        
 
@@ -1735,7 +1743,7 @@ if(id === "refP"){
     tg.expand();
 }
 
-function closeAll(){
+function closeAll(){ const activePopup=[...document.querySelectorAll('.popup')].find(p=>p.style.display==='block'); const backTo=activePopup?activePopup.getAttribute('data-back'):null; if(activePopup){activePopup.removeAttribute('data-back');} if(backTo){openP(backTo); return;}
     document.body.style.overflow = "auto";
 
     document.getElementById('overlay').style.display = 'none';
@@ -3228,9 +3236,9 @@ if(winCondition){
 
 function openBetHistory(){
 
-    const box = document.getElementById("betHistoryBox");
+    const box = document.getElementById("betHistoryList");
 
-    if(box.style.display === "block"){
+    if(false && box.style.display === "block"){
         box.style.display = "none";
         return;
     }
@@ -3239,7 +3247,7 @@ function openBetHistory(){
 
     if(bets.length === 0){
         box.innerHTML = "<div style='font-size:12px;opacity:0.7;'>Ставок пока нет</div>";
-        box.style.display = "block";
+        openPFromProfile("betHistoryP");
         return;
     }
 
@@ -3262,7 +3270,7 @@ function openBetHistory(){
         `;
     });
 
-    box.style.display = "block";
+    openPFromProfile("betHistoryP");
 }
                         
 setInterval(checkMatchStatus, 60000);
