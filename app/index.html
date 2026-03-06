@@ -583,16 +583,6 @@ text-shadow:
         0 0 10px rgba(212,175,55,0.3);
 
 }
- ... твои последние стили ...
-
-.card-glow{
-   ...
-}
-
-@keyframes pulse{
-   ...
-}
-
 
 .big-card:nth-of-type(1){ animation-delay:0.1s; }
 .big-card:nth-of-type(2){ animation-delay:0.2s; }
@@ -2987,14 +2977,14 @@ if(best){
 }
 
 
-// проверяем каждые 10 секунд
-setInterval(checkMatchStatus, 10000);
+// checkMatchStatus запускается ниже с интервалом 60с
+
                         // ===== MATCH ENGINE =====
 
 function finishMatch(matchId, result){
 
     let matches = getMatches();
-    let bets = getBets();
+    let bets = getMyBets();
 
     let match = matches.find(m => m.id === matchId);
     if(!match) return;
@@ -3005,9 +2995,9 @@ function finishMatch(matchId, result){
     bets.forEach(bet => {
 
         if(bet.matchId !== matchId) return;
-        if(bet.status !== "open") return;
+        if(bet.status !== "pending") return;
 
-        if(bet.pick === result){
+        if(bet.type === result){
 
             let odds = match.odds[result];
             let win = Math.floor(bet.amount * odds);
@@ -3025,7 +3015,7 @@ function finishMatch(matchId, result){
     });
 
     saveMatches(matches);
-    saveBets(bets);
+    saveMyBets(bets);
 }
     // ==========================
 // АВТО-ПЕРЕСОЗДАНИЕ МАТЧЕЙ
@@ -3107,6 +3097,10 @@ function getTotalProfit(){
     let history = getBetHistory();
     return history.reduce((sum, bet) => sum + bet.profit, 0);
 }
+function escapeHTML(value){
+    return String(value ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+
 
 // ===============================
 
@@ -3328,9 +3322,9 @@ function openBetHistory(){
                 margin-bottom:6px;
                 font-size:12px;
                 opacity:0.85;">
-                Матч: ${b.matchId}<br>
-                Прогноз: ${b.type}<br>
-                Статус: ${b.status}
+                Матч: ${escapeHTML(b.matchId)}<br>
+                Прогноз: ${escapeHTML(b.type)}<br>
+                Статус: ${escapeHTML(b.status)}
             </div>
         `;
     });
@@ -3389,7 +3383,7 @@ function getMatchTimer(startTime){
             ${bestBadge}
 
             <div style="opacity:0.7;font-size:12px;">
-                ${match.league}
+                ${escapeHTML(match.league)}
             </div>
 
             <div style="
@@ -3397,7 +3391,7 @@ function getMatchTimer(startTime){
                 font-weight:bold;
                 margin:6px 0;
             ">
-                ${match.home} vs ${match.away}
+                ${escapeHTML(match.home)} vs ${escapeHTML(match.away)}
             </div>
 
             <div style="
@@ -3409,11 +3403,11 @@ function getMatchTimer(startTime){
             </div>
 
             <div style="margin:8px 0;">
-                🤖 Прогноз: <b>${match.aiPrediction.mainMarket}</b>
+                🤖 Прогноз: <b>${escapeHTML(match.aiPrediction.mainMarket)}</b>
             </div>
 
             <div style="font-size:12px;opacity:0.8;">
-                Уверенность: ${match.aiPrediction.confidence}%
+                Уверенность: ${escapeHTML(match.aiPrediction.confidence)}%
             </div>
 
             <div style="
@@ -3422,7 +3416,7 @@ function getMatchTimer(startTime){
                 opacity:0.7;
             ">
                 Доп. рынки:
-                ${match.aiPrediction.additionalMarkets.join(", ")}
+                ${(match.aiPrediction.additionalMarkets || []).map(v => escapeHTML(v)).join(", ")}
             </div>
 
         </div>
