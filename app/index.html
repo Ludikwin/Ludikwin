@@ -1368,7 +1368,14 @@ filter: drop-shadow(0 0 8px #ff007a);
 <!-- ПРОГНОЗЫ -->
 <div id="predictP" class="popup">
     <h3 style="color:#ffe57e;display:flex;justify-content:space-between;align-items:center;gap:8px;">ЛИГИ <span id="predictLC" style="font-size:12px;color:#ffe57e;">0 LC</span> <span style="font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(188,19,254,.16);border:1px solid rgba(188,19,254,.35);">-15 LC</span></h3>
-    <div id="predictSpendFx" style="display:none;margin:2px 0 10px;text-align:center;font-size:13px;font-weight:700;color:#ff7a9f;">-15 LC списано</div><div class="league-grid" id="leagueBox"></div>
+    <div id="predictSpendFx" style="display:none;margin:2px 0 10px;text-align:center;font-size:13px;font-weight:700;color:#ff7a9f;">-15 LC списано</div>
+    <div id="stakePresetBar">
+        <button onclick="setBetAmount(10)">10</button>
+        <button onclick="setBetAmount(25)">25</button>
+        <button onclick="setBetAmount(50)">50</button>
+        <button onclick="setBetAmount(100)">100</button>
+    </div>
+    <div class="league-grid" id="leagueBox"></div>
     <div id="pRes" style="margin-top:15px; color:#00ff00; font-size:13px;"></div>
     <button class="close-btn" onclick="closeAll()">ЗАКРЫТЬ</button>
 </div>
@@ -1761,7 +1768,7 @@ function closeAll(){ const activePopup=[...document.querySelectorAll('.popup')].
 // ===== PREDICT =====
 
 function openPredict(){
-    openP('predictP'); const predictLC=document.getElementById('predictLC'); if(predictLC) predictLC.innerText=getLC()+' LC'; const spendFx=document.getElementById('predictSpendFx'); if(spendFx){ spendFx.style.display='none'; spendFx.style.opacity='1'; }
+    openP('predictP'); const predictLC=document.getElementById('predictLC'); if(predictLC) predictLC.innerText=getLC()+' LC'; const spendFx=document.getElementById('predictSpendFx'); if(spendFx){ spendFx.style.display='none'; spendFx.style.opacity='1'; } setBetAmount(parseInt(localStorage.getItem("bet_amount") || "10"));
     const box=document.getElementById('leagueBox');
     box.innerHTML="";
     const leagues={"PL":"АПЛ","PD":"Ла Лига","BL1":"Бундес","SA":"Серия А","CL":"ЛЧ","RPL":"РПЛ","MLS":"MLS","EL":"ЛЕ"};
@@ -1875,12 +1882,12 @@ addLC(-15); const predictLC=document.getElementById("predictLC"); if(predictLC) 
         <div class="match-card">
         <div style="margin-top:8px; padding:8px; background:#111; border-radius:8px;">
 
-<b>🤖 AI прогноз:</b><br>
+<b>🧠 Прогноз AI:</b><br>
 
-Основной рынок: <b>${m.aiPrediction.mainMarket.toUpperCase()}</b><br>
+Основной исход: <b>${m.aiPrediction.mainMarket.toUpperCase()}</b><br>
 Уверенность: <b>${m.aiPrediction.confidence}%</b><br>
 
-Дополнительно:<br>
+Доп. маркеты:<br>
 ${m.aiPrediction.additionalMarkets.map(mk => "• "+mk).join("<br>")}
 
 ${m.aiPrediction && m.aiPrediction.isBestBet ? "<div style='color:gold; margin-top:6px;'>🔥 ЖБ ПРОГНОЗ ДНЯ</div>" : ""}
@@ -1903,15 +1910,15 @@ ${m.aiPrediction && m.aiPrediction.isBestBet ? "<div style='color:gold; margin-t
 
             <div class="bet-row">
                 <button onclick="placeBet('${m.id}','home')">
-    П1 ${m.odds.home}
+    Исход П1 • ${m.odds.home}
 </button>
 
 <button onclick="placeBet('${m.id}','draw')">
-    X ${m.odds.draw}
+    Исход X • ${m.odds.draw}
 </button>
 
 <button onclick="placeBet('${m.id}','away')">
-    П2 ${m.odds.away}
+    Исход П2 • ${m.odds.away}
 </button>
             </div>
 
@@ -2372,6 +2379,27 @@ function copyRef(){
     // ===== AI LIMIT SYSTEM =====
 function getToday(){
     return new Date().toDateString();
+}
+function setBetAmount(amount){
+    let val = parseInt(amount || 10);
+    if(![10,25,50,100].includes(val)) val = 10;
+    localStorage.setItem("bet_amount", val);
+
+    const bar = document.getElementById("stakePresetBar");
+    if(bar){
+        bar.querySelectorAll("button").forEach(btn => {
+            const active = parseInt(btn.innerText) === val;
+            btn.style.border = active ? "1px solid #ffd700" : "1px solid rgba(255,255,255,0.16)";
+            btn.style.background = active ? "linear-gradient(90deg,#ffd700,#ffbf3a)" : "linear-gradient(135deg,#111,#1a1a1a)";
+            btn.style.color = active ? "#111" : "#d8dcff";
+        });
+    }
+
+    const res = document.getElementById("pRes");
+    if(res){
+        res.style.color = "#9dfbd4";
+        res.innerText = "Сумма ставки: " + val + " LC";
+    }
 }
 function getAIUsage(){
     let today = getToday();
@@ -3111,12 +3139,29 @@ function placeBet(matchId, type){
         return;
     }
 
-    let amount = 10;
+    let amount = parseInt(localStorage.getItem("bet_amount") || "10");
+    if(![10,25,50,100].includes(amount)) amount = 10;
+
+    let coefficient = match.odds[type];
+    let pickLabel = type === "home" ? "П1" : (type === "draw" ? "X" : "П2");
+    let riskLabel = amount <= 25 ? "Низкий" : (amount <= 50 ? "Средний" : "Высокий");
+    let potentialWin = Math.floor(amount * coefficient);
+
+    let couponText =
+        "Купон ставки\n\n" +
+        "Матч: " + match.home + " vs " + match.away + "\n" +
+        "Исход: " + pickLabel + "\n" +
+        "Коэффициент: " + coefficient + "\n" +
+        "Риск: " + riskLabel + "\n" +
+        "Сумма: " + amount + " LC\n" +
+        "Потенциальный выигрыш: " + potentialWin + " LC\n\n" +
+        "Подтвердить ставку?";
+
+    if(!confirm(couponText)) return;
 
     if(!spendLC(amount)) return;
 
     let bets = getMyBets();
-    let coefficient = match.odds[type];
 
     bets.push({
     id: Date.now(),
@@ -3140,7 +3185,7 @@ function placeBet(matchId, type){
         date: new Date().toLocaleString()
     });
 
-    document.getElementById("pRes").innerHTML = "✅ Ставка принята";
+    document.getElementById("pRes").innerHTML = "✅ Ставка принята: " + amount + " LC";
 }
 
 // ===== RESULT SYSTEM =====
