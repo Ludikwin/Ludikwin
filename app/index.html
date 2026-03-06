@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -1446,6 +1446,10 @@ filter: drop-shadow(0 0 8px #ff007a);
         
         <button class="action-btn" onclick="openPFromProfile('shopP')">
             💎 Магазин
+        </button>
+
+        <button class="action-btn" onclick="openAdmin()">
+            🛠 Админ
         </button>
 
     </div>
@@ -3439,6 +3443,56 @@ setInterval(function(){
 
 }, 1000);
 
+</script>
+<script>
+const ADMIN_SESSION_KEY="admin_session";
+function getCurrentUserId(){return String(tg.initDataUnsafe?.user?.id||"guest");}
+function isAdminLoggedIn(){return localStorage.getItem(ADMIN_SESSION_KEY)==="1";}
+function adminLogin(){const pin=prompt("Введите PIN администратора");if(pin===null)return false;const saved=localStorage.getItem("admin_pin")||"7777";if(pin.trim()!==saved){tg.showAlert("Неверный PIN");return false;}localStorage.setItem(ADMIN_SESSION_KEY,"1");return true;}
+function adminRequire(){return isAdminLoggedIn()||adminLogin();}
+function adminLogout(){localStorage.removeItem(ADMIN_SESSION_KEY);tg.showAlert("Админ-выход выполнен");}
+function adminPickUserId(){const raw=prompt("ID пользователя (пусто = текущий)","");if(raw===null)return null;const v=raw.trim();return v||getCurrentUserId();}
+function adminSetLC(){const uid=adminPickUserId();if(uid===null)return;const raw=prompt("Новый LC",String(getLCById(uid)));if(raw===null)return;const n=parseInt(raw,10);if(Number.isNaN(n)||n<0){tg.showAlert("Неверное значение LC");return;}setLCById(uid,n);if(uid===getCurrentUserId())setLC(n);tg.showAlert("LC обновлён");}
+function adminSetRP(){const raw=prompt("Новый RP (текущее устройство)",String(getRP()));if(raw===null)return;const n=parseInt(raw,10);if(Number.isNaN(n)||n<0){tg.showAlert("Неверное значение RP");return;}setRP(n);updateProfile();tg.showAlert("RP обновлён");}
+function adminSetVIP(){const raw=prompt("VIP дней (0 = отключить)","14");if(raw===null)return;const d=parseInt(raw,10);if(Number.isNaN(d)||d<0){tg.showAlert("Неверное число дней");return;}if(d===0){localStorage.removeItem("vip_until");tg.showAlert("VIP отключён");return;}activateVIP(d);}
+function adminGenerateMatches(){generateTodayMatches();tg.showAlert("Матчи сгенерированы");}
+function adminSettleMatches(){checkMatchStatus();ensureActiveMatches();tg.showAlert("Матчи и ставки пересчитаны");}
+function adminCreateOneMatch(){let matches=getMatches();let t=matches[0];if(!t){generateTodayMatches();matches=getMatches();t=matches[0];}if(!t){tg.showAlert("Не удалось создать матч");return;}const m=JSON.parse(JSON.stringify(t));m.id="admin_"+Date.now();m.startTime=Date.now()+10*60*1000;m.status="open";m.result=null;m.aiPrediction.isBestBet=false;matches.push(m);saveMatches(matches);tg.showAlert("Матч добавлен");}
+function adminFinishBestMatch(){const matches=getMatches();const m=matches.find(x=>x.status==="open"&&x.aiPrediction?.isBestBet)||matches.find(x=>x.status==="open");if(!m){tg.showAlert("Нет открытых матчей");return;}const r=prompt("Результат: home / draw / away","home");if(r===null)return;const v=r.trim();if(!["home","draw","away"].includes(v)){tg.showAlert("Неверный результат");return;}m.status="finished";m.result=v;settleBets(m);saveMatches(matches);tg.showAlert("Матч завершён");}
+function adminClearBets(){if(!confirm("Очистить все ставки?"))return;saveMyBets([]);tg.showAlert("Ставки очищены");}
+function adminClearHistory(){if(!confirm("Очистить историю ставок?"))return;saveBetHistory([]);tg.showAlert("История очищена");}
+function adminSeasonReset(){localStorage.setItem("season_start",Date.now());localStorage.setItem("season_rp",0);localStorage.removeItem("season_reward_300");localStorage.removeItem("season_reward_700");localStorage.removeItem("season_reward_1500");tg.showAlert("Сезон сброшен");}
+function adminChangePin(){const oldPin=prompt("Текущий PIN","");if(oldPin===null)return;const saved=localStorage.getItem("admin_pin")||"7777";if(oldPin.trim()!==saved){tg.showAlert("Текущий PIN неверный");return;}const np=prompt("Новый PIN (мин. 4 символа)","");if(np===null)return;if(np.trim().length<4){tg.showAlert("Слишком короткий PIN");return;}localStorage.setItem("admin_pin",np.trim());tg.showAlert("PIN обновлён");}
+function openAdmin(){
+if(!adminRequire()) return;
+while(true){
+const menu = "АДМИН-ПАНЕЛЬ\n\n1 - Set LC\n2 - Set RP\n3 - Set VIP\n4 - Генерировать матчи\n5 - Пересчитать матчи/ставки\n6 - Добавить 1 матч\n7 - Завершить лучший матч\n8 - Очистить ставки\n9 - Очистить историю\n10 - Сброс сезона\n11 - Сменить PIN\n0 - Админ выход\n\nНажми Отмена для закрытия";
+const cmd = prompt(menu, "");
+if(cmd === null) return;
+switch(cmd.trim()){
+case "1": adminSetLC(); break;
+case "2": adminSetRP(); break;
+case "3": adminSetVIP(); break;
+case "4": adminGenerateMatches(); break;
+case "5": adminSettleMatches(); break;
+case "6": adminCreateOneMatch(); break;
+case "7": adminFinishBestMatch(); break;
+case "8": adminClearBets(); break;
+case "9": adminClearHistory(); break;
+case "10": adminSeasonReset(); break;
+case "11": adminChangePin(); break;
+case "0": adminLogout(); return;
+default: tg.showAlert("Неизвестная команда");
+}
+}
+}
+
+// ADMIN OWNER LOCK
+const ADMIN_OWNER_KEY="admin_owner_id";
+function getCurrentUserId(){return String(tg.initDataUnsafe?.user?.id||"");}
+function getAdminOwnerId(){return String(localStorage.getItem(ADMIN_OWNER_KEY)||"");}
+function adminLogin(){const currentId=getCurrentUserId();if(!currentId){tg.showAlert("Не удалось определить Telegram ID");return false;}const pin=prompt("Введите PIN администратора");if(pin===null)return false;const saved=localStorage.getItem("admin_pin")||"7777";if(pin.trim()!==saved){tg.showAlert("Неверный PIN");return false;}const ownerId=getAdminOwnerId();if(!ownerId){localStorage.setItem(ADMIN_OWNER_KEY,currentId);tg.showAlert("Админка привязана к вашему ID: "+currentId);}else if(ownerId!==currentId){tg.showAlert("Доступ запрещён: не владелец админки");return false;}localStorage.setItem(ADMIN_SESSION_KEY,"1");return true;}
+function adminRequire(){const currentId=getCurrentUserId();const ownerId=getAdminOwnerId();if(ownerId && ownerId!==currentId){tg.showAlert("Эта админка доступна только владельцу");return false;}return isAdminLoggedIn()||adminLogin();}
 </script>
 </body>
 </html>
