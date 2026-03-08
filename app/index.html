@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -1448,7 +1448,6 @@ filter: drop-shadow(0 0 8px #ff007a);
             💎 Магазин
         </button>
 
-
     </div>
 
     <div id="betHistoryBox" style="display:none;margin-top:12px;"></div>
@@ -1463,15 +1462,15 @@ filter: drop-shadow(0 0 8px #ff007a);
 
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:15px;">
 
-        <button class="action-btn" onclick="quickTopup(50,50)">
+        <button class="action-btn" onclick="addLC(50)">
             50 ⭐ = 50 LC
         </button>
 
-        <button class="action-btn" onclick="quickTopup(170,150)">
+        <button class="action-btn" onclick="addLC(170)">
             150 ⭐ = 170 LC
         </button>
 
-        <button class="action-btn" onclick="quickTopup(380,300)">
+        <button class="action-btn" onclick="addLC(380)">
             300 ⭐ = 380 LC
         </button>
 
@@ -3441,130 +3440,5 @@ setInterval(function(){
 }, 1000);
 
 </script>
-<script>
-const ADMIN_SESSION_KEY="admin_session";
-function getCurrentUserId(){return String(tg.initDataUnsafe?.user?.id||"guest");}
-function isAdminLoggedIn(){return localStorage.getItem(ADMIN_SESSION_KEY)==="1";}
-function adminLogin(){const pin=prompt("Введите PIN администратора");if(pin===null)return false;const saved=localStorage.getItem("admin_pin")||"7777";if(pin.trim()!==saved){tg.showAlert("Неверный PIN");return false;}localStorage.setItem(ADMIN_SESSION_KEY,"1");return true;}
-function adminRequire(){return isAdminLoggedIn()||adminLogin();}
-function adminLogout(){localStorage.removeItem(ADMIN_SESSION_KEY);tg.showAlert("Админ-выход выполнен");}
-function adminPickUserId(){const raw=prompt("ID пользователя (пусто = текущий)","");if(raw===null)return null;const v=raw.trim();return v||getCurrentUserId();}
-function adminSetLC(){const uid=adminPickUserId();if(uid===null)return;const raw=prompt("Новый LC",String(getLCById(uid)));if(raw===null)return;const n=parseInt(raw,10);if(Number.isNaN(n)||n<0){tg.showAlert("Неверное значение LC");return;}setLCById(uid,n);if(uid===getCurrentUserId())setLC(n);tg.showAlert("LC обновлён");}
-function adminSetRP(){const raw=prompt("Новый RP (текущее устройство)",String(getRP()));if(raw===null)return;const n=parseInt(raw,10);if(Number.isNaN(n)||n<0){tg.showAlert("Неверное значение RP");return;}setRP(n);updateProfile();tg.showAlert("RP обновлён");}
-function adminSetVIP(){const raw=prompt("VIP дней (0 = отключить)","14");if(raw===null)return;const d=parseInt(raw,10);if(Number.isNaN(d)||d<0){tg.showAlert("Неверное число дней");return;}if(d===0){localStorage.removeItem("vip_until");tg.showAlert("VIP отключён");return;}activateVIP(d);}
-function adminGenerateMatches(){generateTodayMatches();tg.showAlert("Матчи сгенерированы");}
-function adminSettleMatches(){checkMatchStatus();ensureActiveMatches();tg.showAlert("Матчи и ставки пересчитаны");}
-function adminCreateOneMatch(){let matches=getMatches();let t=matches[0];if(!t){generateTodayMatches();matches=getMatches();t=matches[0];}if(!t){tg.showAlert("Не удалось создать матч");return;}const m=JSON.parse(JSON.stringify(t));m.id="admin_"+Date.now();m.startTime=Date.now()+10*60*1000;m.status="open";m.result=null;m.aiPrediction.isBestBet=false;matches.push(m);saveMatches(matches);tg.showAlert("Матч добавлен");}
-function adminFinishBestMatch(){const matches=getMatches();const m=matches.find(x=>x.status==="open"&&x.aiPrediction?.isBestBet)||matches.find(x=>x.status==="open");if(!m){tg.showAlert("Нет открытых матчей");return;}const r=prompt("Результат: home / draw / away","home");if(r===null)return;const v=r.trim();if(!["home","draw","away"].includes(v)){tg.showAlert("Неверный результат");return;}m.status="finished";m.result=v;settleBets(m);saveMatches(matches);tg.showAlert("Матч завершён");}
-function adminClearBets(){if(!confirm("Очистить все ставки?"))return;saveMyBets([]);tg.showAlert("Ставки очищены");}
-function adminClearHistory(){if(!confirm("Очистить историю ставок?"))return;saveBetHistory([]);tg.showAlert("История очищена");}
-function adminSeasonReset(){localStorage.setItem("season_start",Date.now());localStorage.setItem("season_rp",0);localStorage.removeItem("season_reward_300");localStorage.removeItem("season_reward_700");localStorage.removeItem("season_reward_1500");tg.showAlert("Сезон сброшен");}
-function adminChangePin(){const oldPin=prompt("Текущий PIN","");if(oldPin===null)return;const saved=localStorage.getItem("admin_pin")||"7777";if(oldPin.trim()!==saved){tg.showAlert("Текущий PIN неверный");return;}const np=prompt("Новый PIN (мин. 4 символа)","");if(np===null)return;if(np.trim().length<4){tg.showAlert("Слишком короткий PIN");return;}localStorage.setItem("admin_pin",np.trim());tg.showAlert("PIN обновлён");}
-function openAdmin(){
-if(!adminRequire()) return;
-while(true){
-const menu = "АДМИН-ПАНЕЛЬ\n\n1 - Set LC\n2 - Set RP\n3 - Set VIP\n4 - Генерировать матчи\n5 - Пересчитать матчи/ставки\n6 - Добавить 1 матч\n7 - Завершить лучший матч\n8 - Очистить ставки\n9 - Очистить историю\n10 - Сброс сезона\n11 - Сменить PIN\n0 - Админ выход\n\nНажми Отмена для закрытия";
-const cmd = prompt(menu, "");
-if(cmd === null) return;
-switch(cmd.trim()){
-case "1": adminSetLC(); break;
-case "2": adminSetRP(); break;
-case "3": adminSetVIP(); break;
-case "4": adminGenerateMatches(); break;
-case "5": adminSettleMatches(); break;
-case "6": adminCreateOneMatch(); break;
-case "7": adminFinishBestMatch(); break;
-case "8": adminClearBets(); break;
-case "9": adminClearHistory(); break;
-case "10": adminSeasonReset(); break;
-case "11": adminChangePin(); break;
-case "0": adminLogout(); return;
-default: tg.showAlert("Неизвестная команда");
-}
-}
-}
-
-// ADMIN OWNER LOCK
-const ADMIN_OWNER_KEY="admin_owner_id";
-function getCurrentUserId(){return String(tg.initDataUnsafe?.user?.id||"");}
-function getAdminOwnerId(){return String(localStorage.getItem(ADMIN_OWNER_KEY)||"");}
-function adminLogin(){const currentId=getCurrentUserId();if(!currentId){tg.showAlert("Не удалось определить Telegram ID");return false;}const pin=prompt("Введите PIN администратора");if(pin===null)return false;const saved=localStorage.getItem("admin_pin")||"7777";if(pin.trim()!==saved){tg.showAlert("Неверный PIN");return false;}const ownerId=getAdminOwnerId();if(!ownerId){localStorage.setItem(ADMIN_OWNER_KEY,currentId);tg.showAlert("Админка привязана к вашему ID: "+currentId);}else if(ownerId!==currentId){tg.showAlert("Доступ запрещён: не владелец админки");return false;}localStorage.setItem(ADMIN_SESSION_KEY,"1");return true;}
-function adminRequire(){const currentId=getCurrentUserId();const ownerId=getAdminOwnerId();if(ownerId && ownerId!==currentId){tg.showAlert("Эта админка доступна только владельцу");return false;}return isAdminLoggedIn()||adminLogin();}
-</script>
-<script>
-const API_BASE=localStorage.getItem("api_base")||(location.protocol.startsWith("http")?location.origin:"");
-function getSyncPayload(){const uid=String(tg.initDataUnsafe?.user?.id||"");if(!uid)return null;return {telegram_id:uid,username:String(tg.initDataUnsafe?.user?.username||""),lc:getLC(),rp:getRP(),vip_until:getVIPUntil(),season_rp:getSeasonRP()};}
-async function postSync(){try{if(!API_BASE)return;const p=getSyncPayload();if(!p)return;await fetch(API_BASE+"/api/client/sync",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p)});}catch(e){}}
-async function postDeposit(amount,stars){try{if(!API_BASE)return;const p=getSyncPayload();if(!p)return;await fetch(API_BASE+"/api/client/deposit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...p,amount:Number(amount)||0,currency:"LC",source:"shop_stars",status:"approved",note:"stars:"+String(stars||"")})});}catch(e){}}
-function quickTopup(lc,stars){addLC(lc);postDeposit(lc,stars);tg.showAlert("Пополнение +"+lc+" LC");}
-async function fetchMatchState(force){if(!API_BASE)return null;const r=await fetch(API_BASE+(force?"/api/matches/refresh":"/api/matches/state"),{method:force?"POST":"GET"});const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||"match api error");return j;}
-async function syncMatches(force){try{const d=await fetchMatchState(!!force);const list=(d.matches||[]).filter(m=>m.status==="open"||m.status==="live");saveMatches(list);return list;}catch(e){return getMatches();}}
-async function generateTodayMatches(){await syncMatches(true);} async function ensureActiveMatches(){await syncMatches(false);} async function checkMatchStatus(){await syncMatches(false);}
-function getVipMatch(){return getMatches().find(m=>m.aiPrediction&&m.aiPrediction.isVipPick);} function getJbMatch(){return getMatches().find(m=>m.aiPrediction&&m.aiPrediction.isBestBet);}
-function renderSinglePredict(m){const b=document.getElementById("pRes");if(!b||!m)return;const t=new Date(m.startTime).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});b.innerHTML=`<div class="match-card"><div style="margin-top:8px;padding:8px;background:#111;border-radius:8px;"><b>🧠 Прогноз AI:</b><br>Основной исход: <b>${m.aiPrediction.mainMarket}</b><br>Уверенность: <b>${m.aiPrediction.confidence}%</b><br>${m.aiPrediction.isBestBet?"<div style='color:gold;margin-top:6px;'>🔥 ЖБ ДНЯ</div>":""}${m.aiPrediction.isVipPick?"<div style='color:#7ee7ff;margin-top:6px;'>💎 VIP MAX</div>":""}</div><div class="match-league">⚽ ${m.league}</div><div class="match-teams"><div class="team">${m.home}</div><div class="vs">VS</div><div class="team">${m.away}</div></div><div class="match-time">🕒 ${t}</div><div class="bet-row"><button onclick="placeBet('${m.id}','home')">Исход П1 • ${m.odds.home}</button><button onclick="placeBet('${m.id}','draw')">Исход X • ${m.odds.draw}</button><button onclick="placeBet('${m.id}','away')">Исход П2 • ${m.odds.away}</button></div></div>`;}
-async function openPredict(){await syncMatches(false);openP("predictP");const box=document.getElementById("leagueBox");box.innerHTML="";const map=new Map();getMatches().forEach(m=>{if(!map.has(m.leagueCode))map.set(m.leagueCode,m.league);});map.forEach((n,c)=>{const btn=document.createElement("button");btn.className="league-btn";btn.innerText=n;btn.onclick=()=>getPredict(c);box.appendChild(btn);});}
-async function getPredict(code){if(getLC()<15){tg.showAlert("Недостаточно LC для AI прогноза");return;}if(!confirm("Списать 15 LC за открытие прогноза?"))return;addLC(-15);await syncMatches(false);const m=getMatches().find(x=>x.leagueCode===code&&(x.status==="open"||x.status==="live"));if(!m){const b=document.getElementById("pRes");if(b)b.innerText="Нет доступных матчей";return;}renderSinglePredict(m);}
-function openJB(){const m=getJbMatch();if(!m){tg.showAlert("Сегодня нет ЖБ прогноза");return;}const t=new Date().toDateString(),k="jb_unlocked_date";if(localStorage.getItem(k)!==t){if(!spendLC(20))return;localStorage.setItem(k,t);}showJBContent(m);openP("jbP");}
-function openVipPick(){const m=getVipMatch();if(!m){tg.showAlert("VIP прогноз недоступен");return;}const t=new Date().toDateString(),k="vip_unlocked_date";if(localStorage.getItem(k)!==t){if(!spendLC(50)){tg.showAlert("Нужно 50 LC");return;}localStorage.setItem(k,t);}showJBContent(m);openP("jbP");}
-setTimeout(()=>{const vip=document.getElementById("vipP");if(vip){vip.innerHTML=`<h2 style="color:#bc13fe">💎 VIP MAX ПРОГНОЗ</h2><p style="font-size:12px; margin:15px 0;">Самый высокий прогноз дня. Доступ: 50 LC / день</p><button class="action-btn" onclick="openVipPick()">ОТКРЫТЬ VIP ПРОГНОЗ</button><button class="close-btn" onclick="closeAll()">ОТМЕНА</button>`;}},1200);
-(function(){const _setLC=setLC;setLC=function(a){_setLC(a);postSync();};const _setRP=setRP;setRP=function(v){_setRP(v);postSync();};const _activateVIP=activateVIP;activateVIP=function(d){_activateVIP(d);postSync();};setTimeout(()=>{postSync();syncMatches(false);},700);setInterval(()=>syncMatches(false),60000);})();
-
-
-// UI OVERRIDES: LIVE + MARKETS
-function _markets(m){const add=(m.aiPrediction&&m.aiPrediction.additionalMarkets)||[];return {one:add[0]||"ТБ 2.5",two:add[1]||"ЖК > 3.5",three:add[2]||"Угловые > 8.5",four:add[3]||"ОЗ: Да"};}
-function renderLiveList(){const b=document.getElementById("pRes");if(!b)return;const list=getMatches().filter(x=>x.status==="live");if(list.length===0){b.innerText="Сейчас нет live матчей";return;}b.innerHTML=list.map(m=>`<div class="match-card"><div class="match-league">🔴 LIVE • ${m.league}</div><div class="match-teams"><div class="team">${m.home}</div><div class="vs">VS</div><div class="team">${m.away}</div></div><div style="font-size:12px;opacity:.85;margin-top:6px;">Прогноз: <b>${m.aiPrediction.mainMarket}</b> • ${m.aiPrediction.confidence}%</div></div>`).join("");}
-async function openPredict(){await syncMatches(false);openP("predictP");const box=document.getElementById("leagueBox");box.innerHTML="";const live=document.createElement("button");live.className="league-btn";live.innerText="🔴 LIVE";live.onclick=()=>getPredict("LIVE");box.appendChild(live);const map=new Map();getMatches().forEach(m=>{if(!map.has(m.leagueCode))map.set(m.leagueCode,m.league);});map.forEach((n,c)=>{const btn=document.createElement("button");btn.className="league-btn";btn.innerText=n;btn.onclick=()=>getPredict(c);box.appendChild(btn);});}
-async function getPredict(code){if(code==="LIVE"){await syncMatches(false);renderLiveList();return;}if(getLC()<15){tg.showAlert("Недостаточно LC для AI прогноза");return;}if(!confirm("Списать 15 LC за открытие прогноза?"))return;addLC(-15);await syncMatches(false);const m=getMatches().find(x=>x.leagueCode===code&&(x.status==="open"||x.status==="live"));if(!m){const b=document.getElementById("pRes");if(b)b.innerText="Нет доступных матчей";return;}renderSinglePredict(m);}
-
-</script>
-<script>
-// INLINE_SYNC_MERGED
-﻿const API_BASE=localStorage.getItem("api_base")||(location.protocol.startsWith("http")?location.origin:"");
-function getSyncPayload(){const uid=String(tg.initDataUnsafe?.user?.id||"");if(!uid)return null;return {telegram_id:uid,username:String(tg.initDataUnsafe?.user?.username||""),lc:getLC(),rp:getRP(),vip_until:getVIPUntil(),season_rp:getSeasonRP()};}
-async function postSync(){try{if(!API_BASE)return;const p=getSyncPayload();if(!p)return;await fetch(API_BASE+"/api/client/sync",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p)});}catch(e){}}
-async function postDeposit(amount,stars){try{if(!API_BASE)return;const p=getSyncPayload();if(!p)return;await fetch(API_BASE+"/api/client/deposit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...p,amount:Number(amount)||0,currency:"LC",source:"shop_stars",status:"approved",note:"stars:"+String(stars||"")})});}catch(e){}}
-function quickTopup(lc,stars){addLC(lc);postDeposit(lc,stars);tg.showAlert("Пополнение +"+lc+" LC");}
-async function fetchMatchState(force){if(!API_BASE)return null;const r=await fetch(API_BASE+(force?"/api/matches/refresh":"/api/matches/state"),{method:force?"POST":"GET"});const j=await r.json();if(!r.ok||!j.ok)throw new Error(j.error||"match api error");return j;}
-async function syncMatches(force){try{const d=await fetchMatchState(!!force);const list=(d.matches||[]).filter(m=>m.status==="open"||m.status==="live");saveMatches(list);return list;}catch(e){return getMatches();}}
-async function generateTodayMatches(){await syncMatches(true);} async function ensureActiveMatches(){const l=await syncMatches(false);if(!l||!l.length)await syncMatches(true);} async function checkMatchStatus(){await syncMatches(false);}
-function getVipMatch(){return getMatches().find(m=>m.aiPrediction&&m.aiPrediction.isVipPick);} function getJbMatch(){return getMatches().find(m=>m.aiPrediction&&m.aiPrediction.isBestBet);}
-function renderSinglePredict(m){const b=document.getElementById("pRes");if(!b||!m)return;const t=new Date(m.startTime).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});b.innerHTML=`<div class="match-card"><div style="margin-top:8px;padding:8px;background:#111;border-radius:8px;"><b>🧠 Прогноз AI:</b><br>Основной исход: <b>${m.aiPrediction.mainMarket}</b><br>Уверенность: <b>${m.aiPrediction.confidence}%</b><br>${m.aiPrediction.isBestBet?"<div style='color:gold;margin-top:6px;'>🔥 ЖБ ДНЯ</div>":""}${m.aiPrediction.isVipPick?"<div style='color:#7ee7ff;margin-top:6px;'>💎 VIP MAX</div>":""}</div><div class="match-league">⚽ ${m.league}</div><div class="match-teams"><div class="team">${m.home}</div><div class="vs">VS</div><div class="team">${m.away}</div></div><div class="match-time">🕒 ${t}</div><div class="bet-row"><button onclick="placeBet('${m.id}','home')">Исход П1 • ${m.odds.home}</button><button onclick="placeBet('${m.id}','draw')">Исход X • ${m.odds.draw}</button><button onclick="placeBet('${m.id}','away')">Исход П2 • ${m.odds.away}</button></div></div>`;}
-async function openPredict(){await syncMatches(false);openP("predictP");const box=document.getElementById("leagueBox");box.innerHTML="";const map=new Map();getMatches().forEach(m=>{if(!map.has(m.leagueCode))map.set(m.leagueCode,m.league);});map.forEach((n,c)=>{const btn=document.createElement("button");btn.className="league-btn";btn.innerText=n;btn.onclick=()=>getPredict(c);box.appendChild(btn);});}
-async function getPredict(code){if(getLC()<15){tg.showAlert("Недостаточно LC для AI прогноза");return;}if(!confirm("Списать 15 LC за открытие прогноза?"))return;addLC(-15);await ensureActiveMatches();const m=getMatches().find(x=>x.leagueCode===code&&(x.status==="open"||x.status==="live"));if(!m){const b=document.getElementById("pRes");if(b)b.innerText="Нет доступных матчей";return;}renderSinglePredict(m);}
-async function openJB(){await ensureActiveMatches();const m=getJbMatch();if(!m){tg.showAlert("Сегодня нет ЖБ прогноза");return;}const t=new Date().toDateString(),k="jb_unlocked_date";if(localStorage.getItem(k)!==t){if(!spendLC(20))return;localStorage.setItem(k,t);}showJBContent(m);openP("jbP");}
-async function openVipPick(){await ensureActiveMatches();const m=getVipMatch();if(!m){tg.showAlert("VIP прогноз недоступен");return;}const t=new Date().toDateString(),k="vip_unlocked_date";if(localStorage.getItem(k)!==t){if(!spendLC(50)){tg.showAlert("Нужно 50 LC");return;}localStorage.setItem(k,t);}showJBContent(m);openP("jbP");}
-setTimeout(()=>{const vip=document.getElementById("vipP");if(vip){vip.innerHTML=`<h2 style="color:#bc13fe">💎 VIP MAX ПРОГНОЗ</h2><p style="font-size:12px; margin:15px 0;">Самый высокий прогноз дня. Доступ: 50 LC / день</p><button class="action-btn" onclick="openVipPick()">ОТКРЫТЬ VIP ПРОГНОЗ</button><button class="close-btn" onclick="closeAll()">ОТМЕНА</button>`;}},1200);
-(function(){const _setLC=setLC;setLC=function(a){_setLC(a);postSync();};const _setRP=setRP;setRP=function(v){_setRP(v);postSync();};const _activateVIP=activateVIP;activateVIP=function(d){_activateVIP(d);postSync();};setTimeout(()=>{postSync();syncMatches(false);},700);setInterval(()=>syncMatches(false),60000);})();
-
-
-// UI OVERRIDES: LIVE + MARKETS
-function _markets(m){const add=(m.aiPrediction&&m.aiPrediction.additionalMarkets)||[];return {one:add[0]||"ТБ 2.5",two:add[1]||"ЖК > 3.5",three:add[2]||"Угловые > 8.5",four:add[3]||"ОЗ: Да"};}
-function renderLiveList(){const b=document.getElementById("pRes");if(!b)return;const all=getMatches();const live=all.filter(x=>x.status==="live");const list=live.length?live:all.slice(0,5);if(list.length===0){b.innerText="Нет доступных матчей";return;}b.innerHTML=list.map(m=>`<div class="match-card"><div class="match-league">🔴 LIVE • ${m.league}</div><div class="match-teams"><div class="team">${m.home}</div><div class="vs">VS</div><div class="team">${m.away}</div></div><div style="font-size:12px;opacity:.85;margin-top:6px;">Прогноз: <b>${m.aiPrediction.mainMarket}</b> • ${m.aiPrediction.confidence}%</div></div>`).join("");}
-async function openPredict(){await syncMatches(false);openP("predictP");const box=document.getElementById("leagueBox");box.innerHTML="";const live=document.createElement("button");live.className="league-btn";live.innerText="🔴 LIVE";live.onclick=()=>getPredict("LIVE");box.appendChild(live);const map=new Map();getMatches().forEach(m=>{if(!map.has(m.leagueCode))map.set(m.leagueCode,m.league);});map.forEach((n,c)=>{const btn=document.createElement("button");btn.className="league-btn";btn.innerText=n;btn.onclick=()=>getPredict(c);box.appendChild(btn);});}
-async function getPredict(code){if(code==="LIVE"){await ensureActiveMatches();renderLiveList();return;}if(getLC()<15){tg.showAlert("Недостаточно LC для AI прогноза");return;}if(!confirm("Списать 15 LC за открытие прогноза?"))return;addLC(-15);await ensureActiveMatches();const m=getMatches().find(x=>x.leagueCode===code&&(x.status==="open"||x.status==="live"));if(!m){const b=document.getElementById("pRes");if(b)b.innerText="Нет доступных матчей";return;}renderSinglePredict(m);}
-
-// FINAL OVERRIDE FOR TG VIEW
-function renderSinglePredictRich(m){renderSinglePredict(m);const add=(m.aiPrediction&&m.aiPrediction.additionalMarkets)||[];const box=document.querySelector("#pRes .match-card > div");if(box){box.innerHTML += "<br>⚽ "+(add[0]||"ТБ 2.5")+"<br>🟨 "+(add[1]||"ЖК > 3.5")+"<br>🚩 "+(add[2]||"Угловые > 8.5")+"<br>📌 "+(add[3]||"ОЗ: Да");}const teams=document.querySelectorAll("#pRes .team");if(teams[0]&&m.homeLogo){teams[0].innerHTML="<img src=\""+m.homeLogo+"\" style=\"width:16px;height:16px;border-radius:50%;vertical-align:-3px;\"> "+teams[0].textContent;}if(teams[1]&&m.awayLogo){teams[1].innerHTML=teams[1].textContent+" <img src=\""+m.awayLogo+"\" style=\"width:16px;height:16px;border-radius:50%;vertical-align:-3px;\">";}}
-openPredict=async function(){await ensureActiveMatches();openP("predictP");const box=document.getElementById("leagueBox");box.innerHTML="";const live=document.createElement("button");live.className="league-btn";live.innerText="🔴 LIVE";live.onclick=()=>getPredict("LIVE");box.appendChild(live);const map=new Map();getMatches().forEach(m=>{if(!map.has(m.leagueCode))map.set(m.leagueCode,m.league);});map.forEach((n,c)=>{const btn=document.createElement("button");btn.className="league-btn";btn.innerText=n;btn.onclick=()=>getPredict(c);box.appendChild(btn);});};
-getPredict=async function(code){if(code==="LIVE"){await ensureActiveMatches();renderLiveList();return;}if(getLC()<15){tg.showAlert("Недостаточно LC для AI прогноза");return;}if(!confirm("Списать 15 LC за открытие прогноза?"))return;addLC(-15);await ensureActiveMatches();const m=getMatches().find(x=>x.leagueCode===code&&(x.status==="open"||x.status==="live"));if(!m){const b=document.getElementById("pRes");if(b)b.innerText="Нет доступных матчей";return;}renderSinglePredictRich(m);};
-
-
-
-
-
-
-
-</script>
-<script>(()=>{let __k="";const __old=window.getPredict;window.getPredict=async function(c){const b=document.getElementById("pRes");if(b&&__k===c){__k="";b.innerHTML="";return;}__k=c;if(c!=="LIVE"){if(getLC()<15){tg.showAlert("Недостаточно LC для AI прогноза");return;}if(!confirm("Списать 15 LC за открытие прогноза?"))return;addLC(-15);await ensureActiveMatches();let m=getMatches().find(x=>x.leagueCode===c&&x.status==="open");if(!m){await syncMatches(true);m=getMatches().find(x=>x.leagueCode===c&&x.status==="open");}if(!m){if(b)b.innerText="Нет свежего матча в лиге";return;}return (window.renderSinglePredictRich||window.renderSinglePredict)(m);}return __old(c);};})();</script>
-<script>(()=>{const r1=window.renderSinglePredict;window.renderSinglePredict=function(m){r1(m);document.querySelectorAll("#pRes .bet-row").forEach(x=>x.remove());};const r2=window.renderSinglePredictRich;window.renderSinglePredictRich=function(m){r2(m);document.querySelectorAll("#pRes .bet-row").forEach(x=>x.remove());};})();</script>
-<script>(()=>{window.renderLiveList=function(){const b=document.getElementById("pRes");if(!b)return;const arr=getMatches().filter(x=>x.status==="live");if(!arr.length){b.innerText="Сейчас нет live матчей";return;}b.innerHTML=arr.map(m=>"<div class=\"match-card\"><div class=\"match-league\">🔴 LIVE • "+m.league+"</div><div class=\"match-teams\"><div class=\"team\">"+(m.homeLogo?"<img src=\""+m.homeLogo+"\" style=\"width:16px;height:16px;border-radius:50%;vertical-align:-3px;margin-right:4px;\">":"")+m.home+"</div><div class=\"vs\">VS</div><div class=\"team\">"+m.away+(m.awayLogo?" <img src=\""+m.awayLogo+"\" style=\"width:16px;height:16px;border-radius:50%;vertical-align:-3px;\">":"")+"</div></div><div class=\"match-time\">Счёт: <b>"+((m.liveScore&&m.liveScore.home!=null)?m.liveScore.home:"-")+" : "+((m.liveScore&&m.liveScore.away!=null)?m.liveScore.away:"-")+"</b></div></div>").join("");};})();</script>
-
-<script>
-(()=>{let o="";
-getPredict=window.getPredict=async function(c){const b=document.getElementById("pRes");if(!b)return;if(o===c){o="";b.innerHTML="";return;}if(c==="LIVE"){o="LIVE";await ensureActiveMatches();renderLiveList();return;}await ensureActiveMatches();let m=getMatches().find(x=>x.leagueCode===c&&x.status==="open");if(!m){await syncMatches(true);m=getMatches().find(x=>x.leagueCode===c&&x.status==="open");}if(!m){b.innerText="Нет свежего матча в лиге";return;}if(getLC()<15){tg.showAlert("Недостаточно LC для AI прогноза");return;}if(!confirm("Списать 15 LC за открытие прогноза?"))return;addLC(-15);o=c;(window.renderSinglePredictRich||window.renderSinglePredict)(m);document.querySelectorAll("#pRes .bet-row").forEach(x=>x.remove());};
-openPredict=window.openPredict=async function(){await ensureActiveMatches();openP("predictP");const box=document.getElementById("leagueBox");if(!box)return;box.innerHTML="";const lv=document.createElement("button");lv.className="league-btn";lv.innerText="🔴 LIVE";lv.onclick=()=>window.getPredict("LIVE");box.appendChild(lv);const mp=new Map();getMatches().forEach(m=>{if(!mp.has(m.leagueCode))mp.set(m.leagueCode,m.league);});mp.forEach((n,c)=>{const btn=document.createElement("button");btn.className="league-btn";btn.innerText=n;btn.onclick=()=>window.getPredict(c);box.appendChild(btn);});};
-})();
-</script>
-
 </body>
 </html>
