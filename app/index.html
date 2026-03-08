@@ -3559,3 +3559,11 @@ getPredict=async function(code){if(code==="LIVE"){await ensureActiveMatches();re
 </html>
 
 <!--x-->
+<!--patch-test-->
+<script>console.log('ok_patch_line');</script>
+<script>
+(()=>{});
+</script>
+<script>(()=>{let __k="";const __old=window.getPredict;window.getPredict=async function(c){const b=document.getElementById("pRes");if(b&&__k===c){__k="";b.innerHTML="";return;}__k=c;if(c!=="LIVE"){await ensureActiveMatches();let m=getMatches().find(x=>x.leagueCode===c&&x.status==="open");if(!m){await syncMatches(true);m=getMatches().find(x=>x.leagueCode===c&&x.status==="open");}if(!m){if(b)b.innerText="Нет свежего матча в лиге";return;}return renderSinglePredictRich(m);}return __old(c);};})();</script>
+<script>(()=>{const r1=window.renderSinglePredict;window.renderSinglePredict=function(m){r1(m);document.querySelectorAll("#pRes .bet-row").forEach(x=>x.remove());};const r2=window.renderSinglePredictRich;window.renderSinglePredictRich=function(m){r2(m);document.querySelectorAll("#pRes .bet-row").forEach(x=>x.remove());};})();</script>
+<script>(()=>{window.renderLiveList=function(){const b=document.getElementById("pRes");if(!b)return;const arr=getMatches().filter(x=>x.status==="live");if(!arr.length){b.innerText="Сейчас нет live матчей";return;}b.innerHTML=arr.map(m=>"<div class=\"match-card\"><div class=\"match-league\">LIVE • "+m.league+"</div><div class=\"match-teams\"><div class=\"team\">"+(m.homeLogo?"<img src=\""+m.homeLogo+"\" style=\"width:16px;height:16px;border-radius:50%;vertical-align:-3px;margin-right:4px;\">":"")+m.home+"</div><div class=\"vs\">VS</div><div class=\"team\">"+m.away+(m.awayLogo?" <img src=\""+m.awayLogo+"\" style=\"width:16px;height:16px;border-radius:50%;vertical-align:-3px;\">":"")+"</div></div><div class=\"match-time\">Счёт: <b>"+((m.liveScore&&m.liveScore.home!=null)?m.liveScore.home:"-")+" : "+((m.liveScore&&m.liveScore.away!=null)?m.liveScore.away:"-")+"</b></div></div>").join("");};})();</script>
