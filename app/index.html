@@ -1448,9 +1448,6 @@ filter: drop-shadow(0 0 8px #ff007a);
             💎 Магазин
         </button>
 
-        <button class="action-btn" onclick="openAdmin()">
-            🛠 Админ
-        </button>
 
     </div>
 
@@ -1466,15 +1463,15 @@ filter: drop-shadow(0 0 8px #ff007a);
 
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:15px;">
 
-        <button class="action-btn" onclick="addLC(50)">
+        <button class="action-btn" onclick="quickTopup(50,50)">
             50 ⭐ = 50 LC
         </button>
 
-        <button class="action-btn" onclick="addLC(170)">
+        <button class="action-btn" onclick="quickTopup(170,150)">
             150 ⭐ = 170 LC
         </button>
 
-        <button class="action-btn" onclick="addLC(380)">
+        <button class="action-btn" onclick="quickTopup(380,300)">
             300 ⭐ = 380 LC
         </button>
 
@@ -3494,5 +3491,6 @@ function getAdminOwnerId(){return String(localStorage.getItem(ADMIN_OWNER_KEY)||
 function adminLogin(){const currentId=getCurrentUserId();if(!currentId){tg.showAlert("Не удалось определить Telegram ID");return false;}const pin=prompt("Введите PIN администратора");if(pin===null)return false;const saved=localStorage.getItem("admin_pin")||"7777";if(pin.trim()!==saved){tg.showAlert("Неверный PIN");return false;}const ownerId=getAdminOwnerId();if(!ownerId){localStorage.setItem(ADMIN_OWNER_KEY,currentId);tg.showAlert("Админка привязана к вашему ID: "+currentId);}else if(ownerId!==currentId){tg.showAlert("Доступ запрещён: не владелец админки");return false;}localStorage.setItem(ADMIN_SESSION_KEY,"1");return true;}
 function adminRequire(){const currentId=getCurrentUserId();const ownerId=getAdminOwnerId();if(ownerId && ownerId!==currentId){tg.showAlert("Эта админка доступна только владельцу");return false;}return isAdminLoggedIn()||adminLogin();}
 </script>
+<script src="sync.js"></script>
 </body>
 </html>
